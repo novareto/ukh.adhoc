@@ -1,14 +1,25 @@
-from setuptools import setup, find_packages
 import os
+from setuptools import setup, find_packages
+
 
 version = '1.0'
+
+install_requires=[
+    'grok',
+    'setuptools',
+    'uvcsite',
+]
+
+tests_require = [
+    'z3c.testsetup',
+]
+
 
 setup(name='ukh.adhoc',
       version=version,
       description="",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Programming Language :: Python",
         ],
@@ -21,10 +32,8 @@ setup(name='ukh.adhoc',
       namespace_packages=['ukh'],
       include_package_data=True,
       zip_safe=False,
-      install_requires=[
-          'setuptools',
-          # -*- Extra requirements: -*-
-      ],
+      install_requires=install_requires,
+      extras_require={'test': tests_require},
       entry_points={
          'fanstatic.libraries': [
             'ukh.adhoc = ukh.adhoc.resources:library',
