@@ -4,7 +4,6 @@
    package="ukh.adhoc"
    >
 
-  <includeOverrides package="uvcsite" file="ftesting.zcml"/>
   <include package="ukh.adhoc" />
 
 </configure>
