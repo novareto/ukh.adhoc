@@ -2,6 +2,7 @@ import doctest
 import ukh.adhoc 
 import re
 import six
+import os
 import unittest
 import zope.app.wsgi.testlayer
 import zope.testbrowser.wsgi
@@ -64,21 +65,26 @@ def suiteFromPackage(name):
         doctest.REPORT_NDIFF +
         renormalizing.IGNORE_EXCEPTION_MODULE_IN_PYTHON2)
     for filename in files:
-        if not filename.endswith('.py'):
-            continue
         if filename == '__init__.py':
             continue
 
-        dottedname = 'ukh.adhoc.tests.%s.%s.%s' % (
-            layer_dir, name, filename[:-3])
-        test = doctest.DocTestSuite(
-            dottedname,
-            checker=checker,
-            extraglobs=globs,
-            optionflags=optionflags)
-        test.layer = layer
-
-        suite.addTest(test)
+        test = None
+        if filename.endswith('.py'):
+            dottedname = 'ukh.adhoc.tests.%s.%s.%s' % (
+                layer_dir, name, filename[:-3])
+            test = doctest.DocTestSuite(
+                dottedname,
+                checker=checker,
+                extraglobs=globs,
+                optionflags=optionflags)
+        elif filename.endswith('.txt'):
+            test = doctest.DocFileSuite(
+                os.path.join(layer_dir, name, filename),
+                optionflags=optionflags,
+                globs=globs)
+        if test is not None:
+            test.layer = layer
+            suite.addTest(test)
     return suite
 
 

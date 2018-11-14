@@ -1,0 +1,160 @@
+iDo a functional doctest test on the app.
+========================================
+
+:doctest:
+:layer: ukh.adhoc.tests.test_functional.layer
+
+Let's first create an instance of Uvcsite at the top level:
+
+   >>> from ukh.adhoc.app import UKHAdHocApp
+   >>> from zope.site.hooks import setSite
+   >>> root = getRootFolder()
+   >>> adhoc_app = UKHAdHocApp()
+   >>> root['app'] = adhoc_app
+   >>> setSite(root['app'])
+
+
+Let's look if we have our authenticate infrastucture
+----------------------------------------------------
+
+   >>> from zope.component import getUtility
+   >>> from zope.authentication.interfaces import IAuthentication
+
+   >>> auth = getUtility(IAuthentication)
+   >>> print auth
+   <zope.pluggableauth.authentication.PluggableAuthentication object at ...>
+
+   >>> for plugin in auth.getCredentialsPlugins():
+   ...     print plugin
+   ('Zope Realm Basic-Auth', <zope.pluggableauth.plugins.httpplugins.HTTPBasicAuthCredentialsPlugin object at ...>)
+
+   >>> for plugin in auth.getAuthenticatorPlugins():
+   ...     print plugin
+   ('users', <ukh.adhoc.auth.UserAuthenticatorPlugin object at ...>)
+
+
+The authentication utility contains the user folders
+----------------------------------------------------
+
+   >>> name, authenticator = list(auth.getAuthenticatorPlugins())[0]
+   >>> authenticator.user_folder
+   <ukh.adhoc.auth.UserFolder object at ...>
+
+
+Registries
+----------
+
+   >>> from zope.component.interfaces import IComponents
+   >>> reg = getUtility(IComponents, name=u"ukhadhocRegistry")
+   >>> reg
+   <BaseComponents ukhadhocRegistry>
+
+   >>> sm = adhoc_app.getSiteManager()
+   >>> sm
+   <LocalSiteManager ++etc++site>
+
+   >>> sm.__bases__
+   (<BaseComponents ukhadhocRegistry>, <LocalSiteManager ++etc++site>)
+
+   >>> lsm = sm.__bases__[1]
+   >>> lsm.__bases__
+   (<BaseGlobalComponents base>,)
+
+
+Adding an account
+-----------------
+
+   >>> from ukh.adhoc.components import Account
+   >>> Magnus = Account(
+   ...     az='magnus',
+   ...     password='pwd',
+   ...     mail='magnus@example.com',
+   ...     oid='mag',
+   ...     actions=[])
+
+   >>> authenticator.user_folder['magnus'] = Magnus
+
+
+Test the authentication directly
+--------------------------------
+
+   >>> assert authenticator.getAccount('magnus') is Magnus
+   >>> assert authenticator.getAccount('stephan') is None
+
+   >>> info = authenticator.principalInfo('magnus')
+   >>> info
+   <ukh.adhoc.auth.PrincipalInfo object at ...>
+   >>> assert info.id == 'magnus'
+
+   >>> assert authenticator.principalInfo('jonas') is None
+
+
+Run tests in the testbrowser
+----------------------------
+
+The zope.testbrowser.browser module exposes a Browser class that
+simulates a web browser similar to Mozilla Firefox or IE.  We use that
+to test how our application behaves in a browser.  For more
+information, see http://pypi.python.org/pypi/zope.testbrowser.
+
+
+Only Authorized people should get access
+----------------------------------------
+
+   >>> from zope.testbrowser.wsgi import Browser
+   >>> browser = Browser()
+   >>> browser.handleErrors = True 
+
+This means if we open the index page. We get redirected
+to the login page.
+
+
+   >>> browser.open('http://localhost/app/index')
+   Traceback (most recent call last):
+   ...
+   HTTPError: HTTP Error 401: Unauthorized
+
+
+Now log on as a user and look if we get the index page
+
+   >>> browser.handleErrors = False 
+   >>> browser.addHeader('Authorization', 'Basic magnus:pwd')
+   >>> browser.open('http://localhost/app/index')
+
+   >>> 'uvc.user' in browser.contents
+   True
+
+   >>> "Herzlich Willkommen" in browser.contents
+   True
+
+
+Not Found View
+--------------
+
+   >>> browser.handleErrors = True
+
+We should get the Error Page:
+
+   >>> browser.open('http://localhost/app/not_found')
+   Traceback (most recent call last):
+   ...
+   HTTPError: HTTP Error 404: Not Found
+
+
+And we should get a Status 404
+
+   >>> print browser.headers['Status'].upper()
+   404 NOT FOUND
+
+
+SystemError
+-----------
+
+   >>> from zope.component import getMultiAdapter
+   >>> from zope.publisher.browser import TestRequest
+   >>> request = TestRequest()
+   >>> exception = Exception()
+
+   >>> system_error = getMultiAdapter((exception, request), name=u"index")
+   >>> system_error
+   <uvcsite.app.SystemError object at ...>

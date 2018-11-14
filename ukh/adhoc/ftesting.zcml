@@ -1,10 +1,12 @@
 <configure
    xmlns="http://namespaces.zope.org/zope"
    i18n_domain="ukh.adhoc"
-   package="ukh.adhoc"
-   >
+   package="ukh.adhoc">
 
+  <include package="zope.component" />
+  <include package="zope.pluggableauth" />
+  <include package="zope.authentication" />
+  <include package="zope.security" file="meta.zcml" />
   <include package="ukh.adhoc" />
 
 </configure>
-
