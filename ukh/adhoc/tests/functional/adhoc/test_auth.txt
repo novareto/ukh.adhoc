@@ -14,8 +14,6 @@ Let's first create an instance of Uvcsite at the top level:
    >>> setSite(root['app'])
 
 
-
-
 Let's look if we have our authenticate infrastucture
 ----------------------------------------------------
 
@@ -39,8 +37,8 @@ The authentication utility contains the user folders
 ----------------------------------------------------
 
    >>> name, authenticator = list(auth.getAuthenticatorPlugins())[0]
-   >>> authenticator.user_folder
-   <ukh.adhoc.auth.UserFolder object at ...>
+   >>> authenticator._users
+   <ukh.adhoc.auth.UsersFolder object at ...>
 
 
 Registries
@@ -70,14 +68,15 @@ Adding an account
    >>> Magnus = Account(
    ...     az='magnus',
    ...     password='pwd',
-   ...     mail='magnus@example.com',
+   ...     email='magnus@example.com',
    ...     oid='mag',
    ...     document_information={})
 
    >>> Magnus
    <ukh.adhoc.components.Account object at ...>
 
-   >>> authenticator.user_folder['magnus'] = Magnus
+   >>> authenticator.add(Magnus)
+   True
 
 
 Test the authentication directly
@@ -88,7 +87,7 @@ Test the authentication directly
 
    >>> info = authenticator.principalInfo('magnus')
    >>> info
-   <ukh.adhoc.auth.PrincipalInfo object at ...>
+   <ukh.adhoc.auth.PrincipalInfo...>
    >>> assert info.id == 'magnus'
 
    >>> assert authenticator.principalInfo('jonas') is None

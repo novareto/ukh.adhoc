@@ -16,12 +16,97 @@ Let's first create an instance of Uvcsite at the top level:
    >>> import json
    >>> from zope.testbrowser.wsgi import Browser
    >>> browser = Browser()
-   >>> browser.handleErrors = False
+   >>> browser.handleErrors = True
    >>> browser.addHeader('Authorization', 'Basic magnus:pwd')
 
-   >>> data = {'id': 1, 'password': 'password', 'email': 'ck@novareto.de', 'oid': '11'}
+Request with a few errors
+-------------------------
 
-   >>> browser.open('http://localhost/app/add', data=json.dumps(data))
-   >>> print json.loads(browser.contents)
-   {u'password': u'password', u'id': 1, u'oid': u'11', u'email': u'ck@novareto.de'}
+   >>> data = {
+   ...     'az': 1,
+   ...     'password': 'password',
+   ...     'email': 'ck@novareto.de',
+   ...     'oid': '11'
+   ...     }
 
+   >>> browser.open(
+   ...     'http://localhost/app/add', data=json.dumps(data))
+   Traceback (most recent call last):
+   ...
+   HTTPError: HTTP Error 400: Bad Request
+
+   >>> assert json.loads(browser.contents) == {
+   ...    'errors': [
+   ...        'az: Object is of wrong type.',
+   ...    ]
+   ... }
+   
+
+
+Working request
+---------------
+
+   >>> data = {
+   ...     'az': 'Audrey',
+   ...     'password': 'password',
+   ...     'email': 'audrey@pithiviers.fr',
+   ...     'oid': '13'
+   ...     }
+
+   >>> browser.open(
+   ...     'http://localhost/app/add', data=json.dumps(data))
+
+   >>> assert browser._response.status == '201 Created'
+
+
+No duplicate
+---------------
+
+   >>> data = {
+   ...     'az': 'Audrey',
+   ...     'password': 'password2',
+   ...     'email': 'otheraudrey@pithiviers.fr',
+   ...     'oid': '31'
+   ...     }
+
+   >>> browser.open(
+   ...     'http://localhost/app/add', data=json.dumps(data))
+   Traceback (most recent call last):
+   ...
+   HTTPError: HTTP Error 400: Bad Request
+
+   >>> assert json.loads(browser.contents) == {
+   ...    'errors': [
+   ...        'Account `Audrey` already exists.',
+   ...    ]
+   ... }
+
+
+Representation
+--------------
+
+   >>> data = {'az': 'Audrey'}
+   >>> browser.open(
+   ...     'http://localhost/app/get', data=json.dumps(data))
+
+   >>> assert json.loads(browser.contents) == {
+   ...     "document_information": None,
+   ...     "password": "password",
+   ...     "az": "Audrey",
+   ...     "email": "audrey@pithiviers.fr",
+   ...     "oid": "13"
+   ... }
+
+
+Update
+---------------
+
+   >>> data = {
+   ...     'az': 'Audrey',
+   ...     'email': 'audrey@paris.fr',
+   ...     }
+
+   >>> browser.open(
+   ...     'http://localhost/app/update', data=json.dumps(data))
+
+   >>> assert browser._response.status == '202 Accepted'

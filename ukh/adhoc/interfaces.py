@@ -46,7 +46,7 @@ class IAccount(interface.Interface):
 
     document_information = schema.List(
         title=u"Document Information",
-        required=True,
+        required=False,
         value_type=schema.Object(
             title=u"iDocumentInfo",
             schema=IDocumentInfo

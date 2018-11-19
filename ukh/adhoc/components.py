@@ -11,11 +11,12 @@ from ukh.adhoc.interfaces import IAccount
 
 @implementer(IAccount)
 class Account(grok.Container):
-    def __init__(self, az, password, mail, oid, document_information=None):
+
+    def __init__(self, az, password, email, oid, document_information=None):
         super(Account, self).__init__()
         self.az = az
         self.password = password
-        self.mail = mail
+        self.email = email
         self.oid = oid
         self.id = az
         self.document_information = document_information
