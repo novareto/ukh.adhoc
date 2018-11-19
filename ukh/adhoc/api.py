@@ -19,7 +19,6 @@ from .interfaces import IAccount, IUKHAdHocApp
 from .components import Account
 
 
-
 class AdHocService(grok.JSON):
     grok.context(IUKHAdHocApp)
 

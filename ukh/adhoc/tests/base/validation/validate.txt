@@ -1,0 +1,128 @@
+Validation: validate
+====================
+
+  >>> from zope.interface import Interface
+  >>> from zope.schema import TextLine, List, Int, Bool
+
+  >>> class IUser(Interface):
+  ...
+  ...     activated = Bool(
+  ...         title=u"Activated",
+  ...         required=True,
+  ...         default=True)
+  ...
+  ...     name = TextLine(
+  ...         title=u"Name",
+  ...         required=True,
+  ...         default=u"Unnamed")
+  ...
+  ...     age = Int(
+  ...         title=u"Age",
+  ...         required=True,
+  ...         min=21)
+  ...
+  ...     friends = List(
+  ...         title=u"Friends",
+  ...         value_type=TextLine(),
+  ...         required=False)
+
+  >>> from ukh.adhoc import serialize
+
+  >>> fields = list(serialize.fields(IUser))
+  >>> fields
+  [<zope.schema...Bool...>,
+   <zope.schema...TextLine...>,
+   <zope.schema...Int...>,
+   <zope.schema...List...>]
+
+
+Basic validation
+****************
+
+  >>> from ukh.adhoc.validate import validate
+
+Missing fields
+--------------
+
+  >>> data = {
+  ...     "name": u"Audrey"
+  ... }
+
+  >>> parsed, errors = validate(data, fields)
+  >>> errors
+  ['Missing field `activated`', 'Missing field `age`']
+  >>> parsed
+  {'name': u'Audrey'}
+
+
+Validation error
+----------------
+
+  >>> data = {
+  ...     "name": u"Audrey",
+  ...     "age": 18,
+  ...     "activated": "true"
+  ... }
+
+  >>> parsed, errors = validate(data, fields)
+  >>> errors
+  [u'activated: Object is of wrong type.', u'age: Value is too small']
+  >>> parsed
+  {'name': u'Audrey'}
+
+
+Complete object
+---------------
+
+  >>> data = {
+  ...     "name": u"Audrey",
+  ...     "age": 35,
+  ...     "activated": False
+  ... }
+
+  >>> parsed, errors = validate(data, fields)
+  >>> errors
+  []
+  >>> parsed
+  {'age': 35, 'activated': False, 'name': u'Audrey'}
+
+
+unknown fields
+---------------
+
+  >>> data = {
+  ...     "name": u"Audrey",
+  ...     "age": 35,
+  ...     "subscribed": False
+  ... }
+
+  >>> parsed, errors = validate(data, fields)
+  >>> errors
+  ['Missing field `activated`', 'Unexpected field `subscribed`']
+  >>> parsed
+  {'age': 35, 'name': u'Audrey'}
+
+
+Conditionnal validation
+***********************
+
+  >>> data = {
+  ...     "name": u"Audrey",
+  ... }
+
+  >>> parsed, errors = validate(data, fields, strict={"name"})
+  >>> errors
+  []
+  >>> parsed
+  {'name': u'Audrey'}
+
+
+  >>> data = {
+  ...     "name": u"Audrey",
+  ... }
+
+  >>> parsed, errors = validate(data, fields, strict={"name", "age"})
+  >>> errors
+  ['Missing field `age`']
+  >>> parsed
+  {'name': u'Audrey'}
