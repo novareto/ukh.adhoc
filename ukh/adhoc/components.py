@@ -5,15 +5,20 @@
 
 import grok
 
+from ukh.adhoc import IAccount
+from zope.interface import implementer
 
-class Account(grok.Model):
-    def __init__(self, az, password, mail, oid, actions):
+
+@implementer(IAccount)
+class Account(grok.Container):
+    def __init__(self, az, password, mail, oid, actions, document_information):
         self.az = az
         self.password = password
         self.mail = mail
         self.oid = oid
         self.actions = actions
         self.id = az
+        self.document_information = document_information
 
     def checkPassword(self, password):
         return True

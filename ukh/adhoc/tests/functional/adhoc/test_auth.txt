@@ -14,6 +14,8 @@ Let's first create an instance of Uvcsite at the top level:
    >>> setSite(root['app'])
 
 
+
+
 Let's look if we have our authenticate infrastucture
 ----------------------------------------------------
 
@@ -103,7 +105,7 @@ Only Authorized people should get access
 
    >>> from zope.testbrowser.wsgi import Browser
    >>> browser = Browser()
-   >>> browser.handleErrors = True 
+   >>> browser.handleErrors = False 
 
 This means if we open the index page. We get redirected
 to the login page.
@@ -112,7 +114,7 @@ to the login page.
    >>> browser.open('http://localhost/app/index')
    Traceback (most recent call last):
    ...
-   HTTPError: HTTP Error 401: Unauthorized
+   Unauthorized: (<ukh.adhoc.views.Index object at 0...>, 'browserDefault', 'zope.View')
 
 
 Now log on as a user and look if we get the index page
@@ -121,40 +123,5 @@ Now log on as a user and look if we get the index page
    >>> browser.addHeader('Authorization', 'Basic magnus:pwd')
    >>> browser.open('http://localhost/app/index')
 
-   >>> 'uvc.user' in browser.contents
-   True
+   >>> browser.contents
 
-   >>> "Herzlich Willkommen" in browser.contents
-   True
-
-
-Not Found View
---------------
-
-   >>> browser.handleErrors = True
-
-We should get the Error Page:
-
-   >>> browser.open('http://localhost/app/not_found')
-   Traceback (most recent call last):
-   ...
-   HTTPError: HTTP Error 404: Not Found
-
-
-And we should get a Status 404
-
-   >>> print browser.headers['Status'].upper()
-   404 NOT FOUND
-
-
-SystemError
------------
-
-   >>> from zope.component import getMultiAdapter
-   >>> from zope.publisher.browser import TestRequest
-   >>> request = TestRequest()
-   >>> exception = Exception()
-
-   >>> system_error = getMultiAdapter((exception, request), name=u"index")
-   >>> system_error
-   <uvcsite.app.SystemError object at ...>
