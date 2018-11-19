@@ -34,8 +34,10 @@ def validate(data, fields, strict=True):
 
 
 def expected(*fields, **kws):
+
     strict = kws.get('strict', True)
     decode = kws.get('decode', json.loads)
+    handle_errors = kws.get('handle_errors', True)
 
     def method_validator(api_meth):
 
@@ -44,6 +46,22 @@ def expected(*fields, **kws):
             data = decode(api.body)
             parsed, errors = validate(data, fields, strict)
             return api_meth(api, parsed, errors)
+
         return validate_incoming_data
 
     return method_validator
+
+
+def error_handler(api_meth):
+
+    @functools.wraps(api_meth)
+    def safeguard(api, parsed, errors):
+        if not errors:
+            try:
+                return api_meth(api, parsed)
+            except KeyError as err:
+                errors.append(err.message)
+        api.request.response.setStatus(400)
+        return {'errors': errors}
+
+    return safeguard
