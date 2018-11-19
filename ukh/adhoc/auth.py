@@ -37,7 +37,9 @@ class UserAuthenticatorPlugin(grok.LocalUtility):
         return PrincipalInfo(id=account.az)
 
     def getAccount(self, login):
-        return login in self.user_folder and self.user_folder[login] or None
+        if login in self.user_folder:
+            return self.user_folder[login]
+        return None
 
     def principalInfo(self, id):
         account = self.getAccount(id)

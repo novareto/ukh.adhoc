@@ -5,18 +5,18 @@
 
 import grok
 
-from ukh.adhoc import IAccount
 from zope.interface import implementer
+from ukh.adhoc.interfaces import IAccount
 
 
 @implementer(IAccount)
 class Account(grok.Container):
-    def __init__(self, az, password, mail, oid, actions, document_information):
+    def __init__(self, az, password, mail, oid, document_information=None):
+        super(Account, self).__init__()
         self.az = az
         self.password = password
         self.mail = mail
         self.oid = oid
-        self.actions = actions
         self.id = az
         self.document_information = document_information
 

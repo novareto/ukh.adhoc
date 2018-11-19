@@ -72,7 +72,10 @@ Adding an account
    ...     password='pwd',
    ...     mail='magnus@example.com',
    ...     oid='mag',
-   ...     actions=[])
+   ...     document_information={})
+
+   >>> Magnus
+   <ukh.adhoc.components.Account object at ...>
 
    >>> authenticator.user_folder['magnus'] = Magnus
 
@@ -123,5 +126,6 @@ Now log on as a user and look if we get the index page
    >>> browser.addHeader('Authorization', 'Basic magnus:pwd')
    >>> browser.open('http://localhost/app/index')
 
-   >>> browser.contents
-
+   >>> print browser.contents
+   <html>
+   Hallo WELT

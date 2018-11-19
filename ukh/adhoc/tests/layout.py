@@ -8,7 +8,7 @@ class Layout(grokcore.layout.Layout):
     context(Interface)
 
     def __call__(self, view):
-        return u"<!DOCTYPE html>\n" + unicode(view.render())
+        return u"<html>\n" + unicode(view.render())
 
     def render(self):
         return u""

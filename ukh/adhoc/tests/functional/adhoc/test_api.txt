@@ -1,0 +1,24 @@
+iDo a functional doctest test on the app.
+========================================
+
+:doctest:
+:layer: ukh.adhoc.tests.test_functional.layer
+
+Let's first create an instance of Uvcsite at the top level:
+
+   >>> from ukh.adhoc.app import UKHAdHocApp
+   >>> from zope.site.hooks import setSite
+   >>> root = getRootFolder()
+   >>> adhoc_app = UKHAdHocApp()
+   >>> root['app'] = adhoc_app
+   >>> setSite(root['app'])
+
+   >>> import json
+   >>> from zope.testbrowser.wsgi import Browser
+   >>> browser = Browser()
+   >>> browser.handleErrors = False 
+   >>> browser.addHeader('Authorization', 'Basic magnus:pwd')
+   >>> browser.open('http://localhost/app/add')
+
+   >>> json.loads(browser.contents)
+

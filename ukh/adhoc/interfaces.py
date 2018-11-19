@@ -1,12 +1,15 @@
+# -*- coding: utf-8 -*-
+# # Copyright (c) 2007-2013 NovaReto GmbH
+# # cklinger@novareto.de 
+
 from zope import interface, schema
-from zope.pluggableauth.interfaces import IPrincipal
 
 
 class IUKHAdHocApp(interface.Interface):
     pass
 
 
-class IDocumentInfo(interface.Interface)
+class IDocumentInfo(interface.Interface):
 
     doc_type = schema.TextLine(
         title=u"Type of the Document",
@@ -42,10 +45,10 @@ class IAccount(interface.Interface):
     )
 
     document_information = schema.List(
-        title="Document Information",
-        value_type=schema.Object(
-            title=_(u"DocumentInfo"),
-            schema=IDocumentInfo),
+        title=u"Document Information",
         required=True,
+        value_type=schema.Object(
+            title=u"iDocumentInfo",
+            schema=IDocumentInfo
+            )
     )
-
