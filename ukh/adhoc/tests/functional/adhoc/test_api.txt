@@ -16,9 +16,12 @@ Let's first create an instance of Uvcsite at the top level:
    >>> import json
    >>> from zope.testbrowser.wsgi import Browser
    >>> browser = Browser()
-   >>> browser.handleErrors = False 
+   >>> browser.handleErrors = False
    >>> browser.addHeader('Authorization', 'Basic magnus:pwd')
-   >>> browser.open('http://localhost/app/add')
 
-   >>> json.loads(browser.contents)
+   >>> data = {'id': 1, 'password': 'password', 'email': 'ck@novareto.de', 'oid': '11'}
+
+   >>> browser.open('http://localhost/app/add', data=json.dumps(data))
+   >>> print json.loads(browser.contents)
+   {u'password': u'password', u'id': 1, u'oid': u'11', u'email': u'ck@novareto.de'}
 
