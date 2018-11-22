@@ -69,8 +69,7 @@ Adding an account
    ...     az='magnus',
    ...     password='pwd',
    ...     email='magnus@example.com',
-   ...     oid='mag',
-   ...     document_information={})
+   ...     oid='mag')
 
    >>> Magnus
    <ukh.adhoc.components.Account object at ...>

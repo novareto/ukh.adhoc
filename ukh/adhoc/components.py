@@ -4,22 +4,34 @@
 
 
 import grok
-
+from persistent import Persistent
+from persistent.list import PersistentList
 from zope.interface import implementer
-from ukh.adhoc.interfaces import IAccount
+from ukh.adhoc.interfaces import IAccount, IDocumentInfo
 
 
 @implementer(IAccount)
 class Account(grok.Container):
 
-    def __init__(self, az, password, email, oid, document_information=None):
+    def __init__(self, az, password, email, oid):
         super(Account, self).__init__()
         self.az = az
         self.password = password
         self.email = email
         self.oid = oid
         self.id = az
-        self.document_information = document_information
+        self.documents = PersistentList()
 
     def checkPassword(self, password):
         return True
+
+
+@implementer(IDocumentInfo)
+class Document(Persistent):
+    doc_type = None
+    defaults = None
+
+    def __init__(self, doc_type, defaults):
+        super(Document, self).__init__()
+        self.doc_type = doc_type
+        self.defaults = defaults

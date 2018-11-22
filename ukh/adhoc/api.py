@@ -13,8 +13,8 @@ from zope.pluggableauth.interfaces import IAuthenticatorPlugin
 
 from .serialize import serialize, fields
 from .validate import expected, error_handler
-from .interfaces import IAccount, IUKHAdHocApp
-from .components import Account
+from .interfaces import IAccount, IDocumentInfo, IUKHAdHocApp
+from .components import Account, Document
 
 
 class AdHocService(grok.JSON):
@@ -50,4 +50,27 @@ class AdHocService(grok.JSON):
         if user is not None:
             struct = serialize(user, IAccount)
             return struct._asdict()
+        raise KeyError('Unknown user.')
+
+    @expected(IAccount['az'], *fields(IDocumentInfo))
+    @error_handler
+    def submit_document(self, data):
+        user = self.manager.get(data['az'])
+        if user is not None:
+            info = data.by_schema[IDocumentInfo]
+            doc = Document(**info)
+            user.documents.append(doc)
+            self.request.response.setStatus(202)
+            return
+        raise KeyError('Unknown user.')
+
+    @expected(IAccount['az'])
+    @error_handler
+    def list_documents(self, data):
+        user = self.manager.get(data['az'])
+        if user is not None:
+            docs = [
+                serialize(doc, IDocumentInfo)._asdict()
+                for doc in user.documents]
+            return docs
         raise KeyError('Unknown user.')

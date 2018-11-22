@@ -4,7 +4,7 @@
 
 import json
 import functools
-
+import collections
 import zope.component
 import zope.schema
 from zope.interface.exceptions import BrokenImplementation
@@ -13,8 +13,20 @@ from zope.interface.verify import verifyObject
 from .serialize import fields
 
 
+class Extracted(dict):
+
+    def __init__(self, *args, **kwargs):
+        super(Extracted, self).__init__(*args, **kwargs)
+        self.by_schema = collections.defaultdict(dict)
+
+    def insert(self, field, value):
+        name = field.__name__
+        self[name] = value
+        self.by_schema[field.interface][name] = value
+
+
 def validate(data, fields, strict=True):
-    parsed = {}
+    parsed = Extracted()
     errors = []
     for field in fields:
         name = field.__name__
@@ -25,7 +37,7 @@ def validate(data, fields, strict=True):
             except zope.schema.ValidationError as err:
                 errors.append('%s: %s' % (name, err.__doc__))
             else:
-                parsed[name] = value
+                parsed.insert(field, value)
         elif field.required and (strict is True or name in strict):
             errors.append('Missing field `%s`' % name)
     if data:
@@ -43,8 +55,13 @@ def expected(*fields, **kws):
 
         @functools.wraps(api_meth)
         def validate_incoming_data(api):
-            data = decode(api.body)
-            parsed, errors = validate(data, fields, strict)
+            try:
+                data = decode(api.body)
+            except ValueError:
+                parsed = None
+                errors = ['Impossible to decode the body.']
+            else:
+                parsed, errors = validate(data, fields, strict)
             return api_meth(api, parsed, errors)
 
         return validate_incoming_data

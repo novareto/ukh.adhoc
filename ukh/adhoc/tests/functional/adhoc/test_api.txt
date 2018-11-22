@@ -90,7 +90,6 @@ Representation
    ...     'http://localhost/app/get', data=json.dumps(data))
 
    >>> assert json.loads(browser.contents) == {
-   ...     "document_information": None,
    ...     "password": "password",
    ...     "az": "Audrey",
    ...     "email": "audrey@pithiviers.fr",
@@ -99,7 +98,7 @@ Representation
 
 
 Update
----------------
+------
 
    >>> data = {
    ...     'az': 'Audrey',
@@ -110,3 +109,40 @@ Update
    ...     'http://localhost/app/update', data=json.dumps(data))
 
    >>> assert browser._response.status == '202 Accepted'
+
+
+Add a document
+--------------
+
+   >>> data = {
+   ...     'az': 'Audrey',
+   ...     'doc_type': 'Word document',
+   ...     'defaults': {
+   ...         'test': 'some value'
+   ...     }
+   ... }
+
+   >>> browser.open(
+   ...     'http://localhost/app/submit_document', data=json.dumps(data))
+
+   >>> assert browser._response.status == '202 Accepted'
+
+
+List a document
+---------------
+
+   >>> data = {
+   ...     'az': 'Audrey'
+   ... }
+
+   >>> browser.open(
+   ...     'http://localhost/app/list_documents', data=json.dumps(data))
+
+   >>> assert json.loads(browser.contents) == [
+   ...     {
+   ...          "doc_type": "Word document",
+   ...          "defaults": {
+   ...              "test": "some value"
+   ...          }
+   ...      }
+   ... ]

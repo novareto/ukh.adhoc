@@ -43,12 +43,3 @@ class IAccount(interface.Interface):
         title=u"OID Document Number",
         required=True
     )
-
-    document_information = schema.List(
-        title=u"Document Information",
-        required=False,
-        value_type=schema.Object(
-            title=u"iDocumentInfo",
-            schema=IDocumentInfo
-            )
-    )
