@@ -102,3 +102,8 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+.mr.developer.cfg
+bin/
+include/
+pip-selfcheck.json

@@ -12,6 +12,8 @@ install_requires=[
 
 tests_require = [
     'z3c.testsetup',
+    'webtest',
+    'zope.testbrowser',
 ]
 
 

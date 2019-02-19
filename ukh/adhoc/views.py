@@ -10,9 +10,6 @@ import uvcsite
 from ukh.adhoc.interfaces import IUKHAdHocApp
 
 
-grok.templatedir("templates")
-
-
 class Index(uvcsite.Page):
     grok.context(IUKHAdHocApp)
 
