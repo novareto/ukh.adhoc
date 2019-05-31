@@ -1,0 +1,39 @@
+<div class="landingpage">
+  <h1> Versicherten Extranet </h1>
+  <p class="lead"> <span tal:content="context.ansprechpartner"> </span> </p>
+  <p> Sie haben sich hier im Versicherten Extranet angemeldet </p>
+  <p> Über diese Plattform können Sie nun alle anfallenden Dokumente zu Ihrem Aktenfall <b tal:content="context.az"> </b> bearbeiten</p>
+
+  <h2> Momentan haben wir folgende Aktenfälle für Sie </h2>
+
+
+<div tal:repeat="document context.values()" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne" tal:attributes="id string:heading-${repeat.document.number}">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" tal:attributes="href string:#collapse-${repeat.document.number}" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <span tal:replace="document.doc_title"> </span>
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne" tal:attributes="id string:collapse-${repeat.document.number}">
+      <div class="panel-body">
+        <dl class="dl-horizontal">
+          <dt>Dokumentart:</dt>
+          <dd> <span tal:replace="document.doc_name"/></dd>
+          <dt>Dokument NR:</dt>
+          <dd> <span tal:replace="document.meta_type"/></dd>
+          <dt>Erstelldatum:</dt>
+          <dd> <span tal:replace="document.modtime.strftime('%d.%m.%Y')"/> </dd>
+          <dt>Status:</dt>
+          <dd> <span tal:replace="document.state"/> </dd>
+        </dl>
+        <span tal:replace="document.anschreiben"> </span>
+        <hr>
+        <a href="" class="btn btn-primary pull-right text-right" tal:attributes="href view.url(document, '@@edit')"> Dokument senden </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

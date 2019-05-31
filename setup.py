@@ -8,11 +8,13 @@ install_requires=[
     'grok',
     'setuptools',
     'uvcsite',
+    'webtest',
+    'zope.app.testing',
+    'uvc.adhoc'
 ]
 
 tests_require = [
     'z3c.testsetup',
-    'webtest',
     'zope.testbrowser',
 ]
 

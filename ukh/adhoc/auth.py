@@ -3,15 +3,20 @@
 # # cklinger@novareto.de
 
 import grok
+from ukh.adhoc.components import Account
+from uvcsite import log
+from uvc.tbskin.skin import ITBSkinLayer
+from zope.pluggableauth import factories
+from zope.pluggableauth import interfaces
+from zope.pluggableauth.interfaces import IAuthenticatorPlugin
+from zope.component import getUtility
+from zope.location.location import located
 from zope.interface import implementer
-from zope.pluggableauth.interfaces import IAuthenticatorPlugin, IPrincipalInfo
-
-from .interfaces import IAccount
+from zope.pluggableauth.interfaces import IPrincipalInfo
 
 
 @implementer(IPrincipalInfo)
 class PrincipalInfo:
-
     def __init__(self, id):
         self.id = id
         self.title = id
@@ -23,7 +28,6 @@ class UsersFolder(grok.Container):
 
 
 class UsersManagement:
-
     def __init__(self):
         self._users = UsersFolder()
 
@@ -35,7 +39,7 @@ class UsersManagement:
 
     def add(self, account):
         if account.az in self._users:
-            raise KeyError('Account `%s` already exists.' % account.az)
+            raise KeyError("Account `%s` already exists." % account.az)
         self._users[account.az] = account
         return True
 
@@ -48,7 +52,7 @@ class UsersManagement:
     def update(self, key, **data):
         user = self.get(key)
         if user is None:
-            raise KeyError('Account `%s` does not exist.' % key)
+            raise KeyError("Account `%s` does not exist." % key)
         for field, value in data.items():
             setattr(user, field, value)
         return True
@@ -76,3 +80,35 @@ class UserAuthenticatorPlugin(UsersManagement, grok.LocalUtility):
         if account is None:
             return
         return PrincipalInfo(id=account.az)
+
+
+def get_account(name):
+    util = getUtility(IAuthenticatorPlugin, "users")
+    account = util.getAccount(name)
+    if account is not None:
+        located(account, grok.getSite(), name)
+    return account
+
+
+class AdHocPrincipal(factories.Principal, Account):
+    info = "CUSTOM PROPERTY"
+
+    def __repr__(self):
+        return "BGPrincipal('%s')" % self.id
+
+
+class AdHocPrincipalFactory(factories.AuthenticatedPrincipalFactory, grok.MultiAdapter):
+    grok.adapts(interfaces.IPrincipalInfo, ITBSkinLayer)
+    grok.baseclass()
+
+    def __call__(self, authentication):
+        log("CREATING USER")
+        principal = AdHocPrincipal(
+            authentication.prefix + self.info.id, self.info.description
+        )
+        grok.notify(
+            interfaces.AuthenticatedPrincipalCreated(
+                authentication, principal, self.info, self.request
+            )
+        )
+        return principal

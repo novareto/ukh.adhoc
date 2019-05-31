@@ -17,6 +17,7 @@ from .interfaces import IAccount, IDocumentInfo, IUKHAdHocApp
 from .components import Account, Document
 
 
+
 class AdHocService(grok.JSON):
     grok.context(IUKHAdHocApp)
 
@@ -52,14 +53,32 @@ class AdHocService(grok.JSON):
             return struct._asdict()
         raise KeyError('Unknown user.')
 
+    @expected(IAccount['az'])
+    @error_handler
+    def get_user(self, data):
+        user = self.manager.get(data['az'])
+        if user is not None:
+            docs = []
+            for name, obj in user.items():
+                docs.append(dict(doc_type=name, status=obj.state, date=obj.modtime.strftime('%d.%m.%Y')))
+            struct = dict(az=user.az, password=user.password, email=user.email, docs=docs, active=user.active)
+            return struct
+        raise KeyError('Unknown user.')
+
     @expected(IAccount['az'], *fields(IDocumentInfo))
     @error_handler
     def submit_document(self, data):
         user = self.manager.get(data['az'])
         if user is not None:
             info = data.by_schema[IDocumentInfo]
-            doc = Document(**info)
-            user.documents.append(doc)
+            view = zope.component.getMultiAdapter(
+                (self.context, self.request), name=data.get('doc_type'))
+            defaults = data.pop('defaults')
+            data.update(defaults)
+            doc = view.create(data)
+            if not doc:
+                doc = Document(**info)
+            user[data.get('doc_type')] = doc
             self.request.response.setStatus(202)
             return
         raise KeyError('Unknown user.')

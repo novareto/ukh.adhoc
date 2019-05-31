@@ -21,6 +21,11 @@ class IDocumentInfo(interface.Interface):
         required=True,
     )
 
+    anschreiben = schema.Text(
+        title=u"Anschreiben",
+        required = False,
+    )
+
 
 class IAccount(interface.Interface):
 
@@ -42,4 +47,19 @@ class IAccount(interface.Interface):
     oid = schema.TextLine(
         title=u"OID Document Number",
         required=True
+    )
+
+    active = schema.Bool(
+        title=u"Teilnahme",
+        description=u"Wollen sie am Verfahren teilnehmen",
+    )
+
+    ansprechpartner = schema.TextLine(
+        title=u"Ansprechpartner",
+        description=u"Ansprechpartner"
+    )
+
+    anrede = schema.TextLine(
+        title=u"Anrede",
+        description=u"Anrede"
     )

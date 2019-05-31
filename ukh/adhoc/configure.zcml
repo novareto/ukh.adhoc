@@ -1,7 +1,13 @@
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
            xmlns:grok="http://namespaces.zope.org/grok">
 
   <include package="grok"/>
   <grok:grok package="." />
+   <include package="ukhtheme.grok" />
+  <include package="bgetem.lv1101" />
+  <include package="ukh.u1051" />
+  <include package="ukh.u1315" />
+  <browser:defaultSkin name="ukhtheme" />^
 </configure>
 
