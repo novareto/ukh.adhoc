@@ -55,6 +55,9 @@ class LandingPage(uvcsite.Page):
 
 class Register(uvcsite.Form):
     grok.context(IAccount)
+    label = u"Anmeldung"
+    description = u"Bitte vervollständigen Sie folgende Angaben um den \
+        'Versicherten Service' der UKH zu nutzen"
 
     fields = uvcsite.Fields(IAccount).omit('az', 'oid', 'password')
     ignoreContent = False
@@ -81,6 +84,10 @@ class UKHBaseAddView(BaseAddView):
     grok.baseclass()
     grok.context(Interface)
 
+    def create(self, data):
+        content = super(UKHBaseAddView, self).create(data)
+        return content
+
 
 class AddForm(AddForm):
     grok.context(Interface)
@@ -96,13 +103,13 @@ class EditForm(uvcsite.Form):
 
     @property
     def label(self):
-        self.context.doc_title
+        return self.context.doc_title
 
-    description = u"KLAUS"
+    description = u"Bitte geben Sie uns folgende Informationen"
 
     @property
     def fields(self):
-        return uvcsite.Fields(*self.context.schema).omit('title', 'docid', 'doc_type')
+        return uvcsite.Fields(*self.context.schema).omit('title', 'docid', 'doc_type', 'anschreiben')
 
 
     @uvcsite.action(u"Speichern")

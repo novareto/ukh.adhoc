@@ -4,7 +4,7 @@
   <p> Sie haben sich hier im Versicherten Extranet angemeldet </p>
   <p> Über diese Plattform können Sie nun alle anfallenden Dokumente zu Ihrem Aktenfall <b tal:content="context.az"> </b> bearbeiten</p>
 
-  <h2> Momentan haben wir folgende Aktenfälle für Sie </h2>
+  <h2> Momentan haben wir folgende Geschäftsfälle für Sie </h2>
 
 
 <div tal:repeat="document context.values()" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -28,7 +28,7 @@
           <dt>Status:</dt>
           <dd> <span tal:replace="document.state"/> </dd>
         </dl>
-        <span tal:replace="document.anschreiben"> </span>
+        <span tal:replace="structure document.anschreiben"> </span>
         <hr>
         <a href="" class="btn btn-primary pull-right text-right" tal:attributes="href view.url(document, '@@edit')"> Dokument senden </a>
       </div>
