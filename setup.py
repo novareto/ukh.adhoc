@@ -10,7 +10,9 @@ install_requires=[
     'uvcsite',
     'webtest',
     'zope.app.testing',
-    'uvc.adhoc'
+    'uvc.adhoc',
+    'z3c.saconfig',
+    'ukh.ibmdbsa'
 ]
 
 tests_require = [

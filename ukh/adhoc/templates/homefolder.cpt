@@ -1,0 +1,39 @@
+<h1> Mein Ordner </h1>
+<p class="lead"> Hier können Sie Ihre Dokumente einsehen </p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Dokumentart</th>
+      <th>Datum</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr tal:repeat="item context.values()">
+      <td tal:condition="item.state == 'Entwurf'">
+        <a href="#" tal:attributes="href view.application_url() + '/' + context.id + '/' + item.doc_type + '/@@edit'" tal:content="item.doc_name">
+        </a>
+      </td>
+      <td tal:condition="item.state != 'Entwurf'">
+        <a href="#" tal:attributes="href view.application_url() + '/' + context.id + '/' + item.doc_type + '/@@pdf'" tal:content="item.doc_name">
+        </a>
+      </td>
+      <td tal:content="item.published.strftime('%d.%m.%Y %H:%M')"></td>
+      <td tal:content="item.state"></td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,100 @@
+<div>
+  <h1> Extranet <small> Unfallkasse Hesssen </small>
+  </h1>
+  <div>
+    <p>
+      Vielen Dank, dass Sie sich für die elektronische Kommunikation entschieden haben.
+    </p>
+    <p>
+      In diesem speziell abgesicherten Kundenservicebereich stellen wir Ihnen besondere Anwendungen und Informationen zur Verfügung.
+    </p>
+    <fieldset>
+      <span class="badge pull-right">Schritt 2/4</span>
+      <form class="form-horizontal" enctype="multipart/form-data" method="post" novalidate="novalidate" action="" tal:attributes="action request.URL">
+
+        <div class="info">
+          Im zweiten Schritt bitten wir Sie um Ihre <strong>Einwilligung zur Datenerhebung</strong>
+          <br>
+          <br>
+          <strong>Einwilligung zur Datenerhebung</strong>
+          <br>
+          <br>
+          <p>
+            Ich bin damit einverstanden, dass dem Unfallversicherungsträger Unterlagen gesendet werden,
+            um meinen Versicherungsfall zu klären und Leistungen festzustellen.
+          </p>
+          <p>
+            Mir ist bewusst, dass alle mich betreffenden Daten grundsätzlich zunächst bei mir zur erheben sind.
+            Zur Beschleunigung des Verfahrens erkläre ich mich damit einverstanden, dass die benötigten Auskünfte
+            und Unterlagen über meine gesundheitlichen Verhältnisse <strong>direkt</strong> von 
+          </p>
+          <ul>
+            <li>
+              meinen behandelnden Ärzten, ggf. früheren behandelnden Ärzten,
+            </li>
+            <li>
+              meiner Krankenkasse, meinen früheren Krankenkassen,
+            </li>
+            <li>
+              dem Rentenversicherungsträger,
+            </li>
+            <li>
+              der Bundesagentur für Arbeit, 
+            </li>
+            <li>
+              dem Versorgungsamt oder anderen Behörden, denen Aufgaben nach dem Schwerbehinderten- oder sozialen Entschädigungsrecht übertragen sind,
+            </li>
+            <li>
+              dem Medizinischen Dienst der Krankenversicherung
+            </li>
+          </ul>
+          <p>
+            angefordert werden.
+          </p>
+          <p>
+            Zu den Auskünften bzw. Unterlagen können insbesondere Röntgen-, CT-Bilder,
+            medizinische Gutachten und Bescheinigungen, Unterlagen über bestehende und frühere Erkrankungen,
+            Vorsorgeuntersuchungen oder sonstige entscheidungserhebliche, ärztliche Unterlagen gehören.
+          </p>
+          <p>
+            Zur Klärung des Versicherungsfalles bzw. zur Feststellung der Leistungshöhe kann es erforderlich sein von
+          </p>
+          <ul>
+            <li>
+              meinem Arbeitgeber, ggf. früheren Arbeitgebern
+            </li>
+          </ul>
+          <p>
+            Auskünfte einzuholen.
+          </p>
+          <p>
+            Insoweit willige ich in die Erhebung meiner Daten ein bzw. entbinde die betroffenen Personen und
+            Stellen von ihrer Schweigepflicht gegenüber der Unfallkasse Hessen.
+          </p>
+          <p>
+            <small>
+            Hinweis: 
+            <br>
+            Ihre Einwilligung  ist  freiwillig und kann jederzeit widerrufen werden. Es genügt eine formlose Mitteilung an uns.
+            Bitte beachten Sie, dass der Widerruf Ihrer Einwilligungen nur für die Zukunft und nicht für die Vergangenheit möglich ist.
+            Die bis zu dem Zeitpunkt Ihres Widerrufs vorgenommene Datenverarbeitung bleibt damit rechtmäßig.
+            </small>
+          </p>
+        </div>
+
+        <div tal:define="widget view.fieldWidgets.get('form.field.datenerhebung')"
+             metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+        </div>
+
+        <br>
+
+        <div class="row">
+          <div metal:use-macro="path: context/@@fieldmacros/template/macros/form-actions"></div>
+        </div>
+      </form>
+    </fieldset>
+  </div>
+  <a href="/fanstatic/ukh.adhoc/Datenschutzhinweis.pdf" target="_blank">
+    Datenschutzrichtlinien der Unfallkasse Hessen
+  </a>
+</div>

@@ -1,0 +1,25 @@
+<div>
+  <h1> Extranet <small> Unfallkasse Hesssen </small>
+  </h1>
+  <div>
+    <b> Sehr geehrte/r  <span tal:replace="string: ${context.anrede} ${context.ansprechpartner}"> </span>, </b>
+    <p>
+      willkommen im Extranet der Unfallkasse Hessen. 
+    </p>
+    <fieldset>
+    <p>
+      Wir bedauern, dass Sie nicht am elektronischen Verfahren teilnehmen möchten.
+      Sollte dies jedoch zukünftig der Fall sein, informieren Sie einfach unser
+      Servicetelefon (Tel.: 069 29972-440).
+    </p>
+    <p>
+      Die weitere Kommunikation findet ab heute in schriftlicher Form statt.
+      Ihr/e zuständige/r Sachbearbeiter*in wird hierüber informiert.
+    </p>
+    </fieldset>
+  </div>
+
+  <a href="/fanstatic/ukh.adhoc/Datenschutzhinweis.pdf" target="_blank">
+    Datenschutzrichtlinien der Unfallkasse Hessen
+  </a>
+</div>

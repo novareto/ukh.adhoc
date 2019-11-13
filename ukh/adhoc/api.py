@@ -15,6 +15,11 @@ from .serialize import serialize, fields
 from .validate import expected, error_handler
 from .interfaces import IAccount, IDocumentInfo, IUKHAdHocApp
 from .components import Account, Document
+from zeam.form.base.components import Collection
+from zope.interface.interfaces import IInterface
+from uvc.letterbasket.components import Message
+from uvc.letterbasket.interfaces import IMessage, IThreadRoot
+from zope.interface import directlyProvides
 
 
 
@@ -26,9 +31,11 @@ class AdHocService(grok.JSON):
         return zope.component.getUtility(
             IAuthenticatorPlugin, name="users")
 
-    @expected(*fields(IAccount))
+    @expected(*fields(IAccount), strict={'az'})
+    #@expected(*Fields(IAccount).select('az'))
     @error_handler
     def add(self, data):
+        #import pdb; pdb.set_trace()
         account = Account(**data)
         self.manager.add(account)
         self.request.response.setStatus(201)
@@ -60,10 +67,12 @@ class AdHocService(grok.JSON):
         if user is not None:
             docs = []
             for name, obj in user.items():
-                docs.append(dict(doc_type=name, status=obj.state, date=obj.modtime.strftime('%d.%m.%Y')))
-            struct = dict(az=user.az, password=user.password, email=user.email, docs=docs, active=user.active)
+                if name != 'nachrichten':
+                    docs.append(dict(doc_type=name, status=obj.state, date=obj.modtime.strftime('%d.%m.%Y')))
+            struct = dict(az=user.az, password=user.password, email=user.email, docs=docs,
+                          active=user.active, anfragedatum=user.anfragedatum, status=user.status)
             return struct
-        raise KeyError('Unknown user.')
+        raise KeyError('Unknown user !!!.')
 
     @expected(IAccount['az'], *fields(IDocumentInfo))
     @error_handler
@@ -79,6 +88,22 @@ class AdHocService(grok.JSON):
             if not doc:
                 doc = Document(**info)
             user[data.get('doc_type')] = doc
+            self.request.response.setStatus(202)
+            return
+        raise KeyError('Unknown user.')
+
+
+    @expected(IAccount['az'], *fields(IMessage))
+    @error_handler
+    def submit_letter(self, data):
+        user = self.manager.get(data['az'])
+        if user is not None:
+            info = data.by_schema[IMessage]
+            message = Message()
+            from dolmen.forms.base import set_fields_data
+            set_fields_data(IMessage, message, info)
+            directlyProvides(message, IThreadRoot)
+            user['nachrichten'].add(message)
             self.request.response.setStatus(202)
             return
         raise KeyError('Unknown user.')

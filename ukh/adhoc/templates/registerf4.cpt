@@ -1,0 +1,279 @@
+<div>
+  <h1> Extranet <small> Unfallkasse Hesssen </small>
+  </h1>
+  <div>
+    <p>
+      Vielen Dank, dass Sie sich für die elektronische Kommunikation entschieden haben.
+    </p>
+    <p>
+      In diesem speziell abgesicherten Kundenservicebereich stellen wir Ihnen besondere Anwendungen und Informationen zur Verfügung.
+    </p>
+    <fieldset>
+      <span class="badge pull-right">Schritt 3/4</span>
+      <form class="form-horizontal" enctype="multipart/form-data" method="post" novalidate="novalidate" action="" tal:attributes="action request.URL">
+        <div class="row">
+          <div class="info">
+            <!--Schritt 1: Im ersten Schritt bitten wir Sie, die uns übermittelnden Angaben zur Ihrer Person zu überprüfen und ggf. zu ergänzen-->
+            Im dritten Schritt bitten wir Sie um Ihre <strong>Einwilligung zur Datenübermittlung</strong>
+            <br>
+            <br>
+            <strong>Einwilligung zur Datenübermittlung</strong>
+            <br>
+            <br>
+            <p>
+              Ich willige darin ein, dass die Unfallkasse Hessen zur Durchführung des Heilverfahrens mich betreffende
+              Gesundheitsdaten (z.B.: Arztberichte, Röntgenaufnahmen), die ihr von einem Arzt oder einer Behörde zugänglich
+              gemacht worden sind, an weitere am Heilverfahren Beteiligte (z.B.: Ärzte, Kliniken, Krankengymnasten,
+              Psychotherapeuten, Ergotherapeuten usw.) übermittelt.
+            </p>
+            <p>
+              <small>
+              Hinweis: 
+              <br>
+              Ihre Einwilligung  ist  freiwillig und kann jederzeit widerrufen werden. Es genügt eine formlose Mitteilung an uns.
+              Bitte beachten Sie, dass der Widerruf Ihrer Einwilligungen nur für die Zukunft und nicht für die Vergangenheit möglich ist.
+              Die bis zu dem Zeitpunkt Ihres Widerrufs vorgenommene Datenverarbeitung bleibt damit rechtmäßig.
+              </small>
+            </p>
+
+
+
+
+          <!--
+            <br>
+            <ol>
+              <li>
+                folgende Ärztinnen und Ärzte über meinen Gesundheitszustand und über Ursachen meiner
+                Erkrankung(en) auf <strong>Nachfrage oder aufgrund medizinischer und leistungsrechtlicher Notwendigkeit unterrichtet:</strong>
+                <br>
+                <br>
+                <div tal:define="widget view.fieldWidgets.get('form.field.hausarzt')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+                <br>
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.hausarztname')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.hausarztstr')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.hausarzthnr')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.hausarztplz')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.hausarztort')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.zusatzarzt')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+                <br>
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.zusatzarzt1')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.zusatzarzt2')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.zusatzarzt3')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.netzwerkpartner')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+                <br>
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.netzwerkpartner1')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.netzwerkpartner2')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+              </li>
+
+              <br>
+
+              <li>
+                folgende Stellen über die abschließende Entscheidung und den Zusammenhang der Erkrankung
+                mit den Arbeitsplatzverhältnissen <strong>nach Bedarf informiert</strong>
+                <br>
+                <br>
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.stelle1')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+                <br>
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.stelle2')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+                <br>
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.stelle3')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+                <br>
+
+                <div tal:define="widget view.fieldWidgets.get('form.field.stelle4')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+                <br>
+
+              </li>
+
+              <li>
+                Bemerkungen:
+                <br>
+                <br>
+                <div tal:define="widget view.fieldWidgets.get('form.field.bemerkung')"
+                     metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+                </div>
+
+                <br>
+              </li>
+
+            </ol>
+
+            Hinweis:
+            <br>
+            <br>
+            Ihre Einwilligung ist freiwillig und kann jederzeit widerrufen werden. Es genügt eine formlose
+            Mitteilung an uns. Bitte beachten Sie, dass der Widerruf Ihrer Einwilligung nur für die Zukunft
+            und nicht für die Vergangenheit möglich ist. Die bis zu dem Zeitpunkt Ihres Widerrufs
+            vorgenommene Datenverarbeitung bleibt damit rechtmäßig.
+            <br>
+            <br>
+
+            <div tal:define="widget view.fieldWidgets.get('form.field.datenschutz')"
+                 metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+            </div>
+
+
+          </div>
+          <div tal:define="widget view.fieldWidgets.get('form.field.anrede')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+          <div tal:define="widget view.fieldWidgets.get('form.field.nname')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+          <div tal:define="widget view.fieldWidgets.get('form.field.vname')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+          <div tal:define="widget view.fieldWidgets.get('form.field.vsstr')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+          <div tal:define="widget view.fieldWidgets.get('form.field.vshnr')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+          <div tal:define="widget view.fieldWidgets.get('form.field.vsplz')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+          <div tal:define="widget view.fieldWidgets.get('form.field.vsort')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+          <div tal:define="widget view.fieldWidgets.get('form.field.gebdat')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+          <div tal:define="widget view.fieldWidgets.get('form.field.unfdat')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+          <div tal:define="widget view.fieldWidgets.get('form.field.unfzeit')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+          <div tal:define="widget view.fieldWidgets.get('form.field.vsvwl')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+          <div tal:define="widget view.fieldWidgets.get('form.field.vstel')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+          <div tal:define="widget view.fieldWidgets.get('form.field.email')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+          <div tal:define="widget view.fieldWidgets.get('form.field.jobinfo1')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+          <div tal:define="widget view.fieldWidgets.get('form.field.jobinfo2')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+          <div tal:define="widget view.fieldWidgets.get('form.field.ansprechpartner')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+          <div tal:define="widget view.fieldWidgets.get('form.field.telefon')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+          </div>
+
+
+        </div>
+        <div class="row">
+          <div metal:use-macro="path: context/@@fieldmacros/template/macros/form-actions"></div>
+        </div>
+      </form>
+    </fieldset>
+  </div>
+  <a href="/fanstatic/ukh.adhoc/Datenschutzhinweis.pdf" target="_blank">
+    Datenschutzrichtlinien der Unfallkasse Hessen
+  </a>
+</div>
+          -->
+
+
+
+
+        </div>
+
+        <div tal:define="widget view.fieldWidgets.get('form.field.datenuebermittlung')"
+             metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+        </div>
+
+        <br>
+
+        <div class="row">
+          <div metal:use-macro="path: context/@@fieldmacros/template/macros/form-actions"></div>
+        </div>
+      </form>
+    </fieldset>
+  </div>
+  <a href="/fanstatic/ukh.adhoc/Datenschutzhinweis.pdf" target="_blank">
+    Datenschutzrichtlinien der Unfallkasse Hessen
+  </a>
+</div>
+
+
+

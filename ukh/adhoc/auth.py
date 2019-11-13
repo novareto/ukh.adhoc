@@ -38,6 +38,7 @@ class UsersManagement:
         return self._users.get(key)
 
     def add(self, account):
+        print "add..."
         if account.az in self._users:
             raise KeyError("Account `%s` already exists." % account.az)
         self._users[account.az] = account
@@ -102,6 +103,7 @@ class AdHocPrincipalFactory(factories.AuthenticatedPrincipalFactory, grok.MultiA
     grok.baseclass()
 
     def __call__(self, authentication):
+        print "adhoc..."
         log("CREATING USER")
         principal = AdHocPrincipal(
             authentication.prefix + self.info.id, self.info.description

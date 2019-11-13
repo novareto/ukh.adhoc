@@ -4,10 +4,15 @@ import zope.schema
 from collections import namedtuple
 
 
-def fields(*schemas):
+def fields(*schemas, **kw):
+    select = kw.get('select')
     for schema in schemas:
         for name, field in zope.schema.getFieldsInOrder(schema):
-            yield field
+            if select:
+                if name in select:
+                    yield field
+            else:
+                yield field
 
 
 def serialize(obj, *schemas):

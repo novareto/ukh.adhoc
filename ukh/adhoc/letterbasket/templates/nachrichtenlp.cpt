@@ -1,0 +1,21 @@
+<div>
+  <h1> Nachrichten </h1>
+  <p class="lead"> ... </p>
+  <table class="table">
+    <tr>
+      <th> Titel </th>
+      <th> Objekt </th>
+      <th> Autor </th>
+      <th> Datum </th>
+    </tr>
+    <tr tal:repeat="message context.values()">
+      <td> <a href="" tal:attributes="href view.url(message)" tal:content="message.title"> </a> </td>
+      <td> Nachricht </td>
+      <td tal:content="message.about['creator']"> </td>
+      <td tal:content="message.about['created']"> </td>
+    </tr>
+  </table>
+  <div>
+    <a class="btn btn-primary" href="@@add"> Hinzufügen </a>
+  </div>
+</div>

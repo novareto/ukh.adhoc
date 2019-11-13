@@ -3,11 +3,17 @@
            xmlns:grok="http://namespaces.zope.org/grok">
 
   <include package="grok"/>
-  <grok:grok package="." />
    <include package="ukhtheme.grok" />
   <include package="bgetem.lv1101" />
   <include package="ukh.u1051" />
   <include package="ukh.u1315" />
+  <include package="ukh.u1040" />
+  <include package="ukh.U_1012" />
+  <include package="ukh.U_1021" />
+  <include package="ukh.U_1031" />
+  <include package="ukh.U_1051" />
   <browser:defaultSkin name="ukhtheme" />^
+  <grok:grok package="uvc.letterbasket" exclude="event" />
+  <grok:grok package="." />
 </configure>
 
