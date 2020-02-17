@@ -64,11 +64,20 @@ class UserAuthenticatorPlugin(UsersManagement, grok.LocalUtility):
     grok.name("users")
 
     def authenticateCredentials(self, credentials):
+        ##########################################################
+        # Hier gibt es Probleme...
+        ##########################################################
         if not isinstance(credentials, dict):
             return
         account = self.getAccount(credentials["login"])
         if account is None:
             return None
+        #print "--------------------------------------------------------------------------------------------"
+        #print dir(account)
+        #print account.checkPassword(credentials["password"])
+        #print credentials["password"]
+        #print account.getGrundDaten()
+        #print "--------------------------------------------------------------------------------------------"
         if not account.checkPassword(credentials["password"]):
             return None
         return PrincipalInfo(id=account.az)

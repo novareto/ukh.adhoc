@@ -16,15 +16,26 @@
             Im letzten Schritt bitten wir Sie noch um ein paar Informationen um eine zügige Bearbeitung zu gewährleisten
           </div>
           <br>
+          <div tal:define="widget view.fieldWidgets.get('form.field.jobinfo1')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline_fix_uk">
+          </div>
+          <br>
+          <div tal:define="widget view.fieldWidgets.get('form.field.jobinfo2')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline_fix_uk">
+          </div>
+          <br>
           <div tal:define="widget view.fieldWidgets.get('form.field.kkdaten')"
                metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline_fix_uk">
           </div>
+          <br>
           <div tal:define="widget view.fieldWidgets.get('form.field.kkvsnummer')"
                metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline_fix_uk">
           </div>
+          <br>
           <div tal:define="widget view.fieldWidgets.get('form.field.hausarzt')"
                metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline_fix_uk">
           </div>
+          <br>
           <div tal:define="widget view.fieldWidgets.get('form.field.zusatzarzt')"
                metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline_fix_uk">
           </div>

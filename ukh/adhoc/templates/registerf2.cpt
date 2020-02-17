@@ -45,14 +45,6 @@
                metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline_fix_uk">
           </div>
           <br>
-          <div tal:define="widget view.fieldWidgets.get('form.field.jobinfo1')"
-               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline_fix_uk">
-          </div>
-          <br>
-          <div tal:define="widget view.fieldWidgets.get('form.field.jobinfo2')"
-               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline_fix_uk">
-          </div>
-          <br>
         </div>
         <div class="row">
           <div metal:use-macro="path: context/@@fieldmacros/template/macros/form-actions"></div>

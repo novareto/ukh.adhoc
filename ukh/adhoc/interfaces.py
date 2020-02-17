@@ -50,6 +50,16 @@ class IDocumentInfo(interface.Interface):
         required=True
     )
 
+    #edat1 = schema.TextLine(
+    #    title=u"Erinnerung1",
+    #    required=False
+    #)
+
+    #edat2 = schema.TextLine(
+    #    title=u"Erinnerung2",
+    #    required=False
+    #)
+
 
 class IAccount(interface.Interface):
 
@@ -226,3 +236,39 @@ class IAccount(interface.Interface):
 
 class IAccountData(IAccount):
     pass
+
+
+from zope.location.interfaces import IContained
+from zope.container.interfaces import IContainer
+from zope.container.constraints import contains
+from dolmen.file import FileField
+
+
+class IMessage(IContained, IContainer):
+    contains('.IMessage')
+
+    title = schema.TextLine(
+        title=u"Betreff",
+        description=u"Der Betreff Ihrer Nachricht",
+    )
+
+    message = schema.Text(
+        title=u"Nachricht",
+        description=u"Bitte tragen Sie hier Ihre Nachricht ein",
+    )
+
+    attachment = FileField(
+        title=u"Anhang",
+        required=False,
+        description=u"Bitte waehlen Sie die Datei, die Sie uns senden moechten.",
+    )
+
+    filename = schema.TextLine(
+        title=u"Dateiname",
+        description=u"Der Dateiname der Datei",
+    )
+
+    access_token = schema.TextLine(
+        title=u"   ",
+        required=False,
+    )

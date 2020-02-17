@@ -10,10 +10,17 @@
   <include package="ukh.u1040" />
   <include package="ukh.U_1012" />
   <include package="ukh.U_1021" />
+  <include package="ukh.U_1025" />
+  <include package="ukh.U_1026" />
+  <include package="ukh.U_1027" />
   <include package="ukh.U_1031" />
+  <include package="ukh.U_1050" />
   <include package="ukh.U_1051" />
+  <include package="ukh.U_TEST01" />
   <browser:defaultSkin name="ukhtheme" />^
   <grok:grok package="uvc.letterbasket" exclude="event" />
+  <include package="dolmen.widget.file" />
+  <include package="dolmen.blob" />
   <grok:grok package="." />
 </configure>
 

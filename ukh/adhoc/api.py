@@ -5,10 +5,13 @@
 import json
 import grok
 import functools
-from collections import namedtuple
 
 import zope.component
 import zope.schema
+
+
+from base64 import decodestring
+from collections import namedtuple
 from zope.pluggableauth.interfaces import IAuthenticatorPlugin
 
 from .serialize import serialize, fields
@@ -18,9 +21,31 @@ from .components import Account, Document
 from zeam.form.base.components import Collection
 from zope.interface.interfaces import IInterface
 from uvc.letterbasket.components import Message
-from uvc.letterbasket.interfaces import IMessage, IThreadRoot
+#from uvc.letterbasket.interfaces import IMessage, IThreadRoot
+from .interfaces import IMessage
+from uvc.letterbasket.interfaces import IThreadRoot
 from zope.interface import directlyProvides
 
+####################################################
+# Test Mail senden...
+from uvcsite.utils.mail import send_mail
+from ukh.adhoc.interfaces import IAccountData
+
+
+BODY = u"""\
+Guten Tag,
+
+Sie haben eine neue Nachricht!
+
+Bitte melden Sie sich im Versicherten Extranet der Unfallkasse Hessen an und kontrollieren Ihre Nachrichten.
+
+
+Freundliche Grüße
+
+
+Unfallkasse Hessen
+"""
+####################################################
 
 
 class AdHocService(grok.JSON):
@@ -63,6 +88,7 @@ class AdHocService(grok.JSON):
     @expected(IAccount['az'])
     @error_handler
     def get_user(self, data):
+        print "get_user"
         user = self.manager.get(data['az'])
         if user is not None:
             docs = []
@@ -77,9 +103,14 @@ class AdHocService(grok.JSON):
     @expected(IAccount['az'], *fields(IDocumentInfo))
     @error_handler
     def submit_document(self, data):
+        print "submit_document"
         user = self.manager.get(data['az'])
         if user is not None:
             info = data.by_schema[IDocumentInfo]
+            #print info['edat1']
+            #print info['edat2']
+            #if info['edat1'] != '':
+            #    print "ERINNERUNG 1 !!!"
             view = zope.component.getMultiAdapter(
                 (self.context, self.request), name=data.get('doc_type'))
             defaults = data.pop('defaults')
@@ -96,15 +127,39 @@ class AdHocService(grok.JSON):
     @expected(IAccount['az'], *fields(IMessage))
     @error_handler
     def submit_letter(self, data):
+        #####################################################
+        #account = self.manager.get(data['az'])
+        #ret = account.getGrundDaten()
+        account = self.manager.get(data['az'])
+        #import pdb; pdb.set_trace()
         user = self.manager.get(data['az'])
         if user is not None:
             info = data.by_schema[IMessage]
             message = Message()
+            grok.notify(grok.ObjectCreatedEvent(message))
             from dolmen.forms.base import set_fields_data
+            if 'attachment' in info.keys():
+                from StringIO import StringIO
+                f = StringIO(decodestring(info['attachment']))
+                #f.filename="download"
+                f.filename=info['filename']
+                info['attachment'] = f
             set_fields_data(IMessage, message, info)
             directlyProvides(message, IThreadRoot)
             user['nachrichten'].add(message)
             self.request.response.setStatus(202)
+            ####################################################
+            # Test Mail senden...
+            to = [account.email]
+            body = BODY
+            f_adr = "extranet@ukh.de"
+            send_mail(
+                f_adr,
+                to,
+                u"Neue Nachricht",
+                body=body,
+                )
+            ####################################################
             return
         raise KeyError('Unknown user.')
 

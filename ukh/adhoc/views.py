@@ -47,6 +47,49 @@ class PrincipalTraverser(grok.Traverser):
         return get_account(name)
 
 
+
+
+
+
+
+from zope.traversing.interfaces import IBeforeTraverseEvent
+from zope.authentication.interfaces import IUnauthenticatedPrincipal
+@grok.subscribe(IBeforeTraverseEvent)
+def redirect_on_empty_props(event):
+    principal = event.request.principal
+    #print principal
+
+    #print event.request.principal.id
+
+
+    if IUnauthenticatedPrincipal.providedBy(principal):
+        return
+    if 'stammdaten' in event.request.environment.get('PATH_INFO'):
+        return
+    if event.request.principal.id == u'servicetelefon-0':
+        return
+    ##if event.request.getTraversalStack()[0] == "stammdaten":
+    ##    return
+    #um = getUtility(IUserManagement)
+    #account = um.getUser(principal.id)
+    #if account:
+    #    if (account.get('tlnr', '').strip() == ""
+    #            or account.get('vwhl', '').strip() == ""
+    #            or account.get('nname', '').strip() == ""
+     #           or account.get('email', '').strip() == ""
+      #          or account.get('vname', '').strip() == ""):
+      #      event.request.response.redirect(
+      #          uvcsite.getHomeFolderUrl(event.request, 'stammdaten'))
+
+
+
+
+
+
+
+
+
+
 class LandingPage(uvcsite.Page):
     grok.name("index")
     grok.context(IAccount)
@@ -54,18 +97,14 @@ class LandingPage(uvcsite.Page):
     def update(self):
         if self.context.status != 'bearbeitet':
             self.redirect(self.url(self.context, 'registerf1'))
-        #status = False
+        if self.context.status == 'bearbeitet':
+            if self.context.active == 'nein':
+                self.redirect(self.url(self.context, 'registerfinish'))
         self.context.statustext = u'Momentan haben wir keine Geschäftsfälle für Sie'
         items = [x for x in self.context.values() if x.__name__ != 'nachrichten']
         for item in items:
             if item.state == 'Entwurf':
                 self.context.statustext = u'Momentan haben wir folgende Geschäftsfälle für Sie'
-        #if len(self.context.values()) == 0:
-        #    self.context.statustext = u'Momentan haben wir keine Geschäftsfälle für Sie'
-        #else:
-        #    self.context.statustext = u'Momentan haben wir folgende Geschäftsfälle für Sie'
-        #if not self.context.active:
-        #    self.redirect(self.url(self.context, 'registerf1'))
 
 
 class Homefolder(uvcsite.Page):
@@ -75,20 +114,32 @@ class Homefolder(uvcsite.Page):
     def update(self):
         if self.context.status != 'bearbeitet':
             self.redirect(self.url(self.context, 'registerf1'))
+        if self.context.status == 'bearbeitet':
+            if self.context.active == 'nein':
+                self.redirect(self.url(self.context, 'registerfinish'))
 
 
 class PersonalPanel(PersonalPanel):
     grok.context(IAccount)
 
+    def update(self):
+        if self.context.status != 'bearbeitet':
+            self.redirect(self.url(self.context, 'registerf1'))
+        if self.context.status == 'bearbeitet':
+            if self.context.active == 'nein':
+                self.redirect(self.url(self.context, 'registerfinish'))
+
 
 class ChangePassword(ChangePassword):
     grok.context(IAccount)
-
     fields = uvcsite.Fields(IAccount).select('password')
 
     def update(self):
         if self.context.status != 'bearbeitet':
             self.redirect(self.url(self.context, 'registerf1'))
+        if self.context.status == 'bearbeitet':
+            if self.context.active == 'nein':
+                self.redirect(self.url(self.context, 'registerfinish'))
 
     @uvcsite.action('Speichern')
     def handle_save(self):
@@ -117,6 +168,9 @@ class MeineDaten(uvcsite.Form):
     def update(self):
         if self.context.status != 'bearbeitet':
             self.redirect(self.url(self.context, 'registerf1'))
+        if self.context.status == 'bearbeitet':
+            if self.context.active == 'nein':
+                self.redirect(self.url(self.context, 'registerfinish'))
         meinedatencss.need()
 
     @property

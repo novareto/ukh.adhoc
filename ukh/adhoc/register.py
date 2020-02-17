@@ -155,14 +155,17 @@ class AccountDataAdapter(grok.Adapter):
         else:
             ret = self.grunddaten
             lenstd = len(str(ret['unfstd']))
-            if lenstd == 3:
-                s = str(ret['unfstd'])[0:1]
-                s = '0' + s
-                m = str(ret['unfstd'])[1:3]
-            if lenstd == 4:
-                s = str(ret['unfstd'])[0:2]
-                m = str(ret['unfstd'])[2:4]
-            unfzeit = s + ':' + m
+            if lenstd <= 1:
+                unfzeit = '00:00'
+            else:
+                if lenstd == 3:
+                    s = str(ret['unfstd'])[0:1]
+                    s = '0' + s
+                    m = str(ret['unfstd'])[1:3]
+                if lenstd == 4:
+                    s = str(ret['unfstd'])[0:2]
+                    m = str(ret['unfstd'])[2:4]
+                unfzeit = s + ':' + m
         return unfzeit
 
     @property
@@ -197,22 +200,6 @@ class AccountDataAdapter(grok.Adapter):
     def email(self, value):
         self.context.email = value
 
-    @property
-    def jobinfo1(self):
-        return self.context.jobinfo1
-
-    @jobinfo1.setter
-    def jobinfo1(self, value):
-        self.context.jobinfo1 = value
-
-    @property
-    def jobinfo2(self):
-        return self.context.jobinfo2
-
-    @jobinfo2.setter
-    def jobinfo2(self, value):
-        self.context.jobinfo2 = value
-
     # RegisterF3
 
     @property
@@ -234,6 +221,22 @@ class AccountDataAdapter(grok.Adapter):
         self.context.datenuebermittlung = value
 
     # RegisterF5
+
+    @property
+    def jobinfo1(self):
+        return self.context.jobinfo1
+
+    @jobinfo1.setter
+    def jobinfo1(self, value):
+        self.context.jobinfo1 = value
+
+    @property
+    def jobinfo2(self):
+        return self.context.jobinfo2
+
+    @jobinfo2.setter
+    def jobinfo2(self, value):
+        self.context.jobinfo2 = value
 
     @property
     def kkdaten(self):
@@ -294,17 +297,6 @@ class AccountDataAdapter(grok.Adapter):
         self.context.ansprechpartner = value
 
 
-
-
-
-
-
-
-
-
-
-
-
 class RegisterF1(uvcsite.Form):
     grok.context(IAccount)
     label = u"Teilnahme"
@@ -339,7 +331,7 @@ class RegisterF2(RegisterF1):
     fields = uvcsite.Fields(IAccount).omit(
         'az', 'oid', 'password', 'active', 'status', 'ansprechpartner',
         'anfragedatum', 'telefon', 'datenerhebung', 'datenuebermittlung',
-        'kkdaten', 'kkvsnummer', 'hausarzt', 'zusatzarzt')
+        'kkdaten', 'kkvsnummer', 'hausarzt', 'zusatzarzt', 'jobinfo1', 'jobinfo2')
     fields['anrede'].mode = "radio"
     ignoreContent = False
 
@@ -373,8 +365,8 @@ class RegisterF3(RegisterF1):
     fields = uvcsite.Fields(IAccount).select('datenerhebung')
     fields['datenerhebung'].mode = "radio"
 
-    def update(self):
-        print "################################################################"
+    #def update(self):
+    #    print "################################################################"
 
     @uvcsite.action(u'Zurück')
     def handle_back(self):
@@ -403,8 +395,8 @@ class RegisterF4(RegisterF1):
     fields = uvcsite.Fields(IAccount).select('datenuebermittlung')
     fields['datenuebermittlung'].mode = "radio"
 
-    def update(self):
-        print "REGISTERF4   ###################################################"
+    #def update(self):
+    #    print "REGISTERF4   ###################################################"
 
     @uvcsite.action(u'Zurück')
     def handle_back(self):
@@ -430,10 +422,11 @@ class RegisterF5(RegisterF1):
     description = u"Bitte vervollständigen Sie folgende Angaben um den \
         'Versicherten Service' der UKH zu nutzen"
 
-    fields = uvcsite.Fields(IAccount).select('kkdaten', 'kkvsnummer', 'hausarzt', 'zusatzarzt')
+    fields = uvcsite.Fields(IAccount).select('jobinfo1', 'jobinfo2', 'kkdaten',
+                                             'kkvsnummer', 'hausarzt', 'zusatzarzt')
 
-    def update(self):
-        print "REGISTERF5   ###################################################"
+    #def update(self):
+    #    print "REGISTERF5   ###################################################"
 
     @uvcsite.action(u'Zurück')
     def handle_back(self):
@@ -480,4 +473,3 @@ class RegisterFinish(uvcsite.Form):
         grunddaten = self.context.getGrundDaten()
         Absage_pdf(context, grunddaten)
         css.need()
-

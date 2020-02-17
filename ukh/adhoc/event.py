@@ -28,6 +28,10 @@ Ihre Unfallkasse Hessen
 
 @grok.subscribe(IAdHocContent, grok.IObjectAddedEvent)
 def notify_user(obj, event):
+    print "SCHEISSE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    print dir(obj)
+    print event
+    print "SCHEISSE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     account = obj.__parent__
     grunddaten = IAccountData(obj.__parent__)
     message = MES % (datetime.datetime.now().strftime('%d.%m.%Y'), obj.doc_title)
