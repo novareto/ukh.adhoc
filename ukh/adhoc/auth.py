@@ -3,6 +3,10 @@
 # # cklinger@novareto.de
 
 import grok
+import base64
+import urllib
+import uvcsite
+
 from ukh.adhoc.components import Account
 from uvcsite import log
 from uvc.tbskin.skin import ITBSkinLayer
@@ -13,6 +17,62 @@ from zope.component import getUtility
 from zope.location.location import located
 from zope.interface import implementer
 from zope.pluggableauth.interfaces import IPrincipalInfo
+from dolmen.app.authentication.browser.login import ILoginForm, Login
+from dolmen.app.authentication.plugins.cookies import CookiesCredentials
+from zope import schema
+from zope.publisher.interfaces.http import IHTTPRequest
+
+
+class UKHCookiesCredentials(CookiesCredentials):
+    grok.name('ukh_cookies')
+
+    gebdatefield = 'gebdate'
+
+    @staticmethod
+    def make_cookie(login, password, gebdate):
+        credstr = u'%s:%s:%s' % (login, password, gebdate)
+        val = base64.encodestring(credstr.encode('utf-8'))
+        return urllib.quote(val)
+
+    def extractCredentials(self, request):
+        if not IHTTPRequest.providedBy(request):
+            return
+
+        login = request.get(self.loginfield, None)
+        password = request.get(self.passwordfield, None)
+        gebdate = request.get(self.gebdatefield, None)
+        cookie = request.get(self.cookie_name, None)
+
+        if login and password and gebdate:
+            cookie = self.make_cookie(login, password, gebdate)
+            request.response.setCookie(self.cookie_name, cookie, path='/')
+        elif cookie:
+            val = base64.decodestring(urllib.unquote(cookie)).decode('utf-8')
+            login, password, gebdate = val.split(':')
+        else:
+            return
+        return {'login': login, 'password': password, 'gebdate': gebdate}
+
+
+
+class IUKHLoginForm(ILoginForm):
+
+    gebdate = schema.TextLine(
+        title=u"Geburtsdatum",
+        description=u"Geburtsdatum",
+        required=True
+    )
+
+
+class Login(Login):
+    grok.layer(ITBSkinLayer)
+
+    @property
+    def fields(self):
+        fields = uvcsite.Fields(IUKHLoginForm)
+        for field in fields:
+            field.prefix = u""
+        return fields
 
 
 @implementer(IPrincipalInfo)
@@ -78,7 +138,7 @@ class UserAuthenticatorPlugin(UsersManagement, grok.LocalUtility):
         #print credentials["password"]
         #print account.getGrundDaten()
         #print "--------------------------------------------------------------------------------------------"
-        if not account.checkPassword(credentials["password"]):
+        if not account.checkPassword(credentials["password"], credentials['gebdate']):
             return None
         return PrincipalInfo(id=account.az)
 
