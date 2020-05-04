@@ -4,7 +4,7 @@
 
   <include package="grok"/>
    <include package="ukhtheme.grok" />
-  <include package="bgetem.lv1101" />
+<!--
   <include package="ukh.u1051" />
   <include package="ukh.u1315" />
   <include package="ukh.u1040" />
@@ -17,8 +17,9 @@
   <include package="ukh.U_1050" />
   <include package="ukh.U_1051" />
   <include package="ukh.U_TEST01" />
-  <browser:defaultSkin name="ukhtheme" />^
   <grok:grok package="uvc.letterbasket" exclude="event" />
+-->
+  <browser:defaultSkin name="ukhtheme" />^
   <include package="dolmen.widget.file" />
   <include package="dolmen.blob" />
   <grok:grok package="." />

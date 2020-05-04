@@ -28,10 +28,6 @@ from .pdf import Absage_pdf, Zusage_pdf
 
 grok.templatedir("templates")
 
-import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
-
 
 class AccountDataAdapter(grok.Adapter):
     grok.context(IAccount)
