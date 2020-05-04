@@ -1,0 +1,61 @@
+<div>
+  <h1> Leistungskonto </h1>
+  <br>
+  <div class="row ">
+
+    <div class="col-md-12">
+      <p> Folgende Hauptleistungen wurden durch die Unfallkasse Hessen erbracht: </p>
+    </div>
+
+    <div class="col-md-12">
+
+      <table class="ktotable table-striped table-bordered table-condensed" tal:define="results view.daten" tal:condition="results">
+        <thead>
+          <tr>
+            <th>
+              Leistung
+            </th>
+            <th class="ukh_kto_th">
+              Leistung in EUR
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr tal:repeat="result results" tal:attributes="class repeat['result'].odd() and 'odd' or 'even'">
+            <td>
+              <div tal:condition="result[0] != 'Gesamtbetrag in EUR'">
+                <span tal:content="result[0]" />
+              </div>
+              <div tal:condition="result[0] == 'Gesamtbetrag in EUR'">
+                <div class="ukh_kto_summe">
+                  <span tal:content="result[0]" />
+                </div>
+              </div>
+            </td>
+            <td class="ukh_kto">
+              <div tal:condition="result[0] != 'Gesamtbetrag in EUR'">
+                <span tal:content="result[1]" />
+              </div>
+              <div tal:condition="result[0] == 'Gesamtbetrag in EUR'">
+                <div class="ukh_kto_summe">
+                  <span tal:content="result[1]" />
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+
+    <div class="col-md-12">
+      <br>
+    </div>
+
+  </div>
+
+</div>

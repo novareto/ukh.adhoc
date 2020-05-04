@@ -50,16 +50,6 @@ class IDocumentInfo(interface.Interface):
         required=True
     )
 
-    #edat1 = schema.TextLine(
-    #    title=u"Erinnerung1",
-    #    required=False
-    #)
-
-    #edat2 = schema.TextLine(
-    #    title=u"Erinnerung2",
-    #    required=False
-    #)
-
 
 class IAccount(interface.Interface):
 
@@ -78,8 +68,18 @@ class IAccount(interface.Interface):
         required = False
     )
 
+    passworda = schema.Password(
+        title=u"Bitte tragen Sie hier ihr altes Passwort ein",
+        required=True
+    )
+
     password = schema.Password(
-        title=u"Passwort",
+        title=u"Bitte tragen Sie hier ihr neues Passwort ein",
+        required=True
+    )
+
+    passwordv = schema.Password(
+        title=u"Bitte bestätigen Sie das neue Passwort",
         required=True
     )
 
@@ -98,11 +98,9 @@ class IAccount(interface.Interface):
         title=u"Teilnahme",
         description=u"Wollen sie am Verfahren teilnehmen",
         values=(u'ja', u'nein'),
-        #source=source_active,
     )
 
     datenerhebung = schema.Choice(
-        #title=u"Bestätigung",
         title=u"Einwilligung zur Datenerhebung",
         description=u"Hiermit bestätige ich die oben genannten Dokument der\
             UKH gelesen und akzeptiert zu haben.",
@@ -111,7 +109,6 @@ class IAccount(interface.Interface):
     )
 
     datenuebermittlung = schema.Choice(
-        #title=u"Bestätigung",
         title=u"Einwilligung zur Datenübermittlung",
         description=u"Hiermit bestätige ich die oben genannten Dokument der\
             UKH gelesen und akzeptiert zu haben.",
@@ -143,7 +140,6 @@ class IAccount(interface.Interface):
     anrede = schema.Choice(
         title=u"Anrede",
         values=(u'Frau', u'Herr')
-        #vocabulary=source_anrede(None)
     )
 
     nname = schema.TextLine(
@@ -173,23 +169,27 @@ class IAccount(interface.Interface):
     )
 
     gebdat = schema.TextLine(
-        title=u"Geburtsdatum"
+        title=u"Geburtsdatum *"
     )
 
     unfdat = schema.TextLine(
-        title=u"Unfalldatum"
+        title=u"Unfalldatum",
+        required=False
     )
 
     unfzeit = schema.TextLine(
-        title=u"Unfallzeit"
+        title=u"Unfallzeit",
+        required=False
     )
 
     vsvwl = schema.TextLine(
-        title=u"Vorwahl"
+        title=u"Vorwahl",
+        required=False
     )
 
     vstel = schema.TextLine(
-        title=u"Telefonnummer"
+        title=u"Telefonnummer",
+        required=False
     )
 
     handy = schema.TextLine(
@@ -198,39 +198,39 @@ class IAccount(interface.Interface):
     )
 
     jobinfo1 = schema.TextLine(
-        title=u"Arbeitgeber*",
+        title=u"Arbeitgeber *",
         description=u"Nennen Sie uns den Namen und die Anschrift Ihres Arbeitgebers/Unfallbetriebs",
         required=True
     )
 
     jobinfo2 = schema.TextLine(
-        title=u"Berufliche Tätigkeit*",
-        description=u"Nennen Sie uns Ihre Berufliche Tätigkeit"
+        title=u"Berufliche Tätigkeit *",
+        description=u"Nennen Sie uns Ihre Berufliche Tätigkeit",
+        required=True
     )
 
-    #geburtsdatum = schema.TextLine(
-    #    title=u"Geburtsdatum",
-    #    description=u"Geburtsdatum"
-    #)
-
     kkdaten = schema.TextLine(
-        title=u"Daten der Krankenkasse",
-        description=u"Nennen Sie uns den Namen und die Anschrift Ihrer Krankenkasse"
+        title=u"Daten der Krankenkasse *",
+        description=u"Nennen Sie uns den Namen und die Anschrift Ihrer Krankenkasse",
+        required=True
     )
 
     kkvsnummer = schema.TextLine(
-        title=u"Ihre Versichertennummer",
-        description=u"Nennen Sie uns Ihre Versichertennummer der Krankenkasse"
+        title=u"Ihre Versichertennummer *",
+        description=u"Nennen Sie uns Ihre Versichertennummer der Krankenkasse",
+        required=True
     )
 
     hausarzt = schema.TextLine(
-        title=u"Hausärztliche Praxis",
-        description=u"Nennen Sie uns Ihre Hausärztliche Praxis (Name und Anschrift)"
+        title=u"Hausärztliche Praxis *",
+        description=u"Nennen Sie uns Ihre Hausärztliche Praxis (Name und Anschrift)",
+        required=True
     )
 
     zusatzarzt = schema.TextLine(
-        title=u"Weitere Ärztinnen und Ärzte",
+        title=u"Weitere Ärztinnen und Ärzte *",
         description=u"Nennen Sie uns Weitere an der Behandlung beteiligte Ärztinnen und Ärzte",
+        required=True
     )
 
 

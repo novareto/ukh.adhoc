@@ -4,6 +4,7 @@
 
 
 import grok
+import re
 import uvcsite
 
 from .resources import css, stepcss
@@ -327,8 +328,10 @@ class RegisterF2(RegisterF1):
     fields = uvcsite.Fields(IAccount).omit(
         'az', 'oid', 'password', 'active', 'status', 'ansprechpartner',
         'anfragedatum', 'telefon', 'datenerhebung', 'datenuebermittlung',
-        'kkdaten', 'kkvsnummer', 'hausarzt', 'zusatzarzt', 'jobinfo1', 'jobinfo2')
+        'kkdaten', 'kkvsnummer', 'hausarzt', 'zusatzarzt', 'jobinfo1', 'jobinfo2',
+        'passworda', 'passwordv')
     fields['anrede'].mode = "radio"
+    fields['gebdat'].mode = "readonly"
     ignoreContent = False
 
     def update(self):
@@ -337,9 +340,6 @@ class RegisterF2(RegisterF1):
     @uvcsite.action(u'Zurück')
     def handle_back(self):
         data, errors = self.extractData()
-        if errors:
-            self.flash(u"Bitte überprüfen Sie Ihre eingaben")
-            return
         changes = apply_data_event(self.fields, self.context, data)
         self.redirect(self.url(self.context) + '/registerf1')
 
@@ -349,6 +349,11 @@ class RegisterF2(RegisterF1):
         if errors:
             self.flash(u"Bitte überprüfen Sie Ihre eingaben")
             return
+        if data['email'] != '':
+            checkmail = re.compile(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$").match
+            if not bool(checkmail(data['email'])):
+                self.flash(u'Bitte tragen Sie eine gültige E-Mail Adresse ein.')
+                return
         changes = apply_data_event(self.fields, self.context, data)
         self.flash(u'Speichern erfolgreich.')
         self.redirect(self.url(self.context) + '/registerf3')
@@ -360,9 +365,6 @@ class RegisterF3(RegisterF1):
         'Versicherten Service' der UKH zu nutzen"
     fields = uvcsite.Fields(IAccount).select('datenerhebung')
     fields['datenerhebung'].mode = "radio"
-
-    #def update(self):
-    #    print "################################################################"
 
     @uvcsite.action(u'Zurück')
     def handle_back(self):
@@ -391,9 +393,6 @@ class RegisterF4(RegisterF1):
     fields = uvcsite.Fields(IAccount).select('datenuebermittlung')
     fields['datenuebermittlung'].mode = "radio"
 
-    #def update(self):
-    #    print "REGISTERF4   ###################################################"
-
     @uvcsite.action(u'Zurück')
     def handle_back(self):
         data, errors = self.extractData()
@@ -421,15 +420,9 @@ class RegisterF5(RegisterF1):
     fields = uvcsite.Fields(IAccount).select('jobinfo1', 'jobinfo2', 'kkdaten',
                                              'kkvsnummer', 'hausarzt', 'zusatzarzt')
 
-    #def update(self):
-    #    print "REGISTERF5   ###################################################"
-
     @uvcsite.action(u'Zurück')
     def handle_back(self):
         data, errors = self.extractData()
-        if errors:
-            self.flash(u"Bitte überprüfen Sie Ihre eingaben")
-            return
         changes = apply_data_event(self.fields, self.context, data)
         self.redirect(self.url(self.context) + '/registerf4')
 
@@ -444,7 +437,6 @@ class RegisterF5(RegisterF1):
         context = self.context
         grunddaten = self.context.getGrundDaten()
         Zusage_pdf(context, grunddaten)
-        #self.redirect(self.url(self.context) + '/registerf6')
         self.redirect(self.application_url())
 
 

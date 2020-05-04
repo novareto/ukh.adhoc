@@ -21,7 +21,7 @@ adhocRegistry = create_components_registry(
 def setup_pau(PAU):
     PAU.authenticatorPlugins = ("users",)
     PAU.credentialsPlugins = (
-        "cookies",
+        "ukh_cookies",
         "Zope Realm Basic-Auth",
         "No Challenge if Authenticated",
     )

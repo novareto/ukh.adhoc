@@ -1,13 +1,104 @@
 <div class="landingpage">
+  <h1> Willkommen in Ihrem persönlichen Versichertenportal </h1>
+  <br>
+    <div class="row">
+
+      <div class="col-md-3">
+        <a href="" tal:attributes="href view.url(context, 'nachrichten')">
+          <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Nachricht.svg'" />
+          <h2><center>Nachrichten</center></h2>
+        </a>
+      </div>
+
+      <div class="col-md-3">
+        <a href="" tal:attributes="href view.url(context, 'formulare')">
+          <div tal:condition="context.anzahl == 0">
+            <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Formulare.svg'" />
+          </div>
+          <div tal:condition="context.anzahl == 1">
+            <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Formulare_1.svg'" />
+          </div>
+          <div tal:condition="context.anzahl == 2">
+            <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Formulare_2.svg'" />
+          </div>
+          <div tal:condition="context.anzahl == 3">
+            <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Formulare_3.svg'" />
+          </div>
+          <div tal:condition="context.anzahl == 4">
+            <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Formulare_4.svg'" />
+          </div>
+          <div tal:condition="context.anzahl == 5">
+            <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Formulare_5.svg'" />
+          </div>
+          <div tal:condition="context.anzahl == 6">
+            <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Formulare_6.svg'" />
+          </div>
+          <div tal:condition="context.anzahl == 7">
+            <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Formulare_7.svg'" />
+          </div>
+          <div tal:condition="context.anzahl == 8">
+            <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Formulare_8.svg'" />
+          </div>
+          <div tal:condition="context.anzahl == 9">
+            <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Formulare_9.svg'" />
+          </div>
+          <div tal:condition="context.anzahl > 9">
+            <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Formulare_9plus.svg'" />
+          </div>
+          <h2><center>Formulare</center></h2>
+        </a>
+      </div>
+
+      <div class="col-md-3">
+        <a href="" tal:attributes="href view.url(context, 'fahrtkosten')">
+          <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Fahrtkosten.svg'" />
+          <h2><center>Fahrtkosten</center></h2>
+        </a>
+      </div>
+
+      <div class="col-md-3">
+        <a href="" tal:attributes="href view.url(context, 'meinkonto')">
+          <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Leistungskonto.svg'" />
+          <h2><center>Leistungskonto</center></h2>
+        </a>
+      </div>
+
+
+      <div class="col-md-3">
+        <a href="" tal:attributes="href view.url(context, 'uploaderadd')">
+          <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Upload.svg'" />
+          <h2><center>Upload Dokumente</center></h2>
+        </a>
+      </div>
+
+      <div class="col-md-3">
+      </div>
+
+      <div class="col-md-3">
+      </div>
+
+      <div class="col-md-3">
+      </div>
+
+
+    </div>
+
+  <!--
   <h1> Versicherten Extranet </h1>
   <p class="lead"> <span tal:content="context.ansprechpartner"> </span> </p>
   <p> Sie haben sich hier im Versicherten Extranet angemeldet </p>
   <p> Über diese Plattform können Sie nun alle anfallenden Dokumente zu Ihrem Aktenfall <b tal:content="context.az"> </b> bearbeiten</p>
 
-  <h2> <span tal:content="context.statustext"> </span> </h2>
+  <h2> Fahrtkosten </h2>
+  <p> Unabhängig von den laufenden Versicherungsgeschehen können sie hier Regelmäßig Fahrtkosten einreichen </p>
+  <a href="" class="btn btn-primary" tal:attributes="href view.url(context, 'fahrtkosten')"> Fahrtkosten einreichen </a>
 
-  <div tal:repeat="document context.values()" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <h2> <span tal:content="context.statustext"> </span> </h2>
+  -->
+
+  <div tal:repeat="document view.values()" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
     <div tal:condition="document.state != 'gesendet'">
+  <!--
       <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingOne" tal:attributes="id string:heading-${repeat.document.number}">
           <h4 class="panel-title">
@@ -27,10 +118,6 @@
               <dd> <span tal:replace="document.modtime.strftime('%d.%m.%Y')"/> </dd>
               <dt>Status:</dt>
               <dd> <span tal:replace="document.state"/> </dd>
-              <!--
-                <dt>blabla:</dt>
-                <dd> <span tal:replace="document.aktz"/> </dd>
-              -->
             </dl>
             <span tal:replace="structure document.anschreiben"> </span>
             <hr>
@@ -39,6 +126,7 @@
           </div>
         </div>
       </div>
+  -->
     </div>
   </div>
 </div>

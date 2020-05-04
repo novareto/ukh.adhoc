@@ -59,14 +59,38 @@ class HomeFolderMenuItem(uvcsite.MenuItem):
         return self.view.url(get_account(self.request.principal.id), 'homefolder')
 
 
-class NachrichtenMenuItem(uvcsite.MenuItem):
-    """ Menu fuer das Logout """
+#class NachrichtenMenuItem(uvcsite.MenuItem):
+#    """ Menu fuer das Logout """
+#    grok.require('zope.View')
+#    grok.order(95)
+#    grok.context(Interface)
+#    grok.title('Nachrichten')
+#    grok.viewletmanager(uvcsite.IPersonalPreferences)
+#
+#    @property
+#    def action(self):
+#        return self.view.url(get_account(self.request.principal.id), 'nachrichten')
+
+
+class DatenMenuItem(uvcsite.SubMenu):
     grok.require('zope.View')
-    grok.order(95)
+    grok.order(93)
     grok.context(Interface)
-    grok.title('Nachrichten')
+    grok.title('Meine Daten')
     grok.viewletmanager(uvcsite.IPersonalPreferences)
 
     @property
     def action(self):
-        return self.view.url(get_account(self.request.principal.id), 'nachrichten')
+        return self.view.url(get_account(self.request.principal.id), 'meinedaten')
+
+
+#class KontoMenuItem(uvcsite.SubMenu):
+#    grok.require('zope.View')
+#    grok.order(94)
+#    grok.context(Interface)
+#    grok.title('Mein Konto')
+#    grok.viewletmanager(uvcsite.IPersonalPreferences)
+#
+#    @property
+#    def action(self):
+#        return self.view.url(get_account(self.request.principal.id), 'meinkonto')

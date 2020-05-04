@@ -14,20 +14,6 @@ from time import localtime, strftime
 bcp = '/'.join(__file__.split('/')[:-2])
 
 
-def getDaleDir():
-    """
-    Gibt das Directory für die Speicherung der Dokumente
-    zurück und legt das Verzeichnis an, wenn es nicht
-    bereits existiert.
-    """
-    basepath = '/ausgang/fax133'
-    archdir = datetime.datetime.now().strftime('%y/%m/%d')
-    path = '%s/%s' % (basepath, archdir)
-    if not os.path.exists(path):
-        os.makedirs(path)
-    return path
-
-
 def pdf_seitenkopf(data, saveverzeichnis, c, schriftart, schriftartfett, datum):
     c.setFillColor(black)
     c.setFont(schriftartfett, 10)
@@ -47,7 +33,7 @@ def Absage_pdf(data, grunddaten):
     datum = str(strftime("%d.%m.%Y", localtime()))
     datum2 = str(strftime("%Y_%m_%d_%H_%M", localtime()))
     # Datei Name Verzeichnis
-    verzeichnis = getDaleDir()
+    verzeichnis = '/ausgang/fax133a'
     dateiname = datum2 + '_' + data.az + '.pdf'
     saveverzeichnis = verzeichnis + '/' + dateiname
     # Layout
@@ -133,7 +119,7 @@ def Zusage_pdf(data, grunddaten):
     datum = str(strftime("%d.%m.%Y", localtime()))
     datum2 = str(strftime("%Y_%m_%d_%H_%M", localtime()))
     # Datei Name Verzeichnis
-    verzeichnis = getDaleDir()
+    verzeichnis = '/ausgang/fax133a'
     dateiname = datum2 + '_' + data.az + '.pdf'
     saveverzeichnis = verzeichnis + '/' + dateiname
     # Layout
@@ -457,7 +443,7 @@ def Zusage_ALT_pdf(data, grunddaten):
     # Dateiname
     datum = str(strftime("%d.%m.%Y", localtime()))
     datum2 = str(strftime("%Y_%m_%d_%H_%M", localtime()))
-    verzeichnis = getDaleDir()
+    verzeichnis = '/ausgang/fax133a'
     dateiname = datum2 + '_' + data.az + '.pdf'
     saveverzeichnis = verzeichnis + '/' + dateiname
     # Grunddaten
