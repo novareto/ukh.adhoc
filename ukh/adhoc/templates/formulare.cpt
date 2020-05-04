@@ -1,0 +1,48 @@
+<div class="landingpage">
+  <!--
+  <h1> Versichertenportal </h1>
+  <p class="lead"> <span tal:content="context.ansprechpartner"> </span> </p>
+  <p> Sie haben sich hier im Versicherten Extranet angemeldet </p>
+  <p> Über diese Plattform können Sie nun alle anfallenden Dokumente zu Ihrem Aktenfall <b tal:content="context.az"> </b> bearbeiten</p>
+  -->
+
+  <h2> <span tal:content="context.statustext"> </span> </h2>
+
+  <div tal:repeat="document view.values()" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div tal:condition="document.state != 'gesendet'">
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne" tal:attributes="id string:heading-${repeat.document.number}">
+          <h4 class="panel-title">
+            <a role="button" data-toggle="collapse" data-parent="#accordion" tal:attributes="href string:#collapse-${repeat.document.number}" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              <span tal:replace="document.doc_title"> </span>
+              <br>
+              <span tal:replace="document.modtime.strftime('%d.%m.%Y')"> </span>
+            </a>
+          </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" tal:attributes="id string:collapse-${repeat.document.number}">
+          <div class="panel-body">
+            <dl class="dl-horizontal">
+              <dt>Dokumentart:</dt>
+              <dd> <span tal:replace="document.doc_name"/></dd>
+              <dt>Dokument NR:</dt>
+              <dd> <span tal:replace="document.meta_type"/></dd>
+              <dt>Erstelldatum:</dt>
+              <dd> <span tal:replace="document.modtime.strftime('%d.%m.%Y')"/> </dd>
+              <dt>Status:</dt>
+              <dd> <span tal:replace="document.state"/> </dd>
+              <!--
+                <dt>blabla:</dt>
+                <dd> <span tal:replace="document.aktz"/> </dd>
+              -->
+            </dl>
+            <span tal:replace="structure document.anschreiben"> </span>
+            <hr>
+            <a tal:condition="document.state == 'gesendet'" href="" class="btn btn-primary pull-right text-right" tal:attributes="href view.url(document, '@@pdf')"> Download Dokument</a>
+            <a tal:condition="document.state != 'gesendet'" href="" class="btn btn-primary pull-right text-right" tal:attributes="href view.url(document, '@@edit')"> Formular öffnen </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

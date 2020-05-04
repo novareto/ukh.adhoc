@@ -59,7 +59,7 @@ class IUKHLoginForm(ILoginForm):
 
     gebdate = schema.TextLine(
         title=u"Geburtsdatum",
-        description=u"Geburtsdatum",
+        description=u"",
         required=True
     )
 
@@ -70,6 +70,7 @@ class Login(Login):
     @property
     def fields(self):
         fields = uvcsite.Fields(IUKHLoginForm)
+        fields['gebdate'].htmlAttributes['placeholder'] = u"TT.MM.JJJJ"
         for field in fields:
             field.prefix = u""
         return fields

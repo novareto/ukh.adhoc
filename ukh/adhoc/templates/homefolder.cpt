@@ -10,13 +10,13 @@
     </tr>
   </thead>
   <tbody>
-    <tr tal:repeat="item context.values()">
+    <tr tal:repeat="item view.values()">
       <td tal:condition="item.state == 'Entwurf'">
-        <a href="#" tal:attributes="href view.application_url() + '/' + context.id + '/' + item.doc_type + '/@@edit'" tal:content="item.doc_name">
+        <a href="#" tal:attributes="href view.url(item, '@@edit')" tal:content="item.doc_name">
         </a>
       </td>
       <td tal:condition="item.state != 'Entwurf'">
-        <a href="#" tal:attributes="href view.application_url() + '/' + context.id + '/' + item.doc_type + '/@@pdf'" tal:content="item.doc_name">
+        <a href="#" tal:attributes="href view.url(item, '@@pdf')" tal:content="item.doc_name">
         </a>
       </td>
       <td tal:content="item.published.strftime('%d.%m.%Y %H:%M')"></td>

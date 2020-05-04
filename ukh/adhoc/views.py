@@ -6,7 +6,7 @@
 import grok
 import uvcsite
 
-from .resources import css, meinedatencss
+from .resources import css, meinedatencss, kontocss
 #from .resources import step1js
 from .auth import get_account
 from .interfaces import IAccount
@@ -83,7 +83,7 @@ def redirect_on_empty_props(event):
 
 
 
-
+from ukh.fahrtkosten.views import IFahrtkosten
 
 
 
@@ -95,16 +95,50 @@ class LandingPage(uvcsite.Page):
     grok.context(IAccount)
 
     def update(self):
+        z = 0
         if self.context.status != 'bearbeitet':
             self.redirect(self.url(self.context, 'registerf1'))
         if self.context.status == 'bearbeitet':
             if self.context.active == 'nein':
                 self.redirect(self.url(self.context, 'registerfinish'))
         self.context.statustext = u'Momentan haben wir keine Geschäftsfälle für Sie'
-        items = [x for x in self.context.values() if x.__name__ != 'nachrichten']
-        for item in items:
+        for item in self.values():
             if item.state == 'Entwurf':
+                z += 1
                 self.context.statustext = u'Momentan haben wir folgende Geschäftsfälle für Sie'
+        self.context.anzahl = z
+
+    def values(self):
+        from ukh.fahrtkosten.views import IFahrtkosten
+        return [x for x in self.context.values() if (x.__name__ != 'nachrichten' and not IFahrtkosten.providedBy(x))]
+
+
+
+
+
+class Formulare(uvcsite.Page):
+    grok.context(IAccount)
+
+    def update(self):
+        if self.context.status != 'bearbeitet':
+            self.redirect(self.url(self.context, 'registerf1'))
+        if self.context.status == 'bearbeitet':
+            if self.context.active == 'nein':
+                self.redirect(self.url(self.context, 'registerfinish'))
+        self.context.statustext = u'Momentan haben Sie keine offenen Formulare'
+        for item in self.values():
+            if item.state == 'Entwurf':
+                self.context.statustext = u'Momentan haben Sie folgende offene Formulare zu bearbeiten:'
+
+    def values(self):
+        return [x for x in self.context.values() if (x.__name__ != 'nachrichten' )]
+
+
+
+
+
+
+
 
 
 class Homefolder(uvcsite.Page):
@@ -117,6 +151,10 @@ class Homefolder(uvcsite.Page):
         if self.context.status == 'bearbeitet':
             if self.context.active == 'nein':
                 self.redirect(self.url(self.context, 'registerfinish'))
+
+    def values(self):
+        from ukh.fahrtkosten.views import IFahrtkosten
+        return [x for x in self.context.values() if x.__name__ != 'nachrichten']
 
 
 class PersonalPanel(PersonalPanel):
@@ -132,7 +170,7 @@ class PersonalPanel(PersonalPanel):
 
 class ChangePassword(ChangePassword):
     grok.context(IAccount)
-    fields = uvcsite.Fields(IAccount).select('password')
+    fields = uvcsite.Fields(IAccount).select('passworda', 'password', 'passwordv')
 
     def update(self):
         if self.context.status != 'bearbeitet':
@@ -147,19 +185,49 @@ class ChangePassword(ChangePassword):
         if errors:
             self.flash('Es sind Fehler aufgetreten', type='error')
             return
+        if data['passworda'] != self.context.password:
+            self.flash(u'Das alte Passwort ist nicht korrekt!')
+            return
+        if data['password'] != data['passwordv']:
+            self.flash(u'Die Einträge unter "neues Passwort" und "Bestätigung" müssen identisch sein!')
+            return
         self.context.password = data['password']
-        self.flash(u'Ihr Passwort wurde gespeichert!')
+        self.flash(u'Ihr Passwort wurde erfolgreich geändert.')
         self.redirect(self.url(self.context))
 
 
-class MeineDatenMenu(uvcsite.MenuItem):
-    grok.title(u'Meine Daten')
-    grok.require('zope.View')
-    grok.viewletmanager(uvcsite.IPersonalMenu)
+#class MeinKontoMenu(uvcsite.MenuItem):
+#    grok.title(u'Mein Konto')
+#    grok.require('zope.View')
+#    grok.viewletmanager(uvcsite.IPersonalMenu)
+#
+#    @property
+#    def action(self):
+#        return self.view.url(self.context, 'meinkonto')
+
+
+class MeinKonto(uvcsite.Form):
+    grok.context(IAccount)
+
+    def update(self):
+        if self.context.status != 'bearbeitet':
+            self.redirect(self.url(self.context, 'registerf1'))
+        kontocss.need()
 
     @property
-    def action(self):
-        return self.view.url(self.context, 'meinedaten')
+    def daten(self):
+        dat = self.context.getVersichertenkonto()
+        return dat
+
+
+#class MeineDatenMenu(uvcsite.MenuItem):
+#    grok.title(u'Meine Daten')
+#    grok.require('zope.View')
+#    grok.viewletmanager(uvcsite.IPersonalMenu)
+#
+#    @property
+#    def action(self):
+#        return self.view.url(self.context, 'meinedaten')
 
 
 class MeineDaten(uvcsite.Form):
@@ -176,7 +244,6 @@ class MeineDaten(uvcsite.Form):
     @property
     def daten(self):
         return self.context
-
 
 
 class TBSkinViewlet(TBSkinViewlet):

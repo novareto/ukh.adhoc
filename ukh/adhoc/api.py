@@ -47,6 +47,37 @@ Unfallkasse Hessen
 """
 ####################################################
 
+ETEXT1 = u"""
+Die Unfallkasse Hessen hat Ihnen im Rahmen des elektronischen Verfahrens
+vor einiger Zeit einen Fragebogen gesendet.
+
+Leider wurde dieser noch nicht bearbeitet.
+
+Wir bitten Sie, sich im Versicherten Extranet anzumelden, den Fragebogen zu bearbeiten und an uns zurückzusenden.
+
+Vielen Dank für Ihre Mithilfe.
+
+Freundliche Grüße
+
+Ihre Unfallkasse Hessen
+"""
+
+ETEXT2 = u"""
+Die Unfallkasse Hessen hat Ihnen im Rahmen des elektronischen Verfahrens
+vor einiger Zeit ein Fragebogen gesendet.
+
+Leider wurde dieser immer noch nicht bearbeitet!
+
+Wir bitten Sie, sich im Versicherten Extranet anzumelden, den Fragebogen zu bearbeiten und an uns zurückzusenden.
+Ansonsten sehen wir uns leider gezwungen die Leistungen an Sie einzuschränken.
+
+Vielen Dank für Ihre Mithilfe.
+
+Freundliche Grüße
+
+Ihre Unfallkasse Hessen
+"""
+
 
 class AdHocService(grok.JSON):
     grok.context(IUKHAdHocApp)
@@ -123,6 +154,22 @@ class AdHocService(grok.JSON):
             return
         raise KeyError('Unknown user.')
 
+    @expected(IAccount['az'], *fields(IDocumentInfo))
+    @error_handler
+    def submit_notification(self, data):
+        print "submit_notification"
+        #import pdb; pdb.set_trace()
+        user = self.manager.get(data['az'])
+        ETEXT = ''
+        if user is not None:
+            info = data.by_schema[IDocumentInfo]
+            document = user[data.get('doc_type')]
+            if data.get('anschreiben') == '1':
+                ETEXT = ETEXT1
+            if data.get('anschreiben') == '2':
+                ETEXT = ETEXT2
+            #send_mail('extranet@ukh.de', ['m.seibert@ukh.de', user.email, 'ck@novareto.de'], 'Erinnerung!', 'message')
+            send_mail('extranet@ukh.de', [user.email, ], 'Erinnerung!', ETEXT)
 
     @expected(IAccount['az'], *fields(IMessage))
     @error_handler
