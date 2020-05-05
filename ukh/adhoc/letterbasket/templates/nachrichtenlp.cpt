@@ -7,12 +7,14 @@
       <th> Objekt </th>
       <th> Autor </th>
       <th> Datum </th>
+      <th> Status </th>
     </tr>
     <tr tal:repeat="message context.values()">
       <td> <a href="" tal:attributes="href view.url(message)" tal:content="message.title"> </a> </td>
       <td> Nachricht </td>
       <td tal:content="message.about['creator']"> </td>
-      <td tal:content="message.about['created']"> </td>
+      <td tal:content="message.about['created'].strftime('%d.%m.%Y %H:%M')"> </td>
+      <td tal:content="message.about['status'].strftime('%d.%m.%Y %H:%M')"> </td>
     </tr>
   </table>
   <div>

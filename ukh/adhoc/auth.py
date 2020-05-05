@@ -131,7 +131,6 @@ class UserAuthenticatorPlugin(UsersManagement, grok.LocalUtility):
         account = self.getAccount(credentials["login"])
         if account is None:
             return None
-        import pdb; pdb.set_trace()
         if not account.checkPassword(credentials["password"], credentials['gebdate']):
             return None
         return PrincipalInfo(id=account.az)

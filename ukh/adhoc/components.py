@@ -2,7 +2,7 @@
 # # Copyright (c) 2007-2013 NovaReto GmbH
 # # cklinger@novareto.de
 
-
+import os
 import grok
 import locale
 import uvcsite
@@ -181,6 +181,7 @@ class Account(grok.Container):
             return False
         gd = self.getGrundDaten()
         gdatum = "%s.%s.%s" %(str(gd['prsgtt']).zfill(2), str(gd['prsgmm']).zfill(2), str(gd['prsgjj']))
+        print gdatum
         if gebdate != gdatum:
             return False
         return True

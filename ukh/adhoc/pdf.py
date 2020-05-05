@@ -33,7 +33,7 @@ def Absage_pdf(data, grunddaten):
     datum = str(strftime("%d.%m.%Y", localtime()))
     datum2 = str(strftime("%Y_%m_%d_%H_%M", localtime()))
     # Datei Name Verzeichnis
-    verzeichnis = '/ausgang/fax133a'
+    verzeichnis = '/tmp/ausgang/fax133a'
     dateiname = datum2 + '_' + data.az + '.pdf'
     saveverzeichnis = verzeichnis + '/' + dateiname
     # Layout
@@ -119,7 +119,7 @@ def Zusage_pdf(data, grunddaten):
     datum = str(strftime("%d.%m.%Y", localtime()))
     datum2 = str(strftime("%Y_%m_%d_%H_%M", localtime()))
     # Datei Name Verzeichnis
-    verzeichnis = '/ausgang/fax133a'
+    verzeichnis = '/tmp/ausgang/fax133a'
     dateiname = datum2 + '_' + data.az + '.pdf'
     saveverzeichnis = verzeichnis + '/' + dateiname
     # Layout
@@ -443,7 +443,7 @@ def Zusage_ALT_pdf(data, grunddaten):
     # Dateiname
     datum = str(strftime("%d.%m.%Y", localtime()))
     datum2 = str(strftime("%Y_%m_%d_%H_%M", localtime()))
-    verzeichnis = '/ausgang/fax133a'
+    verzeichnis = '/tmp/ausgang/fax133a'
     dateiname = datum2 + '_' + data.az + '.pdf'
     saveverzeichnis = verzeichnis + '/' + dateiname
     # Grunddaten
