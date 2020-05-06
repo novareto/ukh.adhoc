@@ -224,7 +224,8 @@ class TBSkinViewlet(TBSkinViewlet):
 from uvcsite.content.views import Add
 
 
-class Form(Add):
+
+class Form(uvcsite.Form):
     grok.context(IAdHocContent)
     grok.name("edit")
     grok.require("zope.View")

@@ -42,7 +42,8 @@ Ihr Versicherten Extranet
 
 
 @grok.subscribe(IMessage, uvcsite.IAfterSaveEvent)
-def handle_save(obj, event, transition='publish'):
+def handle_save(obj, event, transition='sent'):
+    import pdb; pdb.set_trace()
     sp = transaction.savepoint()
     try:
         betreff = obj.title

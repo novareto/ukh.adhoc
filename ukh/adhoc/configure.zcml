@@ -25,8 +25,8 @@
   <include package="ukh.uploader" />
   <include package="ukh.fahrtkosten" />
   <browser:defaultSkin name="ukhtheme" />^
-  <grok:grok package="uvc.letterbasket" exclude="event" />
 -->
+  <grok:grok package="uvc.letterbasket" exclude="event" />
   <include package="ukh.U_1012" />
   <browser:defaultSkin name="ukhtheme" />^
   <include package="dolmen.widget.file" />
