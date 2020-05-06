@@ -7,11 +7,11 @@ import grok
 import re
 import uvcsite
 
-from .resources import css, stepcss
-from .interfaces import IAccount, IAccountData
+from ukh.adhoc.resources import css, stepcss
+from ukh.adhoc.interfaces import IAccount, IAccountData
 from dolmen.forms.base import apply_data_event
 from zeam.form.base import makeAdaptiveDataManager
-from .pdf import Absage_pdf, Zusage_pdf
+from ukh.adhoc.pdf import Absage_pdf, Zusage_pdf
 
 
 grok.templatedir("templates")

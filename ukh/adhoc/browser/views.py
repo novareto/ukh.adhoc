@@ -6,11 +6,11 @@
 import grok
 import uvcsite
 
-from .resources import css, meinedatencss, kontocss
+from ukh.adhoc.resources import css, meinedatencss, kontocss
 
 # from .resources import step1js
-from .auth import get_account
-from .interfaces import IAccount
+from ukh.adhoc.auth import get_account
+from ukh.adhoc.interfaces import IAccount
 from ukh.adhoc.interfaces import IUKHAdHocApp
 from uvc.tbskin.resources import TBSkinViewlet
 from zope.interface import Interface
@@ -222,10 +222,9 @@ class TBSkinViewlet(TBSkinViewlet):
 #        return content
 #
 from uvcsite.content.views import Add
-from .components import UKHAdHocContent
 
 
-class AddForm(Add):
+class Form(Add):
     grok.context(IAdHocContent)
     grok.name("edit")
     grok.require("zope.View")
@@ -253,7 +252,6 @@ class AddForm(Add):
         changes = apply_data_event(self.fields, self.context, data)
         if changes:
             from uvc.layout.forms.event import AfterSaveEvent
-
             grok.notify(AfterSaveEvent(self.context, self.request))
         else:
             self.flash("Kein Änderung", type="info")

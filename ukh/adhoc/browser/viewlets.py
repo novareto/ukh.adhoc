@@ -3,7 +3,7 @@
 import grok
 import uvcsite
 
-from .auth import get_account
+from ukh.adhoc.auth import get_account
 from zope.interface import Interface
 from uvc.staticcontent.staticmenuentries import PersonalPanelEntry
 
