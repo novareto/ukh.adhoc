@@ -24,14 +24,14 @@ from zope.publisher.interfaces.http import IHTTPRequest
 
 
 class UKHCookiesCredentials(CookiesCredentials):
-    grok.name('ukh_cookies')
+    grok.name("ukh_cookies")
 
-    gebdatefield = 'gebdate'
+    gebdatefield = "gebdate"
 
     @staticmethod
     def make_cookie(login, password, gebdate):
-        credstr = u'%s:%s:%s' % (login, password, gebdate)
-        val = base64.encodestring(credstr.encode('utf-8'))
+        credstr = u"%s:%s:%s" % (login, password, gebdate)
+        val = base64.encodestring(credstr.encode("utf-8"))
         return urllib.quote(val)
 
     def extractCredentials(self, request):
@@ -45,23 +45,18 @@ class UKHCookiesCredentials(CookiesCredentials):
 
         if login and password and gebdate:
             cookie = self.make_cookie(login, password, gebdate)
-            request.response.setCookie(self.cookie_name, cookie, path='/')
+            request.response.setCookie(self.cookie_name, cookie, path="/")
         elif cookie:
-            val = base64.decodestring(urllib.unquote(cookie)).decode('utf-8')
-            login, password, gebdate = val.split(':')
+            val = base64.decodestring(urllib.unquote(cookie)).decode("utf-8")
+            login, password, gebdate = val.split(":")
         else:
             return
-        return {'login': login, 'password': password, 'gebdate': gebdate}
-
+        return {"login": login, "password": password, "gebdate": gebdate}
 
 
 class IUKHLoginForm(ILoginForm):
 
-    gebdate = schema.TextLine(
-        title=u"Geburtsdatum",
-        description=u"",
-        required=True
-    )
+    gebdate = schema.TextLine(title=u"Geburtsdatum", description=u"", required=True)
 
 
 class Login(Login):
@@ -70,7 +65,7 @@ class Login(Login):
     @property
     def fields(self):
         fields = uvcsite.Fields(IUKHLoginForm)
-        fields['gebdate'].htmlAttributes['placeholder'] = u"TT.MM.JJJJ"
+        fields["gebdate"].htmlAttributes["placeholder"] = u"TT.MM.JJJJ"
         for field in fields:
             field.prefix = u""
         return fields
@@ -89,7 +84,6 @@ class UsersFolder(grok.Container):
 
 
 class UsersManagement:
-
     def __init__(self):
         self._users = UsersFolder()
 
@@ -131,7 +125,7 @@ class UserAuthenticatorPlugin(UsersManagement, grok.LocalUtility):
         account = self.getAccount(credentials["login"])
         if account is None:
             return None
-        if not account.checkPassword(credentials["password"], credentials['gebdate']):
+        if not account.checkPassword(credentials["password"], credentials["gebdate"]):
             return None
         return PrincipalInfo(id=account.az)
 

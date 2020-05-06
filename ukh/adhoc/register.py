@@ -8,24 +8,11 @@ import re
 import uvcsite
 
 from .resources import css, stepcss
-#from .resources import step1js
-from .auth import get_account
 from .interfaces import IAccount, IAccountData
-from ukh.adhoc.interfaces import IUKHAdHocApp
-from uvc.tbskin.resources import TBSkinViewlet
-from zope.interface import Interface
-from bgetem.lv1101.content import AddForm
-from dolmen.forms.base import Fields, set_fields_data, apply_data_event
-from uvc.adhoc import content
-from dolmen.content import schema
-from zope.dottedname.resolve import resolve
-from zope.authentication.interfaces import IUnauthenticatedPrincipal
-from uvc.adhoc.interfaces import IAdHocContent
+from dolmen.forms.base import apply_data_event
 from zeam.form.base import makeAdaptiveDataManager
-
-from uvc.adhoc import BaseAddView
-
 from .pdf import Absage_pdf, Zusage_pdf
+
 
 grok.templatedir("templates")
 
@@ -57,7 +44,6 @@ class AccountDataAdapter(grok.Adapter):
         else:
             anrede = self.grunddaten.get('ikanr').strip()
         return anrede
-        #return self.grunddaten.get('ikanr').strip()
 
     @property
     def nname(self):
@@ -66,7 +52,6 @@ class AccountDataAdapter(grok.Adapter):
         else:
             nname = self.grunddaten.get('iknam1').strip()
         return nname
-        #return self.grunddaten.get('iknam1').strip()
 
     @property
     def vname(self):
@@ -283,7 +268,7 @@ class AccountDataAdapter(grok.Adapter):
 
     @telefon.setter
     def telefon(self, value):
-        self.context.telefon= value
+        self.context.telefon = value
 
     @property
     def ansprechpartner(self):
@@ -313,7 +298,7 @@ class RegisterF1(uvcsite.Form):
         if errors:
             self.flash(u"Bitte überprüfen Sie Ihre eingaben")
         data['status'] = u'bearbeitet'
-        changes = apply_data_event(self.fields, self.context, data)
+        apply_data_event(self.fields, self.context, data)
         self.flash(u'Speichern erfolgreich.')
         if data.get('active') == 'ja':
             self.redirect(self.url(self.context) + '/registerf2')
@@ -340,7 +325,7 @@ class RegisterF2(RegisterF1):
     @uvcsite.action(u'Zurück')
     def handle_back(self):
         data, errors = self.extractData()
-        changes = apply_data_event(self.fields, self.context, data)
+        apply_data_event(self.fields, self.context, data)
         self.redirect(self.url(self.context) + '/registerf1')
 
     @uvcsite.action('Speichern & Weiter')
@@ -354,7 +339,7 @@ class RegisterF2(RegisterF1):
             if not bool(checkmail(data['email'])):
                 self.flash(u'Bitte tragen Sie eine gültige E-Mail Adresse ein.')
                 return
-        changes = apply_data_event(self.fields, self.context, data)
+        apply_data_event(self.fields, self.context, data)
         self.flash(u'Speichern erfolgreich.')
         self.redirect(self.url(self.context) + '/registerf3')
 
@@ -372,7 +357,7 @@ class RegisterF3(RegisterF1):
         if errors:
             self.flash(u"Bitte überprüfen Sie Ihre eingaben")
             return
-        changes = apply_data_event(self.fields, self.context, data)
+        apply_data_event(self.fields, self.context, data)
         self.redirect(self.url(self.context) + '/registerf2')
 
     @uvcsite.action('Speichern & Weiter')
@@ -381,7 +366,7 @@ class RegisterF3(RegisterF1):
         if errors:
             self.flash(u"Bitte überprüfen Sie Ihre eingaben")
             return
-        changes = apply_data_event(self.fields, self.context, data)
+        apply_data_event(self.fields, self.context, data)
         self.flash(u'Speichern erfolgreich.')
         self.redirect(self.url(self.context) + '/registerf4')
 
@@ -399,7 +384,7 @@ class RegisterF4(RegisterF1):
         if errors:
             self.flash(u"Bitte überprüfen Sie Ihre eingaben")
             return
-        changes = apply_data_event(self.fields, self.context, data)
+        apply_data_event(self.fields, self.context, data)
         self.redirect(self.url(self.context) + '/registerf3')
 
     @uvcsite.action('Speichern')
@@ -407,7 +392,7 @@ class RegisterF4(RegisterF1):
         data, errors = self.extractData()
         if errors:
             self.flash(u"Bitte überprüfen Sie Ihre eingaben")
-        changes = apply_data_event(self.fields, self.context, data)
+        apply_data_event(self.fields, self.context, data)
         self.flash(u'Speichern erfolgreich.')
         self.redirect(self.url(self.context) + '/registerf5')
 
@@ -423,7 +408,7 @@ class RegisterF5(RegisterF1):
     @uvcsite.action(u'Zurück')
     def handle_back(self):
         data, errors = self.extractData()
-        changes = apply_data_event(self.fields, self.context, data)
+        apply_data_event(self.fields, self.context, data)
         self.redirect(self.url(self.context) + '/registerf4')
 
     @uvcsite.action('Speichern')
@@ -432,20 +417,13 @@ class RegisterF5(RegisterF1):
         if errors:
             self.flash(u"Bitte überprüfen Sie Ihre eingaben")
             return
-        changes = apply_data_event(self.fields, self.context, data)
+        apply_data_event(self.fields, self.context, data)
         self.flash(u'Speichern erfolgreich.')
         context = self.context
         grunddaten = self.context.getGrundDaten()
         Zusage_pdf(context, grunddaten)
         self.redirect(self.application_url())
 
-
-#class RegisterFinish(uvcsite.Page):
-#    grok.context(IAccount)
-#    grok.name('registerfinish')
-#
-#    def render(self):
-#        return u"HALLO WELT"
 
 class RegisterFinish(uvcsite.Form):
     grok.context(IAccount)

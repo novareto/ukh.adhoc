@@ -28,9 +28,14 @@ Ihre Unfallkasse Hessen
 
 @grok.subscribe(IAdHocContent, grok.IObjectAddedEvent)
 def notify_user(obj, event):
-    if obj.doc_title != 'Dateiupload':
+    if obj.doc_title != "Dateiupload":
         account = obj.__parent__
         grunddaten = IAccountData(obj.__parent__)
-        message = MES % (datetime.datetime.now().strftime('%d.%m.%Y'), obj.doc_title)
-        #send_mail('extranet@ukh.de', ['m.seibert@ukh.de', 'ck@novareto.de'], 'Sie haben neue Nachrichten!', message)
-        send_mail('extranet@ukh.de', [grunddaten.email, ], 'Sie haben neue Nachrichten!', message)
+        message = MES % (datetime.datetime.now().strftime("%d.%m.%Y"), obj.doc_title)
+        # send_mail('extranet@ukh.de', ['m.seibert@ukh.de', 'ck@novareto.de'], 'Sie haben neue Nachrichten!', message)
+        send_mail(
+            "extranet@ukh.de",
+            [grunddaten.email],
+            "Sie haben neue Nachrichten!",
+            message,
+        )

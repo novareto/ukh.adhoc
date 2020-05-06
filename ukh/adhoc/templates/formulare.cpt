@@ -36,7 +36,7 @@
                 <dd> <span tal:replace="document.aktz"/> </dd>
               -->
             </dl>
-            <span tal:replace="structure document.anschreiben"> </span>
+            <span tal:replace="structure getattr(document, 'anschreiben', '')"> </span>
             <hr>
             <a tal:condition="document.state == 'gesendet'" href="" class="btn btn-primary pull-right text-right" tal:attributes="href view.url(document, '@@pdf')"> Download Dokument</a>
             <a tal:condition="document.state != 'gesendet'" href="" class="btn btn-primary pull-right text-right" tal:attributes="href view.url(document, '@@edit')"> Formular öffnen </a>

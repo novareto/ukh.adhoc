@@ -9,57 +9,57 @@ from uvc.staticcontent.staticmenuentries import PersonalPanelEntry
 
 
 class PersonalPanelEntry(PersonalPanelEntry):
-    grok.name('ppe')
+    grok.name("ppe")
 
     @property
     def action(self):
-        return self.view.url(get_account(self.request.principal.id), 'personalpanelview')
+        return self.view.url(
+            get_account(self.request.principal.id), "personalpanelview"
+        )
 
 
 class StartMenu(uvcsite.MenuItem):
     grok.context(Interface)
     grok.viewletmanager(uvcsite.IGlobalMenu)
-    grok.title('Startseite')
+    grok.title("Startseite")
 
     @property
     def action(self):
         return self.view.application_url()
 
 
-
-
-
-
 class LogoutMenu(uvcsite.MenuItem):
     """ Menu fuer das Logout """
-    grok.require('zope.View')
+
+    grok.require("zope.View")
     grok.order(99)
     grok.context(Interface)
-    grok.title('Abmelden')
+    grok.title("Abmelden")
     grok.viewletmanager(uvcsite.IPersonalPreferences)
 
     @property
     def action(self):
-        return self.view.application_url() + '/logout'
+        return self.view.application_url() + "/logout"
 
 
 class HomeFolderMenuItem(uvcsite.MenuItem):
     """ Menu fuer das Logout """
-    grok.require('zope.View')
+
+    grok.require("zope.View")
     grok.order(90)
     grok.context(Interface)
-    grok.title('Mein Ordner')
+    grok.title("Mein Ordner")
     grok.viewletmanager(uvcsite.IPersonalPreferences)
 
     @property
     def action(self):
-        #print "???????????????????????????????????????????????????????????????"
-        #print dir(get_account(self.request.principal.id))
-        #print "???????????????????????????????????????????????????????????????"
-        return self.view.url(get_account(self.request.principal.id), 'homefolder')
+        # print "???????????????????????????????????????????????????????????????"
+        # print dir(get_account(self.request.principal.id))
+        # print "???????????????????????????????????????????????????????????????"
+        return self.view.url(get_account(self.request.principal.id), "homefolder")
 
 
-#class NachrichtenMenuItem(uvcsite.MenuItem):
+# class NachrichtenMenuItem(uvcsite.MenuItem):
 #    """ Menu fuer das Logout """
 #    grok.require('zope.View')
 #    grok.order(95)
@@ -73,18 +73,18 @@ class HomeFolderMenuItem(uvcsite.MenuItem):
 
 
 class DatenMenuItem(uvcsite.SubMenu):
-    grok.require('zope.View')
+    grok.require("zope.View")
     grok.order(93)
     grok.context(Interface)
-    grok.title('Meine Daten')
+    grok.title("Meine Daten")
     grok.viewletmanager(uvcsite.IPersonalPreferences)
 
     @property
     def action(self):
-        return self.view.url(get_account(self.request.principal.id), 'meinedaten')
+        return self.view.url(get_account(self.request.principal.id), "meinedaten")
 
 
-#class KontoMenuItem(uvcsite.SubMenu):
+# class KontoMenuItem(uvcsite.SubMenu):
 #    grok.require('zope.View')
 #    grok.order(94)
 #    grok.context(Interface)

@@ -8,7 +8,6 @@
   <include package="ukh.u1051" />
   <include package="ukh.u1315" />
   <include package="ukh.u1040" />
-  <include package="ukh.U_1012" />
   <include package="ukh.U_1021" />
   <include package="ukh.U_1025" />
   <include package="ukh.U_1026" />
@@ -28,6 +27,7 @@
   <browser:defaultSkin name="ukhtheme" />^
   <grok:grok package="uvc.letterbasket" exclude="event" />
 -->
+  <include package="ukh.U_1012" />
   <browser:defaultSkin name="ukhtheme" />^
   <include package="dolmen.widget.file" />
   <include package="dolmen.blob" />
