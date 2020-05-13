@@ -56,7 +56,11 @@ class UKHCookiesCredentials(CookiesCredentials):
 
 class IUKHLoginForm(ILoginForm):
 
-    gebdate = schema.TextLine(title=u"Geburtsdatum", description=u"", required=True)
+    gebdate = schema.TextLine(
+        title=u"Geburtsdatum",
+        description=u"",
+        required=True
+    )
 
 
 class Login(Login):

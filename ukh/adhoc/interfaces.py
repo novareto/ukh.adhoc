@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # # Copyright (c) 2007-2013 NovaReto GmbH
-# # cklinger@novareto.de 
+# # cklinger@novareto.de
 
 import grokcore.component as grok
 from zope import interface, schema
@@ -242,10 +242,10 @@ from zope.location.interfaces import IContained
 from zope.container.interfaces import IContainer
 from zope.container.constraints import contains
 from dolmen.file import FileField
+from uvc.letterbasket.interfaces import IThreadRoot
 
 
 class IMessage(IContained, IContainer):
-    contains('.IMessage')
 
     title = schema.TextLine(
         title=u"Betreff",
@@ -272,3 +272,14 @@ class IMessage(IContained, IContainer):
         title=u"   ",
         required=False,
     )
+
+
+class IQuestion(IThreadRoot, IMessage):
+    """A question, can be answered
+    """
+    contains('.IMessage')
+
+
+class IAnswer(IMessage):
+    """An answer, it can't be answered.
+    """

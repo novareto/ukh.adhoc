@@ -24,7 +24,7 @@ MessageWorkflow = workflow.Workflow([
 
     workflow.Transition(
         transition_id='sent',
-        title='Sented',
+        title='Sent',
         source=MessageState.created,
         destination=MessageState.sent),
 

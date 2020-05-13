@@ -11,15 +11,14 @@ import zope.schema
 from base64 import decodestring
 from zope.pluggableauth.interfaces import IAuthenticatorPlugin
 
+from .components import Account, Document
+from .interfaces import IAccount, IDocumentInfo, IUKHAdHocApp
+from .interfaces import IMessage, IQuestion
 from .lib.serialize import serialize, fields
 from .lib.validate import expected, error_handler
-from .interfaces import IAccount, IDocumentInfo, IUKHAdHocApp
-from .components import Account, Document
 from uvc.letterbasket.components import Message
-from .interfaces import IMessage
-from uvc.letterbasket.interfaces import IThreadRoot
-from zope.interface import directlyProvides
 from uvcsite.utils.mail import send_mail
+from zope.interface import directlyProvides
 
 
 BODY = u"""\
@@ -167,7 +166,7 @@ class AdHocService(grok.JSON):
                 f.filename = info['filename']
                 info['attachment'] = f
             set_fields_data(IMessage, message, info)
-            directlyProvides(message, IThreadRoot)
+            directlyProvides(message, IQuestion)
             user['nachrichten'].add(message)
             self.request.response.setStatus(202)
             to = [account.email]

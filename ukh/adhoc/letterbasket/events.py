@@ -10,8 +10,8 @@ from grokcore.message import send
 from uvc.letterbasket.interfaces import IMessage
 from uvcsite.utils.mail import send_mail
 from hurry.workflow.interfaces import IWorkflowInfo
-from uvc.letterbasket.auth import make_token
 from ukh.adhoc.interfaces import IAccountData
+from uvc.token_auth.plugin import TokenAuthenticationPlugin
 
 
 BODY = u"""\
@@ -43,7 +43,6 @@ Ihr Versicherten Extranet
 
 @grok.subscribe(IMessage, uvcsite.IAfterSaveEvent)
 def handle_save(obj, event, transition='sent'):
-    import pdb; pdb.set_trace()
     sp = transaction.savepoint()
     try:
         betreff = obj.title
@@ -53,7 +52,7 @@ def handle_save(obj, event, transition='sent'):
         adrz1 = "NN"
         adrz2 = "NN"
         adrz3 = "NN"
-        link = "%s?form.field.access_token=%s" % (grok.url(event.request, obj, 'add'), make_token())
+        link = "%s?form.field.access_token=%s" % (grok.url(event.request, obj, 'add'), TokenAuthenticationPlugin.generate_token())
         f_adr = "extranet@ukh.de"
         body = BODY % (adrz1, adrz2, adrz3, nachrichtentext, link)
         to = ['m.seibert@ukh.de', ]
@@ -68,7 +67,9 @@ def handle_save(obj, event, transition='sent'):
         )
         IWorkflowInfo(obj).fireTransition(transition)
         send(u'Vielen Dank, Ihre Nachricht wurde gesendet.', type='message', name='session')
-    except StandardError:
+    except StandardError as exc:
+        import pdb
+        pdb.set_trace()
         sp.rollback()
         IWorkflowInfo(obj).fireTransition('progress')
         uvcsite.logger.exception("Achtung FEHLER")

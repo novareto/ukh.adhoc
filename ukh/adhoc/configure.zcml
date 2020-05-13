@@ -2,8 +2,19 @@
            xmlns:browser="http://namespaces.zope.org/browser"
            xmlns:grok="http://namespaces.zope.org/grok">
 
+  <include package="dolmen.blob" />
+  <include package="dolmen.widget.file" />
   <include package="grok"/>
+  <include package="ukh.U_1012" />
   <include package="ukhtheme.grok" />
+  <include package="uvc.letterbasket" />
+  <include package="uvc.token_auth" />
+
+  <grok:grok package="." />
+  <grok:grok package="uvc.letterbasket" exclude="event" />
+
+  <browser:defaultSkin name="ukhtheme" />
+
 <!--
   <include package="ukh.u1051" />
   <include package="ukh.u1315" />
@@ -26,11 +37,5 @@
   <include package="ukh.fahrtkosten" />
   <browser:defaultSkin name="ukhtheme" />^
 -->
-  <grok:grok package="uvc.letterbasket" exclude="event" />
-  <include package="ukh.U_1012" />
-  <browser:defaultSkin name="ukhtheme" />^
-  <include package="dolmen.widget.file" />
-  <include package="dolmen.blob" />
-  <grok:grok package="." />
-</configure>
 
+</configure>

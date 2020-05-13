@@ -6,30 +6,28 @@
 import grok
 import uvcsite
 
-from ukh.adhoc.resources import css, meinedatencss, kontocss
-
-# from .resources import step1js
-from ukh.adhoc.auth import get_account
-from ukh.adhoc.interfaces import IAccount
-from ukh.adhoc.interfaces import IUKHAdHocApp
-from uvc.tbskin.resources import TBSkinViewlet
-from zope.interface import Interface
-
-# from bgetem.lv1101.content import AddForm
-from dolmen.forms.base import Fields, set_fields_data, apply_data_event
-from uvc.adhoc import content
 from dolmen.content import schema
-from zope.dottedname.resolve import resolve
-from zope.authentication.interfaces import IUnauthenticatedPrincipal
-from uvc.adhoc.interfaces import IAdHocContent
-from uvc.staticcontent.staticmenuentries import PersonalPanel
-from uvcsite.extranetmembership.enms import ChangePassword
-from ukh.fahrtkosten.views import IFahrtkosten
+from dolmen.forms.base import Fields, set_fields_data, apply_data_event
 
-# from uvc.adhoc import BaseAddView
-from uvc.layout.forms.components import AddForm
+from ukh.adhoc.auth import get_account
+from ukh.adhoc.interfaces import IAccount, IUKHAdHocApp
+from ukh.adhoc.resources import css, meinedatencss, kontocss
+from ukh.fahrtkosten.views import IFahrtkosten
 from ukhtheme.grok.layout import ILayer
+
+from uvc.adhoc import content
+from uvc.adhoc.interfaces import IAdHocContent
+from uvc.layout.forms.components import AddForm
+from uvc.staticcontent.staticmenuentries import PersonalPanel
+from uvc.tbskin.resources import TBSkinViewlet
 from uvc.tbskin.views import FieldMacros
+
+import uvcsite.plugins
+from uvcsite.extranetmembership.enms import ChangePassword
+from zope.authentication.interfaces import IUnauthenticatedPrincipal
+from zope.dottedname.resolve import resolve
+from zope.interface import Interface
+from zope.traversing.interfaces import IBeforeTraverseEvent
 
 
 grok.templatedir("templates")
@@ -53,11 +51,9 @@ class PrincipalTraverser(grok.Traverser):
     grok.context(IUKHAdHocApp)
 
     def traverse(self, name):
+        if name == 'plugins':
+            return uvcsite.plugins.PluginsPanel('plugins', self.context)
         return get_account(name)
-
-
-from zope.traversing.interfaces import IBeforeTraverseEvent
-from zope.authentication.interfaces import IUnauthenticatedPrincipal
 
 
 @grok.subscribe(IBeforeTraverseEvent)
