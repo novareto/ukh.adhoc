@@ -14,7 +14,8 @@
       <td> Nachricht </td>
       <td tal:content="message.about['creator']"> </td>
       <td tal:content="message.about['created'].strftime('%d.%m.%Y %H:%M')"> </td>
-      <td tal:content="message.about['status']"> </td>
+      <td tal:content="message.about.get('status')"
+          tal:condition="False"> </td>
     </tr>
   </table>
   <div>

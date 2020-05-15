@@ -7,10 +7,11 @@ import grok
 import uvcsite
 
 from hurry.workflow.interfaces import IWorkflowInfo, IWorkflowState
-from uvc.letterbasket.interfaces import ILetterBasket
+from uvc.letterbasket.interfaces import ILetterBasket, IMessage
 from uvc.letterbasket.views import AddThread, AddMessage
 from uvc.letterbasket.views import ThreadDisplay as ThreadIndex
 from uvc.letterbasket.views import MessageDisplay as MessageIndex
+from uvc.letterbasket.resources import threadcss
 from ukhtheme.grok.layout import ILayer
 from zope.interface import directlyProvides
 from ..interfaces import IQuestion, IAnswer
@@ -36,6 +37,14 @@ class StartThread(AddThread):
         AddThread.add(self, content)
 
 
+def letter_is_sent(form):
+    return IWorkflowState(form.context).getState() == MessageState.sent
+
+
+def letter_is_read(form):
+    return IWorkflowState(form.context).getState() == MessageState.read
+
+
 class Reply(AddMessage):
     grok.name('add')
     grok.layer(ILayer)
@@ -49,21 +58,49 @@ class Reply(AddMessage):
         AddMessage.add(self, content)
         IWorkflowInfo(self.context).fireTransition('reply')
 
+    @uvcsite.action(
+        u'Nachricht senden',
+        identifier="uvcsite.add", available=letter_is_read)
+    def handleAdd(self):
+        return AddMessage.handleAdd(self)
 
-class ThreadDisplay(ThreadIndex):
-    grok.name('index')
+
+class MarkAsRead(grok.View):
+    grok.name('mark_as_read')
     grok.context(IQuestion)
     grok.layer(ILayer)
 
     def update(self):
-        ThreadIndex.update(self)
-        self.can_answer = IWorkflowState(self.context) in (
-            MessageState.sent, MessageState.read)
+        if self.request.method != 'POST':
+            raise NotImplementedError('This method is only allowed in POST')
+        IWorkflowInfo(self.context).fireTransition('read')
+
+    def render(self):
+        self.redirect(self.url(self.context))
 
 
 class MessageDisplay(MessageIndex):
     grok.name('display')
-    grok.context(IAnswer)
+    grok.context(IMessage)
     grok.require('zope.Public')
+    grok.layer(ILayer)
 
-    can_answer = False
+    def actions(self):
+        uri = self.url(self.context)
+        if IQuestion.providedBy(self.context):
+            if letter_is_sent(self):
+                yield {
+                    'title': 'Mark as read',
+                    'url': '%s/mark_as_read' % uri
+                }
+            elif letter_is_read(self):
+                yield {
+                    'title': 'Antworten',
+                    'url': '%s/add' % uri
+                }
+        attachment = getattr(self.context, 'attachment', None)
+        if attachment is not None:
+            yield {
+                'title': 'Anhang herunterladen',
+                'url': "%s/++download++attachment" % uri
+            }
