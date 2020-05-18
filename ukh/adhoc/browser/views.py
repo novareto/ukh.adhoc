@@ -16,6 +16,7 @@ from ukh.fahrtkosten.views import IFahrtkosten
 from ukhtheme.grok.layout import ILayer
 
 from uvc.adhoc import content
+from uvc.adhoc.views import BaseAddView
 from uvc.adhoc.interfaces import IAdHocContent
 from uvc.layout.forms.components import AddForm
 from uvc.staticcontent.staticmenuentries import PersonalPanel
@@ -133,7 +134,6 @@ class Homefolder(uvcsite.Page):
 
     def values(self):
         from ukh.fahrtkosten.views import IFahrtkosten
-
         return [x for x in self.context.values() if x.__name__ != "nachrichten"]
 
 
@@ -212,16 +212,25 @@ class TBSkinViewlet(TBSkinViewlet):
     pass
 
 
-# class UKHBaseAddView(BaseAddView):
-#    grok.baseclass()
-#    grok.context(Interface)
-#
-#    def create(self, data):
-#        content = super(UKHBaseAddView, self).create(data)
-#        return content
-#
+class UKHBaseAddView(BaseAddView):
+    grok.baseclass()
+    grok.context(Interface)
+
+    def create(self, data):
+        content = super(UKHBaseAddView, self).create(data)
+        return content
+
+
 from uvcsite.content.views import Add
 
+
+class FormDisplay(uvcsite.Page):
+    grok.context(IAdHocContent)
+    grok.name('fd')
+
+    @property
+    def fields(self):
+        return uvcsite.Fields(*self.context.schema) #.omit( "title", "docid", "doc_type", "anschreiben")
 
 
 class Form(uvcsite.Form):
