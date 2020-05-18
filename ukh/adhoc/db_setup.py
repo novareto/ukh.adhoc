@@ -12,7 +12,6 @@ from zope.app.appsetup.product import getProductConfiguration
 config = getProductConfiguration('database')
 DSN = config['dsn']
 SCHEMA = config.get('schema', 'EDUCUSADAT')
-
 engine_factory = EngineFactory(DSN, echo=False)
 scoped_session = GloballyScopedSession()
 
@@ -22,7 +21,7 @@ grok.global_utility(scoped_session, direct=True)
 
 engine = engine_factory()
 metadata = MetaData(bind=engine)
-if os.environ['ADHOC_TEST'] == "True":
+if os.environ.get('ADHOC_TEST') == "True":
     c1unf1aa = None 
     c1prs1aa = None
     avika1aa = None

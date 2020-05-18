@@ -28,13 +28,16 @@ from zope.authentication.interfaces import IUnauthenticatedPrincipal
 from zope.dottedname.resolve import resolve
 from zope.interface import Interface
 from zope.traversing.interfaces import IBeforeTraverseEvent
+from ukh.adhoc.interfaces import IUKHAdHocLayer
+from grokcore.chameleon.components import ChameleonPageTemplateFile
 
 
 grok.templatedir("templates")
 
 
 class FieldMacros(FieldMacros):
-    grok.layer(ILayer)
+    grok.layer(IUKHAdHocLayer)
+    template = ChameleonPageTemplateFile('templates/fieldtemplates.cpt')
 
 
 class Index(uvcsite.Page):

@@ -65,7 +65,7 @@ class Account(grok.Container):
         self['nachrichten'] = LetterBasket()
 
     def getGrundDaten(self):
-        if os.environ['ADHOC_TEST'] == "True":
+        if os.environ.get('ADHOC_TEST') == "True":
             from ukh.adhoc.lib.testdata import gd
             return gd
         d1 = select(

@@ -2,13 +2,26 @@
 # # Copyright (c) 2007-2013 NovaReto GmbH
 # # cklinger@novareto.de
 
-import grokcore.component as grok
+import grok
 from zope import interface, schema
+from grokcore.component import provider
 
 from zope.schema.interfaces import IContextSourceBinder, IBaseVocabulary
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from ukhtheme.grok.layout import ISkin
 
-@grok.provider(IContextSourceBinder)
+
+
+class IUKHAdHocLayer(grok.IDefaultBrowserLayer):
+    """MarkerInterface"""
+
+
+class IAdHocSkin(IUKHAdHocLayer, ISkin):
+    grok.skin('ukhtheme_adhoc')
+
+
+
+@provider(IContextSourceBinder)
 def source_active(context):
     return SimpleVocabulary([
         SimpleTerm('ja', 'ja', u'Ja, ich möchte am elektronischen Verfahren teilnehmen'),
@@ -16,7 +29,7 @@ def source_active(context):
     ])
 
 
-@grok.provider(IBaseVocabulary)
+@provider(IBaseVocabulary)
 def source_anrede(context):
     return SimpleVocabulary([
         SimpleTerm('1', 'Frau', u'Frau'),

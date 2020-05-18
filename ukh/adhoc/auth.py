@@ -155,12 +155,13 @@ class AdHocPrincipal(factories.Principal, Account):
     info = "CUSTOM PROPERTY"
 
     def __repr__(self):
-        return "BGPrincipal('%s')" % self.id
+        return "Principal('%s')" % self.id
 
-
+from .interfaces import IUKHAdHocLayer
+from zope.interface import alsoProvides
 class AdHocPrincipalFactory(factories.AuthenticatedPrincipalFactory, grok.MultiAdapter):
     grok.adapts(interfaces.IPrincipalInfo, ITBSkinLayer)
-    grok.baseclass()
+    #grok.baseclass()
 
     def __call__(self, authentication):
         log("CREATING USER")
@@ -172,4 +173,5 @@ class AdHocPrincipalFactory(factories.AuthenticatedPrincipalFactory, grok.MultiA
                 authentication, principal, self.info, self.request
             )
         )
+        alsoProvides(self.request, IUKHAdHocLayer)
         return principal
