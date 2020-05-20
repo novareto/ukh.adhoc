@@ -41,7 +41,7 @@ Ihr Versicherten Extranet
 """
 
 
-@grok.subscribe(IMessage, uvcsite.IAfterSaveEvent)
+#@grok.subscribe(IMessage, uvcsite.IAfterSaveEvent)
 def handle_save(obj, event, transition='sent'):
     sp = transaction.savepoint()
     try:

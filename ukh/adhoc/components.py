@@ -186,9 +186,10 @@ class Account(grok.Container):
             return False
         return True
 
-    def add(self, content):
-        name = INameChooser(self).chooseName(content.__name__ or '', content)
+    def add(self, name, content):
+        name = INameChooser(self).chooseName(name, content)
         self[name] = content
+        return name
 
 
 from uvc.adhoc.components import AdHocContent

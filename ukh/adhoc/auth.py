@@ -164,14 +164,14 @@ class AdHocPrincipalFactory(factories.AuthenticatedPrincipalFactory, grok.MultiA
     #grok.baseclass()
 
     def __call__(self, authentication):
-        log("CREATING USER")
-        principal = AdHocPrincipal(
-            authentication.prefix + self.info.id, self.info.description
-        )
-        grok.notify(
-            interfaces.AuthenticatedPrincipalCreated(
-                authentication, principal, self.info, self.request
-            )
-        )
+        principal = super(AdHocPrincipalFactory, self).__call__(authentication)
+        #principal = AdHocPrincipal(
+        #    authentication.prefix + self.info.id, self.info.description
+        #)
+        #grok.notify(
+        #    interfaces.AuthenticatedPrincipalCreated(
+        #        authentication, principal, self.info, self.request
+        #    )
+        #)
         alsoProvides(self.request, IUKHAdHocLayer)
         return principal

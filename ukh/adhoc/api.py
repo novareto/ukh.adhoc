@@ -111,7 +111,7 @@ class AdHocService(grok.JSON):
             docs = []
             for name, obj in user.items():
                 if name != 'nachrichten':
-                    docs.append(dict(doc_type=name, status=obj.state, date=obj.modtime.strftime('%d.%m.%Y')))
+                    docs.append(dict(doc_id=name, doc_type=obj.doc_type, status=obj.state, date=obj.modtime.strftime('%d.%m.%Y')))
             struct = dict(az=user.az, password=user.password, email=user.email, docs=docs,
                           active=user.active, anfragedatum=user.anfragedatum, status=user.status)
             return struct
@@ -130,9 +130,9 @@ class AdHocService(grok.JSON):
             doc = view.create(data)
             if not doc:
                 doc = Document(**info)
-            user[data.get('doc_type')] = doc
+            name = user.add(data.get('doc_type'), doc)
             self.request.response.setStatus(202)
-            return
+            return {'id': name}
         raise KeyError('Unknown user.')
 
     @expected(IAccount['az'], *fields(IDocumentInfo))
