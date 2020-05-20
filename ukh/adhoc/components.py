@@ -89,9 +89,6 @@ class Account(grok.Container):
         nd= {}
         for k, v in datensatz.items():
             nd[k] = str(v)
-        print
-        print nd
-        print
         return datensatz
 
     def getVersichertenkonto(self):

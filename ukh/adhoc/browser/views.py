@@ -224,8 +224,9 @@ class UKHBaseAddView(BaseAddView):
 from uvcsite.content.views import Add
 
 
-class FormDisplay(uvcsite.Page):
+class FormDisplay(uvcsite.Form):
     grok.context(IAdHocContent)
+    grok.baseclass()
     grok.name('fd')
 
     @property

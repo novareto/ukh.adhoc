@@ -90,7 +90,7 @@ class MessageDisplay(MessageIndex):
         if IQuestion.providedBy(self.context):
             if letter_is_sent(self):
                 yield {
-                    'title': 'Mark as read',
+                    'title': 'Als gelesen markiert',
                     'url': '%s/mark_as_read' % uri
                 }
             elif letter_is_read(self):

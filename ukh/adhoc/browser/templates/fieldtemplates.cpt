@@ -82,3 +82,13 @@
         <tal:widget tal:content="structure widget.render()" />
     </span>
 </div>
+
+
+
+<div metal:define-macro="field-display-uk" class="control-group">
+	<label class="control-label" for="#" tal:attributes="for widget.htmlId()"> 
+		<span tal:content="widget.title"> </span>
+	</label>
+	<p class="help-block" tal:condition="widget.description" tal:content="structure widget.description"> </p>
+	<p tal:content="widget.inputValue()"/>
+</div>

@@ -16,11 +16,11 @@
             <a role="button" data-toggle="collapse" data-parent="#accordion" tal:attributes="href string:#collapse-${repeat.document.number}" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
               <span tal:replace="document.doc_title"> </span>
               <br>
-              <span tal:replace="document.modtime.strftime('%d.%m.%Y')"> </span>
+              <small tal:replace="document.modtime.strftime('%d.%m.%Y')"> </small>
             </a>
           </h4>
         </div>
-        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" tal:attributes="id string:collapse-${repeat.document.number}">
+        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne" tal:attributes="id string:collapse-${repeat.document.number}">
           <div class="panel-body">
             <dl class="dl-horizontal">
               <dt>Dokumentart:</dt>

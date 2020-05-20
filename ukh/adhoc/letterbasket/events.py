@@ -41,7 +41,7 @@ Ihr Versicherten Extranet
 """
 
 
-#@grok.subscribe(IMessage, uvcsite.IAfterSaveEvent)
+@grok.subscribe(IMessage, uvcsite.IAfterSaveEvent)
 def handle_save(obj, event, transition='sent'):
     sp = transaction.savepoint()
     try:
@@ -68,11 +68,11 @@ def handle_save(obj, event, transition='sent'):
         IWorkflowInfo(obj).fireTransition(transition)
         send(u'Vielen Dank, Ihre Nachricht wurde gesendet.', type='message', name='session')
     except StandardError as exc:
+        uvcsite.logger.exception("Achtung FEHLER")
         import pdb
         pdb.set_trace()
         sp.rollback()
         IWorkflowInfo(obj).fireTransition('progress')
-        uvcsite.logger.exception("Achtung FEHLER")
 
 
 #@grok.subscribe(IMessage, uvcsite.IAfterSaveEvent)
