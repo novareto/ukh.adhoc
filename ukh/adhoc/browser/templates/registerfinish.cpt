@@ -1,13 +1,8 @@
-<div>
+<div tal:define="unter15jahre view.unter15jahre">
   <h1> Versichertenportal <small> der Unfallkasse Hessen </small>
   </h1>
   <div>
-    <div tal:condition="context.anrede == 'Frau'">
-      <b> Sehr geehrte  <span tal:replace="string: ${context.anrede} ${context.ansprechpartner}"> </span>, </b>
-    </div>
-    <div tal:condition="context.anrede == 'Herr'">
-      <b> Sehr geehrter  <span tal:replace="string: ${context.anrede} ${context.ansprechpartner}"> </span>, </b>
-    </div>
+    <b tal:content="unter15jahre.kombianrede + ','"> </b>
     <p>
       willkommen im Versichertenportal der Unfallkasse Hessen. 
     </p>

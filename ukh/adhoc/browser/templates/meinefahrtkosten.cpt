@@ -1,0 +1,70 @@
+<div>
+  <h1> Fahrtkosten </h1>
+  <br>
+  <div class="row ">
+    <div class="col-md-12">
+      <p>
+        Für die Dauer der Heilbehandlung besteht gemäß § 43 SGB VII ein Anspruch auf Fahrtkostenerstattung
+        für alle Fahrten, die im Zusammenhang mit dem Unfall entstehen, bzw. die auf Veranlassung des
+        Unfallversicherungsträgers unternommen wurden.
+      </p>
+      <p>
+        Kosten für die Fahrten mit öffentlichen Verkehrsmitteln werden auf Einzelnachweis (Quittung/Fahrkarte) erstattet.
+      </p>
+      <p>
+        Taxifahrten können nur erstattet werden, wenn eine Notwendigkeitsbescheinigung Ihres Durchgangsarztes und die
+        Quittung vorliegen, oder nach vorheriger Rücksprache und Zustimmung Ihres Unfallversicherungsträgers.
+      </p>
+      <br>
+      <p>
+        Wir bitten Sie, die Fahrtkosten mit Hilfe des PDF bei uns geltend zu machen. 
+      </p>
+      <p>
+        Die Unfallkasse Hessen behält sich eine Prüfung der Angaben vor.
+      </p>
+      <br>
+    </div>
+  
+    <div class="col-md-12">
+      <br>
+    </div>
+
+    <div class="col-md-3">
+      <a href="/fanstatic/ukh.adhoc/FahrtkostenVP_1.1.pdf" target="_blank">
+        <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Fahrtkosten.svg'" />
+          <h2><center>Fahrtkostenantrag</center></h2>
+      </a>
+    </div>
+    <div class="col-md-9">
+    </div>
+
+    <div class="col-md-12">
+      <br>
+    </div>
+
+    <div class="col-md-12">
+      <h1>
+        Kurzanleitung:
+      </h1>
+      <ul>
+        <li>
+          Bitte speichern Sie das PDF auf ihrem PC.
+        </li>
+        <li>
+          Zum Ausfüllen empfehlen wir ein gängiges PDF-Programm.
+        </li>
+        <li>
+          Speichern Sie das PDF erneut, sobald Sie alle Angaben gemacht haben.
+        </li>
+        <li>
+          Anschließend können Sie das PDF und die Anlagen wie z.B. Belege, Quittungen,
+          Fahrkarten über die Funktion
+          <a href="" tal:attributes="href view.url(context, 'dateiuploadadd')">
+            <b>Upload Dokumente</b>
+          </a>
+          einreichen.
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

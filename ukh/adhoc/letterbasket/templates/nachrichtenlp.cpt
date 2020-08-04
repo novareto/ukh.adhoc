@@ -1,23 +1,55 @@
 <div>
   <h1> Nachrichten </h1>
-  <p class="lead"> ... </p>
+  <p class="lead">
+  </p>
+
+  <div class="row">
+    <div class="col-md-3">
+      <h3>
+        <span class="glyphicon glyphicon-envelope"> </span>
+        Neue Nachricht
+      </h3>
+    </div>
+    <div class="col-md-3">
+      <h3>
+        <span class="glyphicon glyphicon-ok"> </span>
+        Gelesene Nachricht
+      </h3>
+    </div>
+    <div class="col-md-6">
+      <h3>
+        <span class="glyphicon glyphicon-pencil"> </span>
+        Gesendete / Beantwortete Nachricht
+      </h3>
+    </div>
+  </div>
+
+
   <table class="table">
     <tr>
-      <th> Titel </th>
-      <th> Objekt </th>
+      <th> &nbsp; </th>
+      <th> Titel der Nachricht </th>
       <th> Autor </th>
       <th> Datum </th>
       <th> Status </th>
     </tr>
-    <tr tal:repeat="message context.values()">
-      <td> <a href="" tal:attributes="href view.url(message)" tal:content="message.title"> </a> </td>
-      <td> Nachricht </td>
-      <td tal:content="message.about['creator']"> </td>
-      <td tal:content="message.about['created'].strftime('%d.%m.%Y %H:%M')"> </td>
-      <td tal:content="message.about.get('status')"> </td>
+    <tr tal:repeat="message view.nachrichten()">
+      <td>
+            <span tal:attributes="class message.css_class()" class="glyphicon glyphicon-envelope"> </span>
+      </td>
+      <td>
+        <a href="" tal:attributes="href view.url(message.context)" tal:content="message.title()"> </a>
+      </td>
+      <td>
+        <span tal:content="message.author()"> </span>
+      </td>
+      <td tal:content="message.date()"> </td>
+      <td>
+        <span tal:content="message.state()"> </span>
+      </td>
     </tr>
   </table>
   <div>
-    <a class="btn btn-primary" href="@@add"> Hinzufügen </a>
+    <a class="btn btn-primary" href="@@add"> Neue Nachricht erstellen </a>
   </div>
 </div>

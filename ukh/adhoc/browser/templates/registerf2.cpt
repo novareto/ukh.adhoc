@@ -1,4 +1,4 @@
-<div>
+<div tal:define="unter15jahre view.unter15jahre">
   <h1> Versichertenportal <small> der Unfallkasse Hessen </small>
   </h1>
   <div>
@@ -13,12 +13,15 @@
       <form class="form-horizontal" enctype="multipart/form-data" method="post" novalidate="novalidate" action="" tal:attributes="action request.URL">
         <div class="row">
           <div class="info">
-            Im ersten Schritt bitten wir Sie, die uns übermittelnden Angaben zur Ihrer Person zu überprüfen und ggf. zu ergänzen
+            <div tal:content="unter15jahre.kombianrede"> </div>   
+            <br>
+            Die mit * gekennzeichneten Felder sind Pflichtfelder.
           </div>
           <br>
           <div tal:define="widget view.fieldWidgets.get('form.field.anrede')"
                metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline_fix_uk">
           </div>
+          <br>
           <div tal:define="widget view.fieldWidgets.get('form.field.nname'); widget2 view.fieldWidgets.get('form.field.vname')" 
                metal:use-macro="path: context/@@fieldmacros/template/macros/doublefield_fix_col">
           </div>
@@ -27,9 +30,6 @@
           </div>
           <div tal:define="widget view.fieldWidgets.get('form.field.vsplz'); widget2 view.fieldWidgets.get('form.field.vsort')"
                metal:use-macro="path: context/@@fieldmacros/template/macros/doublefield_fix_col">
-          </div>
-          <div tal:define="widget view.fieldWidgets.get('form.field.gebdat')"
-               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline_fix_uk">
           </div>
           <div tal:define="widget view.fieldWidgets.get('form.field.unfdat'); widget2 view.fieldWidgets.get('form.field.unfzeit')"
                metal:use-macro="path: context/@@fieldmacros/template/macros/doublefield_fix_col">
@@ -42,6 +42,9 @@
           </div>
           <br>
           <div tal:define="widget view.fieldWidgets.get('form.field.email')"
+               metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline_fix_uk">
+          </div>
+          <div tal:define="widget view.fieldWidgets.get('form.field.email2')"
                metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline_fix_uk">
           </div>
           <br>

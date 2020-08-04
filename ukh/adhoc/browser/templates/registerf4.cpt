@@ -1,4 +1,4 @@
-<div>
+<div tal:define="unter15jahre view.unter15jahre">
   <h1> Versichertenportal <small> der Unfallkasse Hessen </small>
   </h1>
   <div>
@@ -20,22 +20,41 @@
             <strong>Einwilligung zur Datenübermittlung</strong>
             <br>
             <br>
-            <p>
-              Ich willige darin ein, dass die Unfallkasse Hessen zur Durchführung des Heilverfahrens mich betreffende
-              Gesundheitsdaten (z.B.: Arztberichte, Röntgenaufnahmen), die ihr von einem Arzt oder einer Behörde zugänglich
-              gemacht worden sind, an weitere am Heilverfahren Beteiligte (z.B.: Ärzte, Kliniken, Krankengymnasten,
-              Psychotherapeuten, Ergotherapeuten usw.) übermittelt.
-            </p>
-            <p>
-              <small>
-              Hinweis: 
-              <br>
-              Ihre Einwilligung  ist  freiwillig und kann jederzeit widerrufen werden. Es genügt eine formlose Mitteilung an uns.
-              Bitte beachten Sie, dass der Widerruf Ihrer Einwilligungen nur für die Zukunft und nicht für die Vergangenheit möglich ist.
-              Die bis zu dem Zeitpunkt Ihres Widerrufs vorgenommene Datenverarbeitung bleibt damit rechtmäßig.
-              </small>
-            </p>
-
+            <div tal:condition="unter15jahre.alter >= 15">
+              <p>
+                Ich willige darin ein, dass die Unfallkasse Hessen zur Durchführung des Heilverfahrens mich betreffende
+                Gesundheitsdaten (z.B.: Arztberichte, Röntgenaufnahmen), die ihr von einem Arzt oder einer Behörde zugänglich
+                gemacht worden sind, an weitere am Heilverfahren Beteiligte (z.B.: Ärzte, Kliniken, Krankengymnasten,
+                Psychotherapeuten, Ergotherapeuten usw.) übermittelt.
+              </p>
+              <p>
+                <small>
+                Hinweis: 
+                <br>
+                Ihre Einwilligung  ist  freiwillig und kann jederzeit widerrufen werden. Es genügt eine formlose Mitteilung an uns.
+                Bitte beachten Sie, dass der Widerruf Ihrer Einwilligungen nur für die Zukunft und nicht für die Vergangenheit möglich ist.
+                Die bis zu dem Zeitpunkt Ihres Widerrufs vorgenommene Datenverarbeitung bleibt damit rechtmäßig.
+                </small>
+              </p>
+            </div>
+            <div tal:condition="unter15jahre.alter < 15">
+              <p>
+                Ich willige darin ein, dass die Unfallkasse Hessen zur Durchführung des Heilverfahrens meines Kindes betreffende
+                Gesundheitsdaten (z.B.: Arztberichte, Röntgenaufnahmen), die ihr von einem Arzt oder einer Behörde zugänglich
+                gemacht worden sind, an weitere am Heilverfahren Beteiligte (z.B.: Ärzte, Kliniken, Krankengymnasten,
+                Psychotherapeuten, Ergotherapeuten usw.) übermittelt.
+              </p>
+              <p>
+                <small>
+                Hinweis: 
+                <br>
+                Ihre Einwilligung  ist  freiwillig und kann jederzeit widerrufen werden. Es genügt eine formlose Mitteilung an uns.
+                Bitte beachten Sie, dass der Widerruf Ihrer Einwilligungen nur für die Zukunft und nicht für die Vergangenheit möglich ist.
+                Die bis zu dem Zeitpunkt Ihres Widerrufs vorgenommene Datenverarbeitung bleibt damit rechtmäßig.
+                </small>
+              </p>
+            </div>
+          </div>
         </div>
 
         <div tal:define="widget view.fieldWidgets.get('form.field.datenuebermittlung')"

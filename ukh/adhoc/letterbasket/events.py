@@ -12,89 +12,41 @@ from uvcsite.utils.mail import send_mail
 from hurry.workflow.interfaces import IWorkflowInfo
 from ukh.adhoc.interfaces import IAccountData
 from uvc.token_auth.plugin import TokenAuthenticationPlugin
+from pdf import Nachricht_pdf
+from ..event import MES
+from ukh.adhoc.interfaces import IQuestion, IAnswer
 
 
-BODY = u"""\
-Guten Tag,
-
-die Versicherte Person:
-
-%s
-
-%s
-%s
-
-
-hat folgendes Anliegen:
-
-%s
-
-Antworten Sie bitte mit diesem Link: %s
-
-Gegebenenfalls koennen Sie die Mail auch an den entsprechenden Sachbearbeiter weiterleiten.
-
-
-
-Vielen Dank
-
-Ihr Versicherten Extranet
-"""
+def getAccount(obj):
+    if IQuestion.providedBy(obj):
+        account = obj.__parent__.__parent__
+    elif IAnswer.providedBy(obj):
+        account = obj.__parent__.__parent__.__parent__
+    return account
 
 
 @grok.subscribe(IMessage, uvcsite.IAfterSaveEvent)
 def handle_save(obj, event, transition='sent'):
     sp = transaction.savepoint()
+    account = getAccount(obj)
     try:
-        betreff = obj.title
-        nachrichtentext = obj.message
-        fname = None
-        filename = None
-        adrz1 = "NN"
-        adrz2 = "NN"
-        adrz3 = "NN"
-        link = "%s?form.field.access_token=%s" % (grok.url(event.request, obj, 'add'), TokenAuthenticationPlugin.generate_token())
-        f_adr = "extranet@ukh.de"
-        body = BODY % (adrz1, adrz2, adrz3, nachrichtentext, link)
-        to = ['m.seibert@ukh.de', ]
-        send_mail(
-            f_adr,
-            to,
-            u"Anfrage TEST %s" % betreff,
-            #u"Anfrage Schulportal: " + str(betreff),
-            body=body,
-            file=fname,
-            filename=filename
-        )
+        if obj.principal.id == 'zope.anybody':
+            email = account.email
+            message = MES
+            send_mail(
+                "versichertenportal@ukh.de",
+                [email],
+                "Sie haben neue Nachrichten!",
+                message,
+            )
+        else:
+            grunddaten = account.getGrundDaten()
+            nname = grunddaten['iknam1'].strip()
+            vname = grunddaten['iknam2'].strip()
+            Nachricht_pdf(obj, nname, vname, tmp=None)
+            send(u'Vielen Dank, Ihre Nachricht wurde gesendet.')
         IWorkflowInfo(obj).fireTransition(transition)
-        send(u'Vielen Dank, Ihre Nachricht wurde gesendet.', type='message', name='session')
     except StandardError as exc:
         uvcsite.logger.exception("Achtung FEHLER")
-        import pdb
-        pdb.set_trace()
         sp.rollback()
         IWorkflowInfo(obj).fireTransition('progress')
-
-
-#@grok.subscribe(IMessage, uvcsite.IAfterSaveEvent)
-#def handle_save(obj, event, transition='publish'):
-#    sp = transaction.savepoint()
-#    try:
-#        betreff = obj.title
-#        nachrichtentext = obj.message
-#        #to = ['m.seibert@ukh.de', 'ck@novareto.de']
-#        to = ['m.seibert@ukh.de',]
-#        f_adr = "schulportal@ukh.de"
-#        body = "NEUE NACHRICHT"
-#        link = "%s?form.field.access_token=%s" % (grok.url(event.request, obj, 'add'), make_token())
-#        send_mail(
-#            f_adr,
-#            to,
-#            "BETREFF",
-#            body=body + link
-#        )
-#
-#        IWorkflowInfo(obj).fireTransition(transition)
-#    except StandardError:
-#        sp.rollback()
-#        IWorkflowInfo(obj).fireTransition('progress')
-#        uvcsite.logger.exception("Achtung FEHLER")

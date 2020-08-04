@@ -6,6 +6,21 @@
   <include package="dolmen.widget.file" />
   <include package="grok"/>
   <include package="ukh.U_1012" />
+  <include package="ukh.U_1021" />
+  <include package="ukh.U_1025" />
+  <include package="ukh.U_1026" />
+  <include package="ukh.U_1027" />
+  <include package="ukh.U_1031" />
+  <include package="ukh.U_1040" />
+  <include package="ukh.U_1050A" />
+  <include package="ukh.U_1050Z" />
+  <include package="ukh.U_1051" />
+  <include package="ukh.U_1315" />
+  <include package="ukh.U_1400N" />
+  <include package="ukh.U_1520A" />
+  <include package="ukh.U_1520B" />
+  <include package="ukh.U_1520C" />
+  <include package="ukh.dateiupload" />
   <include package="ukhtheme.grok" />
   <include package="uvc.letterbasket" />
   <include package="uvc.token_auth" />
@@ -16,24 +31,6 @@
   <browser:defaultSkin name="ukhtheme_adhoc" />
 
 <!--
-  <include package="ukh.u1051" />
-  <include package="ukh.u1315" />
-  <include package="ukh.u1040" />
-  <include package="ukh.U_1021" />
-  <include package="ukh.U_1025" />
-  <include package="ukh.U_1026" />
-  <include package="ukh.U_1027" />
-  <include package="ukh.U_1031" />
-  <include package="ukh.U_1040" />
-  <include package="ukh.U_1050" />
-  <include package="ukh.U_1051" />
-  <include package="ukh.U_1315" />
-  <include package="ukh.U_1400N" />
-  <include package="ukh.U_1520A" />
-  <include package="ukh.U_1520B" />
-  <include package="ukh.U_1520C" />
-  <include package="ukh.U_TEST01" />
-  <include package="ukh.uploader" />
   <include package="ukh.fahrtkosten" />
   <browser:defaultSkin name="ukhtheme" />^
 -->

@@ -11,7 +11,7 @@ from dolmen.forms.base import Fields, set_fields_data, apply_data_event
 
 from ukh.adhoc.auth import get_account
 from ukh.adhoc.interfaces import IAccount, IUKHAdHocApp
-from ukh.adhoc.resources import css, meinedatencss, kontocss
+from ukh.adhoc.resources import badge_css, ah_css, css, meinedatencss, kontocss
 from ukh.fahrtkosten.views import IFahrtkosten
 from ukhtheme.grok.layout import ILayer
 
@@ -32,6 +32,9 @@ from zope.traversing.interfaces import IBeforeTraverseEvent
 from ukh.adhoc.interfaces import IUKHAdHocLayer
 from grokcore.chameleon.components import ChameleonPageTemplateFile
 
+from ukh.adhoc.browser.register import getAlter
+from hurry.workflow.interfaces import IWorkflowState
+from hurry.workflow.interfaces import IWorkflowInfo
 
 grok.templatedir("templates")
 
@@ -76,24 +79,43 @@ class LandingPage(uvcsite.Page):
     grok.context(IAccount)
 
     def update(self):
-        z = 0
         if self.context.status != "bearbeitet":
             self.redirect(self.url(self.context, "registerf1"))
         if self.context.status == "bearbeitet":
+            if 'kkdaten' not in dir(self.context):
+                self.redirect(self.url(self.context, "registerf1"))
             if self.context.active == "nein":
                 self.redirect(self.url(self.context, "registerfinish"))
         self.context.statustext = u"Momentan haben wir keine Geschäftsfälle für Sie"
+        zf = 0
         for item in self.values():
             if item.state == "Entwurf":
-                z += 1
+                zf += 1
                 self.context.statustext = (
                     u"Momentan haben wir folgende Geschäftsfälle für Sie"
                 )
-        self.context.anzahl = z
+        self.context.anzahl = zf
+        zn = 0
+        #for item in self.context.values():
+        #    if item.title == 'Postfach':
+        #        postfach = item
+        #for nachricht in postfach.values():
+        #    user = str(nachricht.principal)
+        #    if 'zope.anybody' in user:
+        #        status = str(IWorkflowState(nachricht).getState())
+        #        test = dir(IWorkflowInfo(nachricht).context)
+        #        if 'sent' in status:
+        #            zn += 1
+        from ukh.adhoc.letterbasket.views import IMessageTableItem
+        for message in self.context['nachrichten'].values():
+            ma = IMessageTableItem(message)
+            if ma.css_class() == 'glyphicon glyphicon-envelope':
+                zn += 1
+        self.context.anzahlungelesen = zn
+        badge_css.need()
 
     def values(self):
         from ukh.fahrtkosten.views import IFahrtkosten
-
         return [
             x
             for x in self.context.values()
@@ -118,7 +140,8 @@ class Formulare(uvcsite.Page):
                 )
 
     def values(self):
-        return [x for x in self.context.values() if (x.__name__ != "nachrichten")]
+        #return [x for x in self.context.values() if (x.__name__ != "nachrichten")]
+        return [x for x in self.context.values() if (x.__name__ != "nachrichten") if (x.state == "Entwurf")]
 
 
 class Homefolder(uvcsite.Page):
@@ -129,6 +152,8 @@ class Homefolder(uvcsite.Page):
         if self.context.status != "bearbeitet":
             self.redirect(self.url(self.context, "registerf1"))
         if self.context.status == "bearbeitet":
+            if 'kkdaten' not in dir(self.context):
+                self.redirect(self.url(self.context, "registerf1"))
             if self.context.active == "nein":
                 self.redirect(self.url(self.context, "registerfinish"))
 
@@ -144,6 +169,8 @@ class PersonalPanel(PersonalPanel):
         if self.context.status != "bearbeitet":
             self.redirect(self.url(self.context, "registerf1"))
         if self.context.status == "bearbeitet":
+            if 'kkdaten' not in dir(self.context):
+                self.redirect(self.url(self.context, "registerf1"))
             if self.context.active == "nein":
                 self.redirect(self.url(self.context, "registerfinish"))
 
@@ -192,6 +219,14 @@ class MeinKonto(uvcsite.Form):
         return dat
 
 
+class MeineFahrtkosten(uvcsite.Form):
+    grok.context(IAccount)
+
+    def update(self):
+        if self.context.status != "bearbeitet":
+            self.redirect(self.url(self.context, "registerf1"))
+
+
 class MeineDaten(uvcsite.Form):
     grok.context(IAccount)
 
@@ -199,9 +234,22 @@ class MeineDaten(uvcsite.Form):
         if self.context.status != "bearbeitet":
             self.redirect(self.url(self.context, "registerf1"))
         if self.context.status == "bearbeitet":
+            if 'kkdaten' not in dir(self.context):
+                self.redirect(self.url(self.context, "registerf1"))
             if self.context.active == "nein":
                 self.redirect(self.url(self.context, "registerfinish"))
         meinedatencss.need()
+
+    @property
+    def unter15jahre(self):
+        alter = getAlter(self.context.getGrundDaten())
+        a = {}
+        if alter >= 15:
+            a['ueberschrift'] = u'Wir haben folgende Daten von Ihnen:'
+        else:
+            a['ueberschrift'] = u'Wir haben folgende Daten Ihres Kindes:'
+        a['alter'] = alter
+        return a
 
     @property
     def daten(self):
@@ -233,6 +281,9 @@ class FormDisplay(uvcsite.Form):
     def fields(self):
         return uvcsite.Fields(*self.context.schema) #.omit( "title", "docid", "doc_type", "anschreiben")
 
+    def update(self):
+        ah_css.need()
+
 
 class Form(uvcsite.Form):
     grok.context(IAdHocContent)
@@ -254,7 +305,7 @@ class Form(uvcsite.Form):
             "title", "docid", "doc_type", "anschreiben"
         )
 
-    @uvcsite.action(u"Speichern")
+    @uvcsite.action(u"Weiter")
     def handle_save(self):
         data, errors = self.extractData()
         if errors:
@@ -262,11 +313,11 @@ class Form(uvcsite.Form):
         changes = apply_data_event(self.fields, self.context, data)
         if changes:
             from uvc.layout.forms.event import AfterSaveEvent
-            grok.notify(AfterSaveEvent(self.context, self.request))
+            #grok.notify(AfterSaveEvent(self.context, self.request))
         else:
             self.flash("Kein Änderung", type="info")
         self.flash(u"Speichern erfolgreich.")
-        return self.redirect(self.application_url())
+        return self.redirect(self.url(self.context))
 
     @uvcsite.action(u"Abbrechen")
     def handle_cancel(self):

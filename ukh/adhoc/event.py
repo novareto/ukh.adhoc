@@ -11,18 +11,20 @@ from ukh.adhoc.interfaces import IAccountData
 
 
 MES = u"""
-Die Unfallkasse Hessen hat Ihnen im Rahmen des elektronischen Verfahrens am %s
-folgende Fragebogen / folgende Fragebögen gesendet:
+Guten Tag,
 
-%s
+in Ihrem Versichertenportal wartet eine neue Nachricht auf Sie.
 
-Wir bitten Sie diesen/diese auszufüllen und an uns zurückzusenden.
+Um die Nachricht zu lesen, melden Sie sich bitte in Ihrem Versichertenportal \
+der Unfallkasse Hessen auf www.ukh.de/versichertenportal an.
 
-Vielen Dank für Ihre Mithilfe.
 
 Freundliche Grüße
-
 Ihre Unfallkasse Hessen
+
+
+Diese E-Mail-Nachricht wurde von einer ausschließlichen Benachrichtungsadresse versandt, \
+die keine eingehenden Nachrichten empfängt. Bitte antworten Sie nicht auf diese E-Mail-Nachricht.
 """
 
 
@@ -31,9 +33,9 @@ def notify_user(obj, event):
     if obj.doc_title != "Dateiupload":
         account = obj.__parent__
         grunddaten = IAccountData(obj.__parent__)
-        message = MES % (datetime.datetime.now().strftime("%d.%m.%Y"), obj.doc_title)
+        message = MES #% (datetime.datetime.now().strftime("%d.%m.%Y"), obj.doc_title)
         send_mail(
-            "extranet@ukh.de",
+            "versichertenportal@ukh.de",
             [grunddaten.email],
             "Sie haben neue Nachrichten!",
             message,

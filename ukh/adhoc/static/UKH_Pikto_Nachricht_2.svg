@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 23.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Ebene_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 283.46 283.46"
+   style="enable-background:new 0 0 283.46 283.46;"
+   xml:space="preserve"
+   sodipodi:docname="UKH_Pikto_Nachricht_2.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"><metadata
+   id="metadata16"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs14" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1389"
+   inkscape:window-height="695"
+   id="namedview12"
+   showgrid="false"
+   inkscape:zoom="0.83256899"
+   inkscape:cx="141.73"
+   inkscape:cy="141.73"
+   inkscape:window-x="0"
+   inkscape:window-y="0"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="Ebene_1" />
+<style
+   type="text/css"
+   id="style2">
+	.st0{fill:#004994;}
+</style>
+<g
+   id="Hilfslinien_1_">
+</g>
+<g
+   id="g9">
+	<path
+   class="st0"
+   d="M203.83,115.73l-56.66-47.26c-3.51-2.9-7.35-2.87-10.78,0.07l-56.87,47.29c-2.11,1.81-3.26,4.44-3.27,7.13   h-0.01v74.81c0,5.18,4.21,9.39,9.39,9.39h112.21c5.18,0,9.39-4.21,9.39-9.39v-74.81h-0.01   C207.21,120.21,206.01,117.54,203.83,115.73z M141.56,74.65c0.1-0.09,0.19-0.16,0.26-0.21c0.07,0.05,0.15,0.11,0.24,0.19   l53.15,44.32H88.28L141.56,74.65z M84.24,192.15v-60.24l37.01,33.17L84.24,192.15z M88.22,199.15l53.11-38.85   c0.26-0.19,0.42-0.25,0.42-0.26c0.04,0.01,0.22,0.07,0.5,0.28l52.99,38.83H88.22z M199.22,192.14l-36.92-27.06l36.92-33.16V192.14z   "
+   id="path5" />
+	<path
+   class="st0"
+   d="M141.73,14.17c-70.45,0-127.56,57.11-127.56,127.56s57.11,127.56,127.56,127.56s127.56-57.11,127.56-127.56   S212.18,14.17,141.73,14.17z M226.28,226.27c-22.58,22.58-52.61,35.02-84.54,35.02s-61.96-12.44-84.54-35.02   s-35.02-52.61-35.02-84.54c0-31.94,12.44-61.96,35.02-84.54s52.61-35.02,84.54-35.02s61.96,12.44,84.54,35.02   s35.02,52.61,35.02,84.54C261.29,173.67,248.86,203.69,226.28,226.27z"
+   id="path7" />
+</g>
+<g
+   transform="translate(7.2937012e-5,1.6571045e-5)"
+   id="g828"><path
+     d="m 260.37656,64.973659 a 44.457756,44.457756 0 0 1 -45.72497,43.143711 44.457756,44.457756 0 0 1 -43.15333,-45.715892 44.457756,44.457756 0 0 1 45.70681,-43.162946 44.457756,44.457756 0 0 1 43.17257,45.697727 l -44.43996,-1.25804 z"
+     sodipodi:end="0.028301212"
+     sodipodi:start="0.02914281"
+     sodipodi:ry="44.457756"
+     sodipodi:rx="44.457756"
+     sodipodi:cy="63.678219"
+     sodipodi:cx="215.93768"
+     sodipodi:type="arc"
+     id="path859"
+     style="fill:#ff3c02;fill-opacity:1" /><text
+     id="text863"
+     y="88.581261"
+     x="196.55008"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:74.66666412px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none"
+     xml:space="preserve"><tspan
+       y="88.581261"
+       x="196.55008"
+       id="tspan865"
+       sodipodi:role="line">2</tspan></text>
+</g></svg>

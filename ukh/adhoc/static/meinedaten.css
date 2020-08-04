@@ -1,9 +1,9 @@
 .col-md-3 {
-  height: 20px;
+  min-height: 26px;
 }
 
 .col-md-9 {
-  height: 20px;
+  min-height: 26px;
 }
 
 .col-md-12 {

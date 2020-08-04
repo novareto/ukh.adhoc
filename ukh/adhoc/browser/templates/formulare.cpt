@@ -1,13 +1,5 @@
 <div class="landingpage">
-  <!--
-  <h1> Versichertenportal </h1>
-  <p class="lead"> <span tal:content="context.ansprechpartner"> </span> </p>
-  <p> Sie haben sich hier im Versicherten Extranet angemeldet </p>
-  <p> Über diese Plattform können Sie nun alle anfallenden Dokumente zu Ihrem Aktenfall <b tal:content="context.az"> </b> bearbeiten</p>
-  -->
-
   <h2> <span tal:content="context.statustext"> </span> </h2>
-
   <div tal:repeat="document view.values()" class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
     <div tal:condition="document.state != 'gesendet'">
       <div class="panel panel-default">
@@ -20,7 +12,7 @@
             </a>
           </h4>
         </div>
-        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne" tal:attributes="id string:collapse-${repeat.document.number}">
+        <div id="collapseOne" class="panel-collapse collapse out" role="tabpanel" aria-labelledby="headingOne" tal:attributes="id string:collapse-${repeat.document.number}">
           <div class="panel-body">
             <dl class="dl-horizontal">
               <dt>Dokumentart:</dt>
@@ -31,10 +23,6 @@
               <dd> <span tal:replace="document.modtime.strftime('%d.%m.%Y')"/> </dd>
               <dt>Status:</dt>
               <dd> <span tal:replace="document.state"/> </dd>
-              <!--
-                <dt>blabla:</dt>
-                <dd> <span tal:replace="document.aktz"/> </dd>
-              -->
             </dl>
             <span tal:replace="structure getattr(document, 'anschreiben', '')"> </span>
             <hr>

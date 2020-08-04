@@ -1,26 +1,12 @@
 <div>
-  <h1> Versichertenportal <small> der Unfallkasse Hessen </small>
-  </h1>
+  <h1>Willkommen im Versichertenportal<small> der Unfallkasse Hessen </small></h1>
   <div>
-    <div tal:condition="context.anrede == 'Frau'">
-      <b> Sehr geehrte  <span tal:replace="string: ${context.anrede} ${context.ansprechpartner}"> </span>, </b>
-    </div>
-    <div tal:condition="context.anrede == 'Herr'">
-      <b> Sehr geehrter  <span tal:replace="string: ${context.anrede} ${context.ansprechpartner}"> </span>, </b>
-    </div>
-
-    <p>
-      willkommen im Versichertenportal der Unfallkasse Hessen. 
-    </p>
     <p>
       Bitte bestätigen Sie uns Ihre Teilnahme am elektronischen Verfahren unter Zustimmung der
       <a href="/fanstatic/ukh.adhoc/Datenschutzhinweis.pdf" target="_blank"> <b>Datenschutzrichtlinien</b> </a>
       der Unfallkasse Hessen.
     </p>
     <fieldset>
-      <!--
-      <span class="badge pull-right">Schritt 1/2</span>
-      -->
       <form class="form-horizontal" enctype="multipart/form-data" method="post" novalidate="novalidate" action="" tal:attributes="action request.URL">
         <div class="row">
         <div tal:define="widget view.fieldWidgets.get('form.field.active')"
@@ -38,3 +24,38 @@
     Datenschutzrichtlinien der Unfallkasse Hessen
   </a>
 </div>
+
+
+<!--
+<div tal:define="unter15jahre view.unter15jahre">
+  <h1> Versichertenportal <small> der Unfallkasse Hessen </small>
+  </h1>
+  <div>
+    <b tal:content="unter15jahre.kombianrede + ','"> </b>
+    <p>
+      willkommen im Versichertenportal der Unfallkasse Hessen. 
+    </p>
+    <p>
+      Bitte bestätigen Sie uns Ihre Teilnahme am elektronischen Verfahren unter Zustimmung der
+      <a href="/fanstatic/ukh.adhoc/Datenschutzhinweis.pdf" target="_blank"> <b>Datenschutzrichtlinien</b> </a>
+      der Unfallkasse Hessen.
+    </p>
+    <fieldset>
+      <form class="form-horizontal" enctype="multipart/form-data" method="post" novalidate="novalidate" action="" tal:attributes="action request.URL">
+        <div class="row">
+        <div tal:define="widget view.fieldWidgets.get('form.field.active')"
+             metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
+        </div>
+        </div>
+        <div class="row">
+          <div metal:use-macro="path: context/@@fieldmacros/template/macros/form-actions"></div>
+        </div>
+      </form>
+    </fieldset>
+  </div>
+
+  <a href="/fanstatic/ukh.adhoc/Datenschutzhinweis.pdf" target="_blank">
+    Datenschutzrichtlinien der Unfallkasse Hessen
+  </a>
+</div>
+-->

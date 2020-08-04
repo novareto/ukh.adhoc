@@ -1,49 +1,55 @@
-<div tal:define="daten view.daten">
+<div tal:define="daten view.daten; unter15jahre view.unter15jahre">
   <h1> Meine Daten </h1>
   <br>
   <div class="row ">
     <div class="col-md-12">
-      <p> Wir haben folgende Daten von Ihnen: </p>
+      <p tal:content="unter15jahre.ueberschrift"> </p>
     </div>
 
     <div class="col-md-12"></div>
 
     <div class="col-md-3">
-      <p>Anrede:</p>
+      <p>Geschlecht:</p>
     </div>
     <div class="col-md-9">
       <p tal:content="daten.anrede"> </p>
     </div>
+
     <div class="col-md-3">
       <p>Vorname, Nachname:</p>
     </div>
     <div class="col-md-9">
       <p tal:content="daten.vname + ' ' + daten.nname"> </p>
     </div>
+
     <div class="col-md-3">
       <p>Straße, Hausnummer:</p>
     </div>
     <div class="col-md-9">
       <p tal:content="daten.vsstr + ' ' + daten.vshnr"> </p>
     </div>
+
     <div class="col-md-3">
       <p>Postleitzahl, Ort:</p>
     </div>
     <div class="col-md-9">
       <p tal:content="daten.vsplz + ' ' + daten.vsort"> </p>
     </div>
+
     <div class="col-md-3">
       <p>Telefonnummer:</p>
     </div>
     <div class="col-md-9">
       <p tal:content="daten.vsvwl + ' ' + daten.vstel"> </p>
     </div>
+
     <div class="col-md-3">
       <p>Handy / Mobilfunknummer:</p>
     </div>
     <div class="col-md-9">
       <p tal:content="daten.handy"> </p>
     </div>
+
     <div class="col-md-3">
       <p>E-Mail:</p>
     </div>
@@ -54,12 +60,6 @@
     <div class="col-md-12"></div>
 
     <div class="col-md-3">
-      <p>Geburtsdatum:</p>
-    </div>
-    <div class="col-md-9">
-      <p tal:content="daten.gebdat"> </p>
-    </div>
-    <div class="col-md-3">
       <p>Unfalldatum / Unfallzeit:</p>
     </div>
     <div class="col-md-9">
@@ -69,13 +69,13 @@
     <div class="col-md-12"></div>
 
     <div class="col-md-3">
-      <p>Arbeitgeber:</p>
+      <p>Unfallbetrieb:</p>
     </div>
     <div class="col-md-9">
       <p tal:content="daten.jobinfo1"> </p>
     </div>
     <div class="col-md-3">
-      <p>Beschäftigt als:</p>
+      <p>Unfallbringende Tätigkeit:</p>
     </div>
     <div class="col-md-9">
       <p tal:content="daten.jobinfo2"> </p>
@@ -85,18 +85,32 @@
 
     <div class="col-md-12">
       <p>
-        Durch die Teilnahme am elektronischen Verfahren haben Sie den 
-        <a href="/fanstatic/ukh.adhoc/Datenschutzhinweis.pdf" target="_blank"> <b>Datenschutzrichtlinien</b> </a>
-        der Unfallkasse Hessen zugestimmt.
+        <div tal:condition="unter15jahre.alter >= 15">
+          Durch die Teilnahme am elektronischen Verfahren haben Sie den 
+          <a href="/fanstatic/ukh.adhoc/Datenschutzhinweis.pdf" target="_blank"> <b>Datenschutzrichtlinien</b> </a>
+          der Unfallkasse Hessen zugestimmt.
+        </div>
+        <div tal:condition="unter15jahre.alter < 15">
+          Durch die Teilnahme am elektronischen Verfahren haben Sie den 
+          <a href="/fanstatic/ukh.adhoc/Datenschutzhinweis.pdf" target="_blank"> <b>Datenschutzrichtlinien</b> </a>
+          der Unfallkasse Hessen zugestimmt.
+        </div>
       </p>
     </div>
 
     <div class="col-md-12"></div>
 
     <div class="col-md-3">
-      <p>
-        <a href="/fanstatic/ukh.adhoc/Datenerhebung.pdf" target="_blank"> <b>Einwilligung Datenerhebung</b> </a>
-      </p>
+      <div tal:condition="unter15jahre.alter >= 15">
+        <p>
+          <a href="/fanstatic/ukh.adhoc/Datenerhebung.pdf" target="_blank"> <b>Einwilligung Datenerhebung</b> </a>
+        </p>
+      </div>
+      <div tal:condition="unter15jahre.alter < 15">
+        <p>
+          <a href="/fanstatic/ukh.adhoc/Datenerhebung_U15.pdf" target="_blank"> <b>Einwilligung Datenerhebung</b> </a>
+        </p>
+      </div>
     </div>
     <div class="col-md-9">
       <p tal:content="daten.datenerhebung"> </p>
@@ -105,27 +119,27 @@
     <div class="col-md-12"></div>
 
     <div class="col-md-3">
-      <p>
-        <a href="/fanstatic/ukh.adhoc/Datenuebermittlung.pdf" target="_blank"> <b>Einwilligung Datenübermittlung</b> </a>
-      </p>
+      <div tal:condition="unter15jahre.alter >= 15">
+        <p>
+          <a href="/fanstatic/ukh.adhoc/Datenuebermittlung.pdf" target="_blank"> <b>Einwilligung Datenübermittlung</b> </a>
+        </p>
+      </div>
+      <div tal:condition="unter15jahre.alter < 15">
+        <p>
+          <a href="/fanstatic/ukh.adhoc/Datenuebermittlung_U15.pdf" target="_blank"> <b>Einwilligung Datenübermittlung</b> </a>
+        </p>
+      </div>
     </div>
     <div class="col-md-9">
       <p tal:content="daten.datenuebermittlung"> </p>
     </div>
 
 
-
-
-
-
-
-
-
     <div class="col-md-12">
       <br>
     </div>
     <div class="col-md-12">
-      <p> Sollten die Angaben nicht stimmen oder sollten sich in Zukunft Änderungen ergeben, senden Sie uns eine Mitteilung </p> 
+      <p> Sollten die Angaben nicht stimmen oder sollten sich in Zukunft Änderungen ergeben, senden Sie uns eine Mitteilung. </p> 
     </div>
   </div>
 </div>

@@ -5,6 +5,11 @@
 
       <div class="col-md-3">
         <a href="" tal:attributes="href view.url(context, 'nachrichten')">
+          <div tal:condition="context.anzahlungelesen > 0">
+            <span class="notify-badge">
+              <div tal:content="context.anzahlungelesen"></div>
+            </span>
+          </div>
           <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Nachricht.svg'" />
           <h2><center>Nachrichten</center></h2>
         </a>
@@ -12,6 +17,14 @@
 
       <div class="col-md-3">
         <a href="" tal:attributes="href view.url(context, 'formulare')">
+          <div tal:condition="context.anzahl > 0">
+            <span class="notify-badge">
+              <div tal:content="context.anzahl"></div>
+            </span>
+          </div>
+          <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Formulare.svg'" />
+          <!--
+
           <div tal:condition="context.anzahl == 0">
             <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Formulare.svg'" />
           </div>
@@ -45,12 +58,13 @@
           <div tal:condition="context.anzahl > 9">
             <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Formulare_9plus.svg'" />
           </div>
+            -->
           <h2><center>Formulare</center></h2>
         </a>
       </div>
 
       <div class="col-md-3">
-        <a href="" tal:attributes="href view.url(context, 'fahrtkosten')">
+        <a href="" tal:attributes="href view.url(context, 'meinefahrtkosten')">
           <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Fahrtkosten.svg'" />
           <h2><center>Fahrtkosten</center></h2>
         </a>
@@ -65,7 +79,7 @@
 
 
       <div class="col-md-3">
-        <a href="" tal:attributes="href view.url(context, 'uploaderadd')">
+        <a href="" tal:attributes="href view.url(context, 'dateiuploadadd')">
           <img class="img-responsive" src="" tal:attributes="src 'fanstatic/ukh.adhoc/UKH_Pikto_Upload.svg'" />
           <h2><center>Upload Dokumente</center></h2>
         </a>

@@ -6,15 +6,24 @@
 import grok
 import re
 import uvcsite
+import datetime
 
 from ukh.adhoc.resources import css, stepcss
 from ukh.adhoc.interfaces import IAccount, IAccountData
 from dolmen.forms.base import apply_data_event
 from zeam.form.base import makeAdaptiveDataManager
-from ukh.adhoc.pdf import Absage_pdf, Zusage_pdf
+from ukh.adhoc.pdf import Antwort_pdf
 
 
 grok.templatedir("templates")
+
+
+def getAlter(gd):
+    gdat = "%s.%s.%s" %(str(gd['prsgtt']).zfill(2), str(gd['prsgmm']).zfill(2), str(gd['prsgjj']))
+    today = datetime.date.today()
+    tag, monat, jahr = gdat.split('.')
+    born = datetime.date(int(jahr), int(monat), int(tag))
+    return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
 
 class AccountDataAdapter(grok.Adapter):
@@ -39,7 +48,7 @@ class AccountDataAdapter(grok.Adapter):
 
     @property
     def anrede(self):
-        if 'anrede' in dir(self.context):
+        if hasattr(self.context, 'anrede'):
             anrede = self.context.anrede
         else:
             anrede = self.grunddaten.get('ikanr').strip()
@@ -47,7 +56,7 @@ class AccountDataAdapter(grok.Adapter):
 
     @property
     def nname(self):
-        if 'nname' in dir(self.context):
+        if hasattr(self.context, 'nname'):
             nname = self.context.nname
         else:
             nname = self.grunddaten.get('iknam1').strip()
@@ -55,98 +64,81 @@ class AccountDataAdapter(grok.Adapter):
 
     @property
     def vname(self):
-        if 'vname' in dir(self.context):
+        if hasattr(self.context, 'vname'):
             vname = self.context.vname
         else:
             vname = self.grunddaten.get('iknam2').strip()
         return vname
-        #return self.grunddaten.get('iknam2').strip()
 
     @property
     def vsstr(self):
-        if 'vsstr' in dir(self.context):
+        if hasattr(self.context, 'vsstr'):
             vsstr = self.context.vsstr
         else:
             vsstr = self.grunddaten.get('ikstr').strip()
         return vsstr
-        #return self.grunddaten.get('ikstr').strip()
 
     @property
     def vshnr(self):
-        if 'vshnr' in dir(self.context):
+        if hasattr(self.context, 'vshnr'):
             vshnr = self.context.vshnr
         else:
             vshnr = self.grunddaten.get('ikhnr').strip()
         return vshnr
-        #return self.grunddaten.get('ikhnr').strip()
 
     @property
     def vsplz(self):
-        if 'vsplz' in dir(self.context):
+        if hasattr(self.context, 'vsplz'):
             vsplz = self.context.vsplz
         else:
             vsplz = str(self.grunddaten.get('ikhplz'))
         return vsplz
-        #return str(self.grunddaten.get('ikhplz'))
 
     @property
     def vsort(self):
-        if 'vsort' in dir(self.context):
+        if hasattr(self.context, 'vsort'):
             vsort = self.context.vsort
         else:
-            vsort = str(self.grunddaten.get(u'ikhort').strip())
+            vsort = self.grunddaten.get(u'ikhort').strip()
         return vsort
-        #return self.grunddaten.get('ikhort').strip()
 
     @property
     def gebdat(self):
-        if 'gebdat' in dir(self.context):
+        if hasattr(self.context, 'gebdat'):
             gebdat = self.context.gebdat
         else:
-            ret = self.grunddaten
-            t = str(ret['prsgtt'])
-            m = str(ret['prsgmm'])
-            j = str(ret['prsgjj'])
-            if len(t) == 1:
-                t = '0' + t
-            if len(m) == 1:
-                m = '0' + m
-            gebdat = t + '.' + m + '.' + j
+            gebdat = "%s.%s.%s" %(str(self.grunddaten.get(u'prsgtt')).zfill(2),
+                                  str(self.grunddaten.get(u'prsgmm')).zfill(2),
+                                  str(self.grunddaten.get(u'prsgjj')))
         return gebdat
 
     @property
     def unfdat(self):
-        if 'unfdat' in dir(self.context):
+        if hasattr(self.context, 'unfdat'):
             unfdat = self.context.unfdat
         else:
-            ret = self.grunddaten
-            t = str(ret['unfutt'])
-            m = str(ret['unfumm'])
-            j = str(ret['unfujj'])
-            if len(t) == 1:
-                t = '0' + t
-            if len(m) == 1:
-                m = '0' + m
-            unfdat = t + '.' + m + '.' + j
+            unfdat = "%s.%s.%s" %(str(self.grunddaten.get(u'unfutt')).zfill(2),
+                                  str(self.grunddaten.get(u'unfumm')).zfill(2),
+                                  str(self.grunddaten.get(u'unfujj')))
         return unfdat
 
     @property
     def unfzeit(self):
-        if 'unfzeit' in dir(self.context):
+        if hasattr(self.context, 'unfzeit'):
             unfzeit = self.context.unfzeit
         else:
-            ret = self.grunddaten
-            lenstd = len(str(ret['unfstd']))
+            ret = str(self.grunddaten.get(u'unfstd'))
+            lenstd = len(ret)
             if lenstd <= 1:
                 unfzeit = '00:00'
             else:
                 if lenstd == 3:
-                    s = str(ret['unfstd'])[0:1]
+                    s = ret[0:1]
                     s = '0' + s
-                    m = str(ret['unfstd'])[1:3]
+                    m = ret[1:3]
                 if lenstd == 4:
-                    s = str(ret['unfstd'])[0:2]
-                    m = str(ret['unfstd'])[2:4]
+                    s = ret[0:2]
+                    m = ret[2:4]
                 unfzeit = s + ':' + m
         return unfzeit
 
@@ -181,6 +173,14 @@ class AccountDataAdapter(grok.Adapter):
     @email.setter
     def email(self, value):
         self.context.email = value
+
+    @property
+    def email2(self):
+        return self.context.email2
+
+    @email2.setter
+    def email2(self, value):
+        self.context.email2 = value
 
     # RegisterF3
 
@@ -229,28 +229,12 @@ class AccountDataAdapter(grok.Adapter):
         self.context.kkdaten = value
 
     @property
-    def kkvsnummer(self):
-        return self.context.kkvsnummer
-
-    @kkvsnummer.setter
-    def kkvsnummer(self, value):
-        self.context.kkvsnummer = value
-
-    @property
     def hausarzt(self):
         return self.context.hausarzt
 
     @hausarzt.setter
     def hausarzt(self, value):
         self.context.hausarzt = value
-
-    @property
-    def zusatzarzt(self):
-        return self.context.zusatzarzt
-
-    @zusatzarzt.setter
-    def zusatzarzt(self, value):
-        self.context.zusatzarzt = value
 
     # ÜBERFLÜSSIG ????????
 
@@ -289,6 +273,22 @@ class RegisterF1(uvcsite.Form):
     ignoreContent = False
     dataManager = makeAdaptiveDataManager(IAccountData)
 
+    #@property
+    #def unter15jahre(self):
+    #    data = self.context.getGrundDaten()
+    #    alter = getAlter(data)
+    #    a = {}
+    #    if alter >= 15:
+    #        if self.context.anrede == 'Herr':
+    #            a['kombianrede'] = u'Sehr geehrter Herr ' + self.context.ansprechpartner
+    #        elif self.context.anrede == 'Frau':
+    #            a['kombianrede'] = u'Sehr geehrte Frau ' + self.context.ansprechpartner
+    #        else:
+    #            a['kombianrede'] = self.context.anrede + ' ' + self.context.ansprechpartner
+    #    else:
+    #        a['kombianrede'] = u'Sehr geehrte Familie ' + data['iknam1']
+    #    return a
+
     def update(self):
         css.need()
 
@@ -313,11 +313,20 @@ class RegisterF2(RegisterF1):
     fields = uvcsite.Fields(IAccount).omit(
         'az', 'oid', 'password', 'active', 'status', 'ansprechpartner',
         'anfragedatum', 'telefon', 'datenerhebung', 'datenuebermittlung',
-        'kkdaten', 'kkvsnummer', 'hausarzt', 'zusatzarzt', 'jobinfo1', 'jobinfo2',
-        'passworda', 'passwordv')
+        'kkdaten', 'hausarzt', 'jobinfo1', 'jobinfo2',
+        'passworda', 'passwordv', 'gebdat')
     fields['anrede'].mode = "radio"
-    fields['gebdat'].mode = "readonly"
     ignoreContent = False
+
+    @property
+    def unter15jahre(self):
+        alter = getAlter(self.context.getGrundDaten())
+        a = {}
+        if alter >= 15:
+            a['kombianrede'] = u'Im ersten Schritt bitten wir Sie, die uns übermittelnden Angaben zur Ihrer Person zu überprüfen und ggf. zu ergänzen.'
+        else:
+            a['kombianrede'] = u'Im ersten Schritt bitten wir Sie, die uns übermittelnden Angaben zu Ihrem Kind zu überprüfen und ggf. zu ergänzen.'
+        return a
 
     def update(self):
         stepcss.need()
@@ -337,8 +346,16 @@ class RegisterF2(RegisterF1):
         if data['email'] != '':
             checkmail = re.compile(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$").match
             if not bool(checkmail(data['email'])):
-                self.flash(u'Bitte tragen Sie eine gültige E-Mail Adresse ein.')
+                self.flash(u'Bitte tragen Sie eine gültige E-Mail Adresse ein (E-Mail).')
                 return
+        if data['email2'] != '':
+            checkmail = re.compile(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$").match
+            if not bool(checkmail(data['email2'])):
+                self.flash(u'Bitte tragen Sie eine gültige E-Mail Adresse ein (E-Mail Wiederholung).')
+                return
+        if data['email'] != data['email2']:
+            self.flash(u'Die E-Mail Adressen müssen übereinstimmen.')
+            return
         apply_data_event(self.fields, self.context, data)
         self.flash(u'Speichern erfolgreich.')
         self.redirect(self.url(self.context) + '/registerf3')
@@ -350,6 +367,13 @@ class RegisterF3(RegisterF1):
         'Versicherten Service' der UKH zu nutzen"
     fields = uvcsite.Fields(IAccount).select('datenerhebung')
     fields['datenerhebung'].mode = "radio"
+
+    @property
+    def unter15jahre(self):
+        alter = getAlter(self.context.getGrundDaten())
+        a = {}
+        a['alter'] = alter
+        return a
 
     @uvcsite.action(u'Zurück')
     def handle_back(self):
@@ -378,6 +402,13 @@ class RegisterF4(RegisterF1):
     fields = uvcsite.Fields(IAccount).select('datenuebermittlung')
     fields['datenuebermittlung'].mode = "radio"
 
+    @property
+    def unter15jahre(self):
+        alter = getAlter(self.context.getGrundDaten())
+        a = {}
+        a['alter'] = alter
+        return a
+
     @uvcsite.action(u'Zurück')
     def handle_back(self):
         data, errors = self.extractData()
@@ -402,8 +433,22 @@ class RegisterF5(RegisterF1):
     description = u"Bitte vervollständigen Sie folgende Angaben um den \
         'Versicherten Service' der UKH zu nutzen"
 
-    fields = uvcsite.Fields(IAccount).select('jobinfo1', 'jobinfo2', 'kkdaten',
-                                             'kkvsnummer', 'hausarzt', 'zusatzarzt')
+    @property
+    def fields(self):
+        fields = uvcsite.Fields(IAccount).select('jobinfo1', 'jobinfo2', 'kkdaten', 'hausarzt')
+        alter = getAlter(self.context.getGrundDaten())
+        if alter < 15:
+            fields['jobinfo1'].title = u'Unfallbetrieb *'
+            fields['jobinfo1'].description = u'Bitte nennen Sie uns den Namen und die Anschrift \
+                der Kindertagesstätte / des Kindergartens / der Schule'
+            fields['jobinfo2'].title = u'Unfallbringende Tätigkeit *'
+            fields['jobinfo2'].description = u'Bitte beschreiben Sie, bei welcher Tätigkeit \
+                sich der Unfall ereignete'
+            fields['kkdaten'].title = u'Krankenkasse Ihres Kindes *'
+            fields['hausarzt'].title = u'Kinder-/Hausärztin oder Kinder-/Hausarzt *'
+            fields['hausarzt'].description = u'Bitte nennen Sie uns den Namen und die Anschrift \
+                der Kinder-/Hausärztin oder des Kinder-/Hausarztes'
+        return fields
 
     @uvcsite.action(u'Zurück')
     def handle_back(self):
@@ -421,7 +466,7 @@ class RegisterF5(RegisterF1):
         self.flash(u'Speichern erfolgreich.')
         context = self.context
         grunddaten = self.context.getGrundDaten()
-        Zusage_pdf(context, grunddaten)
+        Antwort_pdf(context, grunddaten, u'zusage')
         self.redirect(self.application_url())
 
 
@@ -430,12 +475,27 @@ class RegisterFinish(uvcsite.Form):
     label = u"Teilnahme"
     description = u"Bitte vervollständigen Sie folgende Angaben um den \
         'Versicherten Service' der UKH zu nutzen"
-
     ignoreContent = False
     dataManager = makeAdaptiveDataManager(IAccountData)
+
+    @property
+    def unter15jahre(self):
+        data = self.context.getGrundDaten()
+        alter = getAlter(data)
+        a = {}
+        if alter >= 15:
+            if self.context.anrede == 'Herr':
+                a['kombianrede'] = u'Sehr geehrter Herr ' + self.context.ansprechpartner
+            elif self.context.anrede == 'Frau':
+                a['kombianrede'] = u'Sehr geehrte Frau ' + self.context.ansprechpartner
+            else:
+                a['kombianrede'] = self.context.anrede + ' ' + self.context.ansprechpartner
+        else:
+            a['kombianrede'] = u'Sehr geehrte Familie ' + data['iknam1']
+        return a
 
     def update(self):
         context = self.context
         grunddaten = self.context.getGrundDaten()
-        Absage_pdf(context, grunddaten)
+        Antwort_pdf(context, grunddaten, u'absage')
         css.need()

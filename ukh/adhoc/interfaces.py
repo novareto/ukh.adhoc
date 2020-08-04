@@ -3,6 +3,7 @@
 # # cklinger@novareto.de
 
 import grok
+import uvcsite 
 from zope import interface, schema
 from grokcore.component import provider
 
@@ -10,6 +11,26 @@ from zope.schema.interfaces import IContextSourceBinder, IBaseVocabulary
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from ukhtheme.grok.layout import ISkin
 
+class IAdHocContent(uvcsite.IContent):
+    """ Marker Interface for AdHoc Content Types
+    """
+    title = schema.TextLine(
+        title = u"Titel",
+        description = u"",
+        readonly = True,
+        required = True)
+
+    docid = schema.TextLine(title=u'docid')
+
+    doc_type = schema.TextLine(
+        title=u"Type of the Document",
+        required=True
+    )
+
+    anschreiben = schema.Text(
+        title=u"Anschreiben",
+        required=False,
+    )
 
 
 class IUKHAdHocLayer(grok.IDefaultBrowserLayer):
@@ -21,20 +42,21 @@ class IAdHocSkin(IUKHAdHocLayer, ISkin):
 
 
 
-@provider(IContextSourceBinder)
-def source_active(context):
-    return SimpleVocabulary([
-        SimpleTerm('ja', 'ja', u'Ja, ich möchte am elektronischen Verfahren teilnehmen'),
-        SimpleTerm('nein', 'nein', u'Nein, ich möchte weiterhin auf dem Postweg mit Ihnen kommunizieren')
-    ])
-
-
-@provider(IBaseVocabulary)
-def source_anrede(context):
-    return SimpleVocabulary([
-        SimpleTerm('1', 'Frau', u'Frau'),
-        SimpleTerm('2', 'Herr', u'Herr')
-    ])
+#@provider(IContextSourceBinder)
+#def source_active(context):
+#    return SimpleVocabulary([
+#        SimpleTerm('ja', 'ja', u'Ja, ich möchte am elektronischen Verfahren teilnehmen'),
+#        SimpleTerm('nein', 'nein', u'Nein, ich möchte weiterhin auf dem Postweg mit Ihnen kommunizieren')
+#    ])
+#
+#
+#@provider(IBaseVocabulary)
+#def source_anrede(context):
+#    return SimpleVocabulary([
+#        SimpleTerm('1', 'Frau', u'Frau'),
+#        SimpleTerm('2', 'Herr', u'Herr'),
+#        SimpleTerm('3', 'Divers', u'Divers')
+#    ])
 
 
 class IUKHAdHocApp(interface.Interface):
@@ -102,6 +124,12 @@ class IAccount(interface.Interface):
         required=True
     )
 
+    email2 = schema.TextLine(
+        title=u"E-Mail Wiederholung*",
+        description=u"Bitte bestätigen Sie Ihre E-Mail Adresse",
+        required=True
+    )
+
     oid = schema.TextLine(
         title=u"OID Document Number",
         required=True
@@ -151,8 +179,8 @@ class IAccount(interface.Interface):
     )
 
     anrede = schema.Choice(
-        title=u"Anrede",
-        values=(u'Frau', u'Herr')
+        title=u"Geschlecht",
+        values=(u'Frau', u'Herr', u'Divers')
     )
 
     nname = schema.TextLine(
@@ -182,7 +210,8 @@ class IAccount(interface.Interface):
     )
 
     gebdat = schema.TextLine(
-        title=u"Geburtsdatum *"
+        title=u"Geburtsdatum *",
+        required=False
     )
 
     unfdat = schema.TextLine(
@@ -211,38 +240,26 @@ class IAccount(interface.Interface):
     )
 
     jobinfo1 = schema.TextLine(
-        title=u"Arbeitgeber *",
-        description=u"Nennen Sie uns den Namen und die Anschrift Ihres Arbeitgebers/Unfallbetriebs",
+        title=u"Arbeitgeber*in oder Unfallbetrieb *",
+        description=u"Bitte genauen Namen und Anschrift",
         required=True
     )
 
     jobinfo2 = schema.TextLine(
-        title=u"Berufliche Tätigkeit *",
-        description=u"Nennen Sie uns Ihre Berufliche Tätigkeit",
+        title=u"Berufliche Tätigkeit oder unfallbringende Tätigkeit *",
+        description=u"",
         required=True
     )
 
     kkdaten = schema.TextLine(
-        title=u"Daten der Krankenkasse *",
-        description=u"Nennen Sie uns den Namen und die Anschrift Ihrer Krankenkasse",
-        required=True
-    )
-
-    kkvsnummer = schema.TextLine(
-        title=u"Ihre Versichertennummer *",
-        description=u"Nennen Sie uns Ihre Versichertennummer der Krankenkasse",
+        title=u"Krankenkasse *",
+        description=u"Bitte genauen Namen, Anschrift und Versichertennummer",
         required=True
     )
 
     hausarzt = schema.TextLine(
-        title=u"Hausärztliche Praxis *",
-        description=u"Nennen Sie uns Ihre Hausärztliche Praxis (Name und Anschrift)",
-        required=True
-    )
-
-    zusatzarzt = schema.TextLine(
-        title=u"Weitere Ärztinnen und Ärzte *",
-        description=u"Nennen Sie uns Weitere an der Behandlung beteiligte Ärztinnen und Ärzte",
+        title=u"Hausarzt / Hausärztin *",
+        description=u"Bitte genauen Namen und Anschrift",
         required=True
     )
 
@@ -262,12 +279,12 @@ class IMessage(IContained, IContainer):
 
     title = schema.TextLine(
         title=u"Betreff",
-        description=u"Der Betreff Ihrer Nachricht",
+        description=u"",
     )
 
     message = schema.Text(
         title=u"Nachricht",
-        description=u"Bitte tragen Sie hier Ihre Nachricht ein",
+        description=u"",
     )
 
     attachment = FileField(
@@ -284,6 +301,16 @@ class IMessage(IContained, IContainer):
     access_token = schema.TextLine(
         title=u"   ",
         required=False,
+    )
+
+    doc_id = schema.TextLine(
+        title=u"doc_id",
+        required=False,
+    )
+
+    sachbearbeiter = schema.TextLine(
+        title=u"Sachbearbeiter",
+        required=False
     )
 
 

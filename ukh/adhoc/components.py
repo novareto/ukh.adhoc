@@ -88,7 +88,10 @@ class Account(grok.Container):
             datensatz['ikanr'] = u'Herr'
         nd= {}
         for k, v in datensatz.items():
-            nd[k] = str(v)
+            if isinstance(v, basestring):
+                nd[k] = v
+            else:
+                nd[k] = str(v)
         return datensatz
 
     def getVersichertenkonto(self):

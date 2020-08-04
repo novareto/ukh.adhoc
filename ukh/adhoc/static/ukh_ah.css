@@ -1,0 +1,9 @@
+.form-group label {
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 0px;
+}
+
+.form-control-static {
+  margin-left: 4px;
+}

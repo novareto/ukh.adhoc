@@ -6,6 +6,17 @@ import uvcsite
 from ukh.adhoc.auth import get_account
 from zope.interface import Interface
 from uvc.staticcontent.staticmenuentries import PersonalPanelEntry
+from ukhtheme.grok.viewlets import PersonalPreferencesTemplate
+from ukh.adhoc.interfaces import IUKHAdHocLayer
+
+
+grok.templatedir('templates')
+
+
+
+class PersonalPreferencesTemplate(PersonalPreferencesTemplate):
+#    grok.layer(IUKHAdHocLayer)
+    pass
 
 
 class PersonalPanelEntry(PersonalPanelEntry):

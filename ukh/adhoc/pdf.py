@@ -4,368 +4,57 @@
 import os
 import datetime
 
-
+from ukh.adhoc.interfaces import IAccount
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.lib.colors import black, blue
 from time import localtime, strftime
+import datetime
 
 bcp = '/'.join(__file__.split('/')[:-2])
 
 
-def pdf_seitenkopf(data, saveverzeichnis, c, schriftart, schriftartfett, datum):
+def pdf_seitenkopf_master(c, schriftart, schriftartfett, seite):
     c.setFillColor(black)
+    c.setFont(schriftartfett, 16)
+    c.drawString(2.2 * cm, 28.5 * cm, u"Versichertenportal")
     c.setFont(schriftartfett, 10)
-    c.drawString(2.2 * cm, 28.5 * cm, u"Rehabilitation")
-    c.drawString(2.2 * cm, 28.0 * cm, u"und Entschädigung")
+    c.drawString(18 * cm, 2.0 * cm, u"Seite " + str(seite))
     logo = bcp + '/adhoc/static/logo_ukh.JPG'
     c.drawImage(logo, 14.2 * cm, 27.7 * cm, width=4.5 * cm, height=1.3 * cm)
     c.setFont(schriftart, 8)
-    t1 = u"Dieses Formular wurde über den Online-Service der Unfallkasse Hessen erstellt und versandt und trägt daher keine Unterschrift."
-    c.drawString(2.2 * cm, 1.5 * cm, t1)
+    t1 = u"Dieses Formular wurde über das Versichertenportal der Unfallkasse "
+    t2 = u"Hessen erstellt und versandt und trägt daher keine Unterschrift."
+    c.drawString(2.2 * cm, 1.5 * cm, t1 + t2)
     return c
 
 
-def Absage_pdf(data, grunddaten):
-    seite = 1
-    zeit = strftime("%H:%M:%S", localtime())
-    datum = str(strftime("%d.%m.%Y", localtime()))
-    datum2 = str(strftime("%Y_%m_%d_%H_%M", localtime()))
-    # Datei Name Verzeichnis
-    verzeichnis = '/tmp/ausgang/fax133a'
-    dateiname = datum2 + '_' + data.az + '.pdf'
-    saveverzeichnis = verzeichnis + '/' + dateiname
-    # Layout
-    c = canvas.Canvas(saveverzeichnis, pagesize=A4)
-    c.setAuthor("UKH")
-    c.setTitle(u'Druckversion')
-    schriftart = "Helvetica"
-    schriftartfett = "Helvetica-Bold"
-    # Seite 1
-    c = pdf_seitenkopf(data, saveverzeichnis, c, schriftart, schriftartfett, datum)
-    # Absender
-    y1 = 26.5
-    x1 = 11.7
-    x2 = 15.5
-    # Daten
-    j = str(grunddaten['unfujj'])
-    m = str(grunddaten['unfumm'])
-    t = str(grunddaten['unfutt'])
-    if len(m) == 1:
-        m = '0' + m
-    if len(t) == 1:
-        t = '0' + t
-    unfdat = t + '.' + m + '.' + j
-    j = str(grunddaten['prsgjj'])
-    m = str(grunddaten['prsgmm'])
-    t = str(grunddaten['prsgtt'])
-    if len(m) == 1:
-        m = '0' + m
-    if len(t) == 1:
-        t = '0' + t
-    gebdat = t + '.' + m + '.' + j
-    c.setFont(schriftartfett, 10)
-    #c.drawString(2.2 * cm, y1 * cm, u"Seite: " + str(seite))
-    c.drawString(x1 * cm, y1 * cm, u"Aktenzeichen:")
-    c.drawString(x2 * cm, y1 * cm, data.az)
-    y1 = y1 - 0.5
-    c.drawString(x1 * cm, y1 * cm, u"Versicherte Person:")
-    c.drawString(x2 * cm, y1 * cm, data.ansprechpartner)
-    y1 = y1 - 0.5
-    c.drawString(x1 * cm, y1 * cm, u"Unfalldatum:")
-    c.drawString(x2 * cm, y1 * cm, unfdat)
-    y1 = y1 - 0.5
-    c.drawString(x1 * cm, y1 * cm, u"Geburtsdatum:")
-    c.drawString(x2 * cm, y1 * cm, gebdat)
-    y1 = y1 - 1.0
-    c.drawString(x1 * cm, y1 * cm, u"Datum:")
-    c.drawString(x2 * cm, y1 * cm, datum)
-    y1 = y1 - 0.5
-    c.drawString(x1 * cm, y1 * cm, u"Uhrzeit:")
-    c.drawString(x2 * cm, y1 * cm, zeit)
-    # Empfänger
-    y1 = 24.0
-    x1 = 2.2
-    c.setFont(schriftartfett, 12)
-    c.drawString(x1 * cm, y1 * cm, u"Unfallkasse Hessen")
-    y1 -= 1.0
-    c.drawString(x1 * cm, y1 * cm, u"Leonardo-da-Vinci-Allee 20")
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u"60486 Frankfurt am Main")
-    # Info
-    c.setFillColor(black)
-    c.setFont(schriftartfett,16)
-    c.drawString(2.2 * cm, 20 * cm, u"Versichertenservice " + datum)
-    # Daten
-    y1 = 19.0
-    c.setFont(schriftartfett, 10)
-    t1 = u"Der oben genannte Versicherte wurde am "
-    t2 = u" zur Teilnahme am Versichertenservice eingeladen."
-    c.drawString(x1 * cm, y1 * cm, t1 + data.anfragedatum + t2)
-    y1 = y1 - 1.0
-    c.drawString(x1 * cm, y1 * cm, data.anrede + ' ' + data.ansprechpartner + u" hat am " + datum + " die Einladung abgelehnt.")
-    y1 = y1 - 1.0
-    c.drawString(x1 * cm, y1 * cm, data.anrede + ' ' + data.ansprechpartner + u" wünscht bis auf weiteres eine Schriftliche Kommunikation.")
-    # Seitenumbruch
-    c.showPage()
-    # ENDE und Save
-    c.save()
+def ueberschrift(c, schriftartfett, text, x1, y1, groesse):
+    c.setFont(schriftartfett, groesse)
+    z1 = 0
+    for i in text:
+        y1 -= 0.4
+        c.drawString(x1 * cm, y1 * cm, text[z1])
+        z1 += 1
+    return y1
 
 
-def Zusage_pdf(data, grunddaten):
-    seite = 1
-    zeit = strftime("%H:%M:%S", localtime())
-    datum = str(strftime("%d.%m.%Y", localtime()))
-    datum2 = str(strftime("%Y_%m_%d_%H_%M", localtime()))
-    # Datei Name Verzeichnis
-    verzeichnis = '/tmp/ausgang/fax133a'
-    dateiname = datum2 + '_' + data.az + '.pdf'
-    saveverzeichnis = verzeichnis + '/' + dateiname
-    # Layout
-    c = canvas.Canvas(saveverzeichnis, pagesize=A4)
-    c.setAuthor("UKH")
-    c.setTitle(u'Druckversion')
-    schriftart = "Helvetica"
-    schriftartfett = "Helvetica-Bold"
-    # Seite 1
-    c = pdf_seitenkopf(data, saveverzeichnis, c, schriftart, schriftartfett, datum)
-    # Absender
-    y1 = 26.5
-    x1 = 11.7
-    x2 = 15.5
-    # Daten
-    j = str(grunddaten['unfujj'])
-    m = str(grunddaten['unfumm'])
-    t = str(grunddaten['unfutt'])
-    if len(m) == 1:
-        m = '0' + m
-    if len(t) == 1:
-        t = '0' + t
-    unfdat = t + '.' + m + '.' + j
-    j = str(grunddaten['prsgjj'])
-    m = str(grunddaten['prsgmm'])
-    t = str(grunddaten['prsgtt'])
-    if len(m) == 1:
-        m = '0' + m
-    if len(t) == 1:
-        t = '0' + t
-    gebdat = t + '.' + m + '.' + j
-    c.setFont(schriftartfett, 10)
-    c.drawString(2.2 * cm, y1 * cm, u"Seite: " + str(seite))
-    c.drawString(x1 * cm, y1 * cm, u"Aktenzeichen:")
-    c.drawString(x2 * cm, y1 * cm, data.az)
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u"Versicherte Person:")
-    c.drawString(x2 * cm, y1 * cm, data.ansprechpartner)
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u"Unfalldatum:")
-    c.drawString(x2 * cm, y1 * cm, unfdat)
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u"Geburtsdatum:")
-    c.drawString(x2 * cm, y1 * cm, gebdat)
-    y1 -= 1.0 
-    c.drawString(x1 * cm, y1 * cm, u"Datum:")
-    c.drawString(x2 * cm, y1 * cm, datum)
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u"Uhrzeit:")
-    c.drawString(x2 * cm, y1 * cm, zeit)
-    # Empfänger
-    y1 = 24.0
-    x1 = 2.2
-    x2 = 9.5 
-    c.setFont(schriftartfett, 12)
-    c.drawString(x1 * cm, y1 * cm, u"Unfallkasse Hessen")
-    y1 -= 1.0
-    c.drawString(x1 * cm, y1 * cm, u"Leonardo-da-Vinci-Allee 20")
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u"60486 Frankfurt am Main")
-    # Info
-    c.setFillColor(black)
-    c.setFont(schriftartfett,16)
-    c.drawString(2.2 * cm, 20 * cm, u"Versichertenservice " + datum)
-    # Daten
-    y1 = 19.0
-    c.setFont(schriftartfett, 10)
-    t1 = u"Der oben genannte Versicherte wurde am "
-    t2 = u" zur Teilnahme am Versichertenservice eingeladen."
-    c.drawString(x1 * cm, y1 * cm, t1 + data.anfragedatum + t2)
-    y1 -= 1.0
-    c.drawString(x1 * cm, y1 * cm, data.anrede + ' ' + data.ansprechpartner + u" hat am " + datum + " die Einladung angenommen und folgendes mitgeteilt:")
-    y1 -= 1.0
-    c.drawString(x1 * cm, y1 * cm, u'Zustimmung Datenschutzrichtlinien:')
-    c.drawString(x2 * cm, y1 * cm, data.active)
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u'Einwilligung Datenerhebung:')
-    c.drawString(x2 * cm, y1 * cm, data.datenerhebung)
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u'Einwilligung zur Datenübermittlung:')
-    c.drawString(x2 * cm, y1 * cm, data.datenuebermittlung)
-    x2 = 6
-    x3 = 11.9
-    y1 -= 1.5
-    c.drawString(x1 * cm, y1 * cm, u'Die verfügbaren Kontaktdaten wurden gegebenenfalls angepasst, bzw. erweitert:')
-    y1 -= 1.0
-    c.drawString(x2 * cm, y1 * cm, u'Aktuelle Kontaktdaten:')
-    c.drawString(x3 * cm, y1 * cm, u'Geänderte Kontaktdaten:')
-    y1 -= 1.0
-    c.drawString(x1 * cm, y1 * cm, u'Anrede:')
-    c.drawString(x2 * cm, y1 * cm, grunddaten['ikanr'])
-    c.drawString(x3 * cm, y1 * cm, data.anrede)
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u'Vorname:')
-    c.drawString(x2 * cm, y1 * cm, grunddaten['iknam2'])
-    c.drawString(x3 * cm, y1 * cm, data.vname)
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u'Nachname:')
-    c.drawString(x2 * cm, y1 * cm, grunddaten['iknam1'])
-    c.drawString(x3 * cm, y1 * cm, data.nname)
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u'Straße:')
-    c.drawString(x2 * cm, y1 * cm, grunddaten['ikstr'])
-    c.drawString(x3 * cm, y1 * cm, data.vsstr)
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u'Hausnummer:')
-    c.drawString(x2 * cm, y1 * cm, grunddaten['ikhnr'])
-    c.drawString(x3 * cm, y1 * cm, data.vshnr)
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u'Plz, Ort:')
-    ikhplz = str(grunddaten['ikhplz'])
-    ikhort = grunddaten['ikhort'].strip()
-    plzort = ikhplz + ' ' + ikhort
-    c.drawString(x2 * cm, y1 * cm, plzort)
-    c.drawString(x3 * cm, y1 * cm, data.vsplz + ', ' + data.vsort)
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u'Geburtsdatum:')
-    T = str(grunddaten['prsgtt']).strip()
-    if len(T) == 1:
-        T = '0' + T
-    M = str(grunddaten['prsgmm']).strip()
-    if len(M) == 1:
-        M = '0' + M
-    J = str(grunddaten['prsgjj']).strip()
-    gebdat = T + '.' + M + '.' + J
-    c.drawString(x2 * cm, y1 * cm, gebdat)
-    c.drawString(x3 * cm, y1 * cm, data.gebdat)
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u'Unfalldatum:')
-    T = str(grunddaten['unfutt']).strip()
-    if len(T) == 1:
-        T = '0' + T
-    M = str(grunddaten['unfumm']).strip()
-    if len(M) == 1:
-        M = '0' + M
-    J = str(grunddaten['unfujj']).strip()
-    unfdat = T + '.' + M + '.' + J
-    c.drawString(x2 * cm, y1 * cm, unfdat)
-    c.drawString(x3 * cm, y1 * cm, data.unfdat)
-    y1 -= 0.5
-    c.drawString(x1 * cm, y1 * cm, u'Vorwahl, Telefon:')
-    ikvwhl = str(grunddaten['ikvwhl']).strip()
-    iktlnr = str(grunddaten['iktlnr']).strip()
-    telefonnummer = ''
-    if ikvwhl != '':
-        telefonnummer = ikvwhl + ', ' + iktlnr
-    c.drawString(x2 * cm, y1 * cm, telefonnummer)
-    c.drawString(x3 * cm, y1 * cm, data.vsvwl + ', ' + data.vstel)
-    y1 -= 1.5
-    c.drawString(x1 * cm, y1 * cm, u'Folgende neue Daten wurden von der versicherten Person zur Verfügung gestellt:')
-    y1 -= 1.0
-    c.drawString(x1 * cm, y1 * cm, u'E-Mail:')
-    c.drawString(x2 * cm, y1 * cm, data.email)
-    y1 -= 0.5
-    #####################################################
-    # Seitenumbruch                                     #
-    # Seite 2                                           #
-    #####################################################
-    c.showPage()
-    c = pdf_seitenkopf(data, saveverzeichnis, c, schriftart, schriftartfett, datum)
-    c.setFont(schriftartfett, 10)
-    seite += 1
-    y1 = 26.5
-    x1 = 2.2
-    x3 = 2.7
-    c.drawString(2.2 * cm, y1 * cm, u"Seite: " + str(seite))
-    y1 -= 1.0
-    c.setFillColor(black)
-    c.setFont(schriftartfett, 10)
-    c.drawString(x1 * cm, y1 * cm, u'Weiterhin wurden folgende Daten von der Versicherten Person zur Verfügung gestellt:')
-    y1 -= 1.5
-    c.drawString(x1 * cm, y1 * cm, u'Arbeitgeber:')
-    y1 -= 0.5
-    text = cutrow(data.jobinfo1, 100)
+def antwort(c, schriftart, text, x1, y1):
     c.setFillColor(black)
     c.setFont(schriftart, 10)
     z1 = 0
     for i in text:
         y1 -= 0.4
-        c.drawString(x3 * cm, y1 * cm, text[z1])
+        c.drawString(x1 * cm, y1 * cm, text[z1])
         z1 += 1
-    y1 -= 2.5
-    c.setFont(schriftartfett, 10)
-    c.drawString(x1 * cm, y1 * cm, u'Beruf, Tätigkeit:')
-    y1 -= 0.5
-    text = cutrow(data.jobinfo2, 100)
-    c.setFillColor(black)
-    c.setFont(schriftart, 10)
-    z1 = 0
-    for i in text:
-        y1 -= 0.4
-        c.drawString(x3 * cm, y1 * cm, text[z1])
-        z1 += 1
-    y1 -= 2.5
-    c.setFont(schriftartfett, 10)
-    c.drawString(x1 * cm, y1 * cm, u'Daten der Krankenkasse:')
-    y1 -= 0.5
-    text = cutrow(data.kkdaten, 100)
-    c.setFillColor(black)
-    c.setFont(schriftart, 10)
-    z1 = 0
-    for i in text:
-        y1 -= 0.4
-        c.drawString(x3 * cm, y1 * cm, text[z1])
-        z1 += 1
-    y1 -= 2.5
-    c.setFont(schriftartfett, 10)
-    c.drawString(x1 * cm, y1 * cm, u'Versichertennummer:')
-    y1 -= 0.5
-    text = cutrow(data.kkvsnummer, 100)
-    c.setFillColor(black)
-    c.setFont(schriftart, 10)
-    z1 = 0
-    for i in text:
-        y1 -= 0.4
-        c.drawString(x3 * cm, y1 * cm, text[z1])
-        z1 += 1
-    y1 -= 2.5
-    c.setFont(schriftartfett, 10)
-    c.drawString(x1 * cm, y1 * cm, u'Hausärztliche Praxis:')
-    y1 -= 0.5
-    text = cutrow(data.hausarzt, 100)
-    c.setFillColor(black)
-    c.setFont(schriftart, 10)
-    z1 = 0
-    for i in text:
-        y1 -= 0.4
-        c.drawString(x3 * cm, y1 * cm, text[z1])
-        z1 += 1
-    y1 -= 2.5
-    c.setFont(schriftartfett, 10)
-    c.drawString(x1 * cm, y1 * cm, u'Weitere Ärztinnen und Ärzte:')
-    y1 -= 0.5
-    text = cutrow(data.zusatzarzt, 100)
-    c.setFillColor(black)
-    c.setFont(schriftart, 10)
-    z1 = 0
-    for i in text:
-        y1 -= 0.4
-        c.drawString(x3 * cm, y1 * cm, text[z1])
-        z1 += 1
-    # ENDE und Save
-    c.save()
+    y1 -= 1.0
+    return y1
 
 
 def cutrow(text, ende=100, maxrows=20, maxstring=3000):
+    if text is None:
+        return ''
     text = text.replace("<br />", "\n")
     text = text.replace("<p>", "")
     text = text.replace("</p>", "")
@@ -433,312 +122,251 @@ def cutrow(text, ende=100, maxrows=20, maxstring=3000):
     return druckliste
 
 
-
-
-
-########### ALT LÖSCHEN !!!! #############
-
-
-def Zusage_ALT_pdf(data, grunddaten):
-    # Dateiname
+def Antwort_pdf(data, grunddaten, status):
+    ft = 90
+    bt = 90
+    gdat = "%s.%s.%s" %(str(grunddaten['prsgtt']).zfill(2), str(grunddaten['prsgmm']).zfill(2), str(grunddaten['prsgjj']))
+    today = datetime.date.today()
+    tag, monat, jahr = gdat.split('.')
+    born = datetime.date(int(jahr), int(monat), int(tag))
+    alter = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+    zeit = strftime("%H:%M:%S", localtime())
     datum = str(strftime("%d.%m.%Y", localtime()))
+    uhrzeit = str(strftime("%H:%M", localtime()))
     datum2 = str(strftime("%Y_%m_%d_%H_%M", localtime()))
-    verzeichnis = '/tmp/ausgang/fax133a'
+    verzeichnis = '/ausgang/fax133a'
     dateiname = datum2 + '_' + data.az + '.pdf'
     saveverzeichnis = verzeichnis + '/' + dateiname
-    # Grunddaten
-    j = str(grunddaten['unfujj'])
-    m = str(grunddaten['unfumm'])
-    t = str(grunddaten['unfutt'])
-    if len(m) == 1:
-        m = '0' + m
-    if len(t) == 1:
-        t = '0' + t
-    unfdat = t + '.' + m + '.' + j
-    j = str(grunddaten['prsgjj'])
-    m = str(grunddaten['prsgmm'])
-    t = str(grunddaten['prsgtt'])
-    if len(m) == 1:
-        m = '0' + m
-    if len(t) == 1:
-        t = '0' + t
-    gebdat = t + '.' + m + '.' + j
     # Layout
     c = canvas.Canvas(saveverzeichnis, pagesize=A4)
     c.setAuthor("UKH")
-    c.setTitle(u'Versichertenservice')
+    c.setTitle(u'Druckversion')
     schriftart = "Helvetica"
     schriftartfett = "Helvetica-Bold"
-    #####################################################
-    # Grauer Hintergrund                                #
-    #####################################################
-    c.setFillGray(0.85)
-    c.rect(1.4 * cm, 0.5 * cm, width=19.0 * cm, height=28.9 * cm, stroke=0, fill=1)
-    #####################################################
-    # Überschrift                                       #
-    #####################################################
+    # Seite 1 - Deckblatt
+    seite = 1
+    c = pdf_seitenkopf_master(c, schriftart, schriftartfett, seite)
+    y1 = 25.0
+    x1 = 2.2
+    x2 = 8.2
     c.setFillColor(black)
-    c.setFont(schriftartfett,18)
-    c.drawString(1.6 * cm, 28.7 * cm, u"Versichertenservice " + datum)
-    #####################################################
-    # Titel                                             #
-    #####################################################
+    c.setFont(schriftart, 11)
+    c.drawString(x1 * cm, y1 * cm, u"Aktenzeichen:")
+    c.drawString(x2 * cm, y1 * cm, data.az)
+    y1 -= 0.6
+    c.drawString(x1 * cm, y1 * cm, u"Name:")
+    c.drawString(x2 * cm, y1 * cm, grunddaten['iknam1'])
+    y1 -= 0.6
+    c.drawString(x1 * cm, y1 * cm, u"Vorname:")
+    c.drawString(x2 * cm, y1 * cm, grunddaten['iknam2'])
+    y1 -= 0.6
+    c.drawString(x1 * cm, y1 * cm, u"Formular Typ:")
+    c.drawString(x2 * cm, y1 * cm, u"Erstanmeldung")
+    y1 -= 0.6
+    c.drawString(x1 * cm, y1 * cm, u"Formular Bezeichnung:")
+    c.drawString(x2 * cm, y1 * cm, u"Erstanmeldung")
+    y1 -= 0.6
+    c.drawString(x1 * cm, y1 * cm, u"Eingangsdatum, Uhrzeit:")
+    c.drawString(x2 * cm, y1 * cm, datum + ', ' + zeit)
+    # ----------------------------------------------
+    y1 -= 3.0
     c.setFont(schriftartfett, 10)
-    c.drawString(1.6 * cm, 27.7 * cm, u'Versicherte Person:')
-    #####################################################
-    # Name                                              #
-    #####################################################
-    c.setLineWidth(0.5)
-    c.setFillGray(1.0)
-    c.rect(1.6 * cm, 25.2 * cm, width=11.8 * cm, height=1.9 * cm, stroke=1, fill=1)
-    c.setFillColor(blue)
-    c.setFont(schriftartfett, 21)
-    if len(data.ansprechpartner) > 29:
-        c.setFont(schriftartfett, 18)
-    c.drawString(1.8 * cm, 26.0 * cm, data.ansprechpartner)
-    #####################################################
-    # Aktenzeichen Daten                                #
-    #####################################################
-    c.setLineWidth(0.5)
-    c.setFillGray(1.0)
-    c.rect(13.7 * cm, 25.2 * cm, width=06.5 * cm, height=4.0 * cm, stroke=1, fill=1)
-    c.setFillColor(black)
-    c.setFont(schriftartfett, 12)
-    x1 = 13.9
-    y = 28.5
-    c.drawString(x1 * cm, y * cm, u"Aktenzeichen - Daten")
-    c.setFont(schriftartfett, 11)
-    y = y - 0.9
-    c.drawString(x1 * cm, y * cm, u"Aktenzeichen")
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u"Unfalldatum")
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u"Geburtsdatum")
-    y = y - 0.5
-    c.setFillColor(black)
-    c.setFont(schriftart, 12)
-    x2 = 16.9
-    y = 27.6
-    c.drawString(x2 * cm, y * cm, data.az)
-    y = y - 0.5
-    c.drawString(x2 * cm, y * cm, unfdat)
-    y = y - 0.5
-    c.drawString(x2 * cm, y * cm, gebdat)
-    y = y - 0.5
-    #####################################################
-    # Info                                              #
-    #####################################################
-    c.setLineWidth(0.5)
-    c.setFillGray(1.0)
-    c.rect(1.6 * cm, 2.0 * cm, width=18.6 * cm, height=21.5 * cm, stroke=1, fill=1)
-    c.setFillColor(black)
-    c.setFont(schriftartfett, 12)
-    x1 = 1.9
-    x2 = 8
-    y = 22.8
-    c.drawString(x1 * cm, y * cm, u"Info vom Versichertenservice - Seite 1 von 2:")
-    y = y - 1.0
-    c.setFillColor(black)
-    c.setFont(schriftart, 10)
-    c.drawString(x1 * cm, y * cm, u"Der oben genannte Versicherte wurde am " + data.anfragedatum + " zur Teilnahme am Versichertenservice eingeladen.")
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, data.anrede + ' ' + data.ansprechpartner + u" hat am " + datum + " die Einladung angenommen und folgendes mitgeteilt:")
-    y = y - 1.0
-    c.drawString(x1 * cm, y * cm, u'Zustimmung Datenschutzrichtlinien:')
-    c.drawString(x2 * cm, y * cm, data.active)
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u'Einwilligung Datenerhebung:')
-    c.drawString(x2 * cm, y * cm, data.datenerhebung)
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u'Einwilligung zur Datenübermittlung:')
-    c.drawString(x2 * cm, y * cm, data.datenuebermittlung)
-    x1 = 1.9
-    x2 = 5
-    x3 = 10.9
-    y = y - 1.5
-    c.drawString(x1 * cm, y * cm, u'Die verfügbaren Kontaktdaten wurden gegebenenfalls angepasst, bzw. erweitert:')
-    y = y - 1.0
-    c.drawString(x2 * cm, y * cm, u'Aktuelle Kontaktdaten:')
-    c.drawString(x3 * cm, y * cm, u'Geänderte Kontaktdaten:')
-    y = y - 1.0
-    c.drawString(x1 * cm, y * cm, u'Anrede:')
-    c.drawString(x2 * cm, y * cm, grunddaten['ikanr'])
-    c.drawString(x3 * cm, y * cm, data.anrede)
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u'Vorname:')
-    c.drawString(x2 * cm, y * cm, grunddaten['iknam2'])
-    c.drawString(x3 * cm, y * cm, data.vname)
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u'Nachname:')
-    c.drawString(x2 * cm, y * cm, grunddaten['iknam1'])
-    c.drawString(x3 * cm, y * cm, data.nname)
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u'Straße:')
-    c.drawString(x2 * cm, y * cm, grunddaten['ikstr'])
-    c.drawString(x3 * cm, y * cm, data.vsstr)
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u'Hausnummer:')
-    c.drawString(x2 * cm, y * cm, grunddaten['ikhnr'])
-    c.drawString(x3 * cm, y * cm, data.vshnr)
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u'Plz, Ort:')
-    ikhplz = str(grunddaten['ikhplz'])
-    ikhort = grunddaten['ikhort'].strip()
-    plzort = ikhplz + ' ' + ikhort
-    c.drawString(x2 * cm, y * cm, plzort)
-    c.drawString(x3 * cm, y * cm, data.vsplz + ', ' + data.vsort)
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u'Geburtsdatum:')
-    T = str(grunddaten['prsgtt']).strip()
-    if len(T) == 1:
-        T = '0' + T
-    M = str(grunddaten['prsgmm']).strip()
-    if len(M) == 1:
-        M = '0' + M
-    J = str(grunddaten['prsgjj']).strip()
-    gebdat = T + '.' + M + '.' + J
-    c.drawString(x2 * cm, y * cm, gebdat)
-    c.drawString(x3 * cm, y * cm, data.gebdat)
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u'Unfalldatum:')
-    T = str(grunddaten['unfutt']).strip()
-    if len(T) == 1:
-        T = '0' + T
-    M = str(grunddaten['unfumm']).strip()
-    if len(M) == 1:
-        M = '0' + M
-    J = str(grunddaten['unfujj']).strip()
-    unfdat = T + '.' + M + '.' + J
-    c.drawString(x2 * cm, y * cm, unfdat)
-    c.drawString(x3 * cm, y * cm, data.unfdat)
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u'Vorwahl, Telefon:')
-    ikvwhl = str(grunddaten['ikvwhl']).strip()
-    iktlnr = str(grunddaten['iktlnr']).strip()
-    telefonnummer = ''
-    if ikvwhl != '':
-        telefonnummer = ikvwhl + ', ' + iktlnr
-    c.drawString(x2 * cm, y * cm, telefonnummer)
-    c.drawString(x3 * cm, y * cm, data.vsvwl + ', ' + data.vstel)
-    y = y - 1.5
-    c.drawString(x1 * cm, y * cm, u'Folgende neue Daten wurden von der versicherten Person zur Verfügung gestellt:')
-    y = y - 1.0
-    c.drawString(x1 * cm, y * cm, u'E-Mail:')
-    c.drawString(x2 * cm, y * cm, data.email)
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u'Arbeitgeber:')
-    c.drawString(x2 * cm, y * cm, data.jobinfo1)
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u'Beruf, Tätigkeit:')
-    c.drawString(x2 * cm, y * cm, data.jobinfo2)
-    #####################################################
-    # Datum                                             #
-    #####################################################
-    c.setFillColor(black)
-    c.setFont(schriftart, 10)
-    txt = u"Dieses Schreiben wurde am "
-    zeit = strftime("%H:%M:%S", localtime())
-    c.drawString(x1 * cm, 01.30 * cm, txt + datum + u' um ' + zeit + u' Uhr erstellt')
-    #####################################################
-    # Seitenumbruch                                     #
-    # Seite 2                                           #
-    #####################################################
-    c.showPage()
-    #####################################################
-    # Grauer Hintergrund                                #
-    #####################################################
-    c.setFillGray(0.85)
-    c.rect(1.4 * cm, 0.5 * cm, width=19.0 * cm, height=28.9 * cm, stroke=0, fill=1)
-    #####################################################
-    # Überschrift                                       #
-    #####################################################
-    c.setFillColor(black)
-    c.setFont(schriftartfett,18)
-    c.drawString(1.6 * cm, 28.7 * cm, u"Versichertenservice " + datum)
-    #####################################################
-    # Titel                                             #
-    #####################################################
-    c.setFont(schriftartfett, 10)
-    c.drawString(1.6 * cm, 27.7 * cm, u'Versicherte Person:')
-    #####################################################
-    # Name                                              #
-    #####################################################
-    c.setLineWidth(0.5)
-    c.setFillGray(1.0)
-    c.rect(1.6 * cm, 25.2 * cm, width=11.8 * cm, height=1.9 * cm, stroke=1, fill=1)
-    c.setFillColor(blue)
-    c.setFont(schriftartfett, 21)
-    if len(data.ansprechpartner) > 29:
-        c.setFont(schriftartfett, 18)
-    c.drawString(1.8 * cm, 26.0 * cm, data.ansprechpartner)
-    #####################################################
-    # Aktenzeichen Daten                                #
-    #####################################################
-    c.setLineWidth(0.5)
-    c.setFillGray(1.0)
-    c.rect(13.7 * cm, 25.2 * cm, width=06.5 * cm, height=4.0 * cm, stroke=1, fill=1)
-    c.setFillColor(black)
-    c.setFont(schriftartfett, 12)
-    x1 = 13.9
-    y = 28.5
-    c.drawString(x1 * cm, y * cm, u"Aktenzeichen - Daten")
-    c.setFont(schriftartfett, 11)
-    y = y - 0.9
-    c.drawString(x1 * cm, y * cm, u"Aktenzeichen")
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u"Unfalldatum")
-    y = y - 0.5
-    c.drawString(x1 * cm, y * cm, u"Geburtsdatum")
-    y = y - 0.5
-    c.setFillColor(black)
-    c.setFont(schriftart, 12)
-    x2 = 16.9
-    y = 27.6
-    c.drawString(x2 * cm, y * cm, data.az)
-    y = y - 0.5
-    c.drawString(x2 * cm, y * cm, unfdat)
-    y = y - 0.5
-    c.drawString(x2 * cm, y * cm, gebdat)
-    y = y - 0.5
-    #####################################################
-    # Info                                              #
-    #####################################################
-    c.setLineWidth(0.5)
-    c.setFillGray(1.0)
-    c.rect(1.6 * cm, 2.0 * cm, width=18.6 * cm, height=21.5 * cm, stroke=1, fill=1)
-    c.setFillColor(black)
-    c.setFont(schriftartfett, 12)
-    x1 = 1.9
-    x2 = 5
-    y = 22.8
-    c.drawString(x1 * cm, y * cm, u"Info vom Versichertenservice - Seite 2 von 2:")
-    y = y - 1.0
-    c.setFillColor(black)
-    c.setFont(schriftart, 10)
-    c.drawString(x1 * cm, y * cm, u'Weiterhin wurden folgende Daten von der Versicherten Person zur Verfügung gestellt:')
-    y = y - 1.0
-    c.drawString(x1 * cm, y * cm, u'Daten der Krankenkasse:')
-    y = y - 1.0
-    c.drawString(x1 * cm, y * cm, data.kkdaten)
-    y = y - 2.0
-    c.drawString(x1 * cm, y * cm, u'Versichertennummer:')
-    y = y - 1.0
-    c.drawString(x1 * cm, y * cm, data.kkvsnummer)
-    y = y - 2.0
-    c.drawString(x1 * cm, y * cm, u'Hausärztliche Praxis:')
-    y = y - 1.0
-    c.drawString(x1 * cm, y * cm, data.hausarzt)
-    y = y - 2.0
-    c.drawString(x1 * cm, y * cm, u'Weitere Ärztinnen und Ärzte:')
-    y = y - 1.0
-    c.drawString(x1 * cm, y * cm, data.zusatzarzt)
-    #####################################################
-    # Datum                                             #
-    #####################################################
-    c.setFillColor(black)
-    c.setFont(schriftart, 10)
-    txt = u"Dieses Schreiben wurde am "
-    zeit = strftime("%H:%M:%S", localtime())
-    c.drawString(x1 * cm, 01.30 * cm, txt + datum + u' um ' + zeit + u' Uhr erstellt')
-    # ENDE und Save
-    c.save()
+    if status == 'absage':
+        c.drawString(x1 * cm, y1 * cm, u"Die Einladung vom " + data.anfragedatum + u" zum Versichertenportal wurde abgelehnt.")
+        y1 = y1 - 1.0
+        c.drawString(x1 * cm, y1 * cm, data.anrede + ' ' + data.ansprechpartner + u" wünscht bis auf weiteres eine Schriftliche Kommunikation.")
+        # Seitenumbruch
+        c.showPage()
+        # ENDE und Save
+        c.save()
+    else:
+        x2 = 15.5
+        c.drawString(x1 * cm, y1 * cm, u"Die Einladung vom " + data.anfragedatum + u" zum Versichertenportal wurde angenommen.")
+        y1 -= 1.0
+        c.drawString(x1 * cm, y1 * cm, u"Teilnahme am Versichertenportal und Zustimmung Datenschutzrichtlinien:")
+        c.drawString(x2 * cm, y1 * cm, data.active)
+        y1 -= 0.5
+        c.drawString(x1 * cm, y1 * cm, u'Einwilligung Datenerhebung:')
+        c.drawString(x2 * cm, y1 * cm, data.datenerhebung)
+        y1 -= 0.5
+        c.drawString(x1 * cm, y1 * cm, u'Einwilligung zur Datenübermittlung:')
+        c.drawString(x2 * cm, y1 * cm, data.datenuebermittlung)
+        x2 = 6
+        x3 = 11.9
+        y1 -= 1.5
+        c.drawString(x1 * cm, y1 * cm, u'Die vorhandenen Kontaktdaten wurden überprüft und angepasst/erweitert:')
+        y1 -= 1.0
+        c.drawString(x2 * cm, y1 * cm, u'Aktuelle Kontaktdaten:')
+        c.drawString(x3 * cm, y1 * cm, u'Geänderte Kontaktdaten:')
+        y1 -= 1.0
+        c.drawString(x1 * cm, y1 * cm, u'Anrede:')
+        c.drawString(x2 * cm, y1 * cm, grunddaten['ikanr'])
+        c.drawString(x3 * cm, y1 * cm, data.anrede)
+        y1 -= 0.5
+        c.drawString(x1 * cm, y1 * cm, u'Vorname:')
+        c.drawString(x2 * cm, y1 * cm, grunddaten['iknam2'])
+        c.drawString(x3 * cm, y1 * cm, data.vname)
+        y1 -= 0.5
+        c.drawString(x1 * cm, y1 * cm, u'Nachname:')
+        c.drawString(x2 * cm, y1 * cm, grunddaten['iknam1'])
+        c.drawString(x3 * cm, y1 * cm, data.nname)
+        y1 -= 0.5
+        c.drawString(x1 * cm, y1 * cm, u'Straße:')
+        c.drawString(x2 * cm, y1 * cm, grunddaten['ikstr'])
+        c.drawString(x3 * cm, y1 * cm, data.vsstr)
+        y1 -= 0.5
+        c.drawString(x1 * cm, y1 * cm, u'Hausnummer:')
+        c.drawString(x2 * cm, y1 * cm, grunddaten['ikhnr'])
+        c.drawString(x3 * cm, y1 * cm, data.vshnr)
+        y1 -= 0.5
+        c.drawString(x1 * cm, y1 * cm, u'Plz, Ort:')
+        ikhplz = str(grunddaten['ikhplz'])
+        ikhort = grunddaten['ikhort'].strip()
+        plzort = ikhplz + ' ' + ikhort
+        c.drawString(x2 * cm, y1 * cm, plzort)
+        c.drawString(x3 * cm, y1 * cm, data.vsplz + ', ' + data.vsort)
+        y1 -= 0.5
+        c.drawString(x1 * cm, y1 * cm, u'Unfalldatum:')
+        T = str(grunddaten['unfutt']).strip()
+        if len(T) == 1:
+            T = '0' + T
+        M = str(grunddaten['unfumm']).strip()
+        if len(M) == 1:
+            M = '0' + M
+        J = str(grunddaten['unfujj']).strip()
+        unfdat = T + '.' + M + '.' + J
+        c.drawString(x2 * cm, y1 * cm, unfdat)
+        c.drawString(x3 * cm, y1 * cm, data.unfdat)
+        y1 -= 0.5
+        c.drawString(x1 * cm, y1 * cm, u'Vorwahl, Telefon:')
+        ikvwhl = str(grunddaten['ikvwhl']).strip()
+        iktlnr = str(grunddaten['iktlnr']).strip()
+        telefonnummer = ''
+        if ikvwhl != '':
+            telefonnummer = ikvwhl + ', ' + iktlnr
+        neuetelefonnummer = ''
+        if data.vsvwl != '':
+            neuetelefonnummer = data.vsvwl + ', ' + data.vstel
+        c.drawString(x2 * cm, y1 * cm, telefonnummer)
+        c.drawString(x3 * cm, y1 * cm, neuetelefonnummer)
+        y1 -= 0.5
+        c.drawString(x1 * cm, y1 * cm, u'E-Mail:')
+        c.drawString(x3 * cm, y1 * cm, data.email)
+        y1 -= 0.5
+        #####################################################
+        # Seitenumbruch                                     #
+        # Seite 2                                           #
+        #####################################################
+        c.showPage()
+        seite += 1
+        c = pdf_seitenkopf_master(c, schriftart, schriftartfett, seite)
+        y1 = 26.5
+        x1 = 2.2
+        x3 = 2.7
+        c.setFillColor(black)
+        c.setFont(schriftartfett, 10)
+        c.drawString(x1 * cm, y1 * cm, u'Folgende Daten von der Versicherten Person zur Verfügung gestellt:')
+        y1 -= 1.5
+        # ####################################################################
+        text = cutrow(data.jobinfo1, 100)
+        # Platzbedarf ermitteln
+        lt = len(text) * 0.4
+        lt += 4
+        # ----------------------------------------------
+        # Gegebenenfalls Seitenwechsel einleiten
+        if lt > y1:
+            c.showPage()
+            seite += 1
+            c = pdf_seitenkopf_master(c, schriftart, schriftartfett, seite)
+            y1 = 26.5
+        # ----------------------------------------------
+        if alter >= 15:
+            ftext = cutrow(IAccount.get('jobinfo1').title, ft)
+            btext = cutrow(IAccount.get('jobinfo1').description, bt)
+        else:
+            t1 = u'Unfallbetrieb'
+            t2 = u'Bitte nennen Sie uns den Namen und die Anschrift der Kindertagesstätte / des Kindergartens / der Schule'
+            ftext = cutrow(t1, ft)
+            btext = cutrow(t2, bt)
+        y1 = ueberschrift(c, schriftartfett, ftext, x1, y1, 11)
+        y1 = ueberschrift(c, schriftartfett, btext, x1, y1, 9)
+        y1 -= 0.4
+        y1 = antwort(c, schriftart, text, x1, y1)
+        # ####################################################################
+        text = cutrow(data.jobinfo2, 100)
+        # Platzbedarf ermitteln
+        lt = len(text) * 0.4
+        lt += 4
+        # ----------------------------------------------
+        # Gegebenenfalls Seitenwechsel einleiten
+        if lt > y1:
+            c.showPage()
+            seite += 1
+            c = pdf_seitenkopf_master(c, schriftart, schriftartfett, seite)
+            y1 = 26.5
+        # ----------------------------------------------
+        if alter >= 15:
+            ftext = cutrow(IAccount.get('jobinfo2').title, ft)
+            btext = cutrow(IAccount.get('jobinfo2').description, bt)
+        else:
+            t1 = u'Unfallbringende Tätigkeit'
+            t2 = u'Bitte beschreiben Sie, bei welcher Tätigkeit sich der Unfall ereignete'
+            ftext = cutrow(t1, ft)
+            btext = cutrow(t2, bt)
+        y1 = ueberschrift(c, schriftartfett, ftext, x1, y1, 11)
+        y1 = ueberschrift(c, schriftartfett, btext, x1, y1, 9)
+        y1 -= 0.4
+        y1 = antwort(c, schriftart, text, x1, y1)
+        # ####################################################################
+        text = cutrow(data.kkdaten, 100)
+        # Platzbedarf ermitteln
+        lt = len(text) * 0.4
+        lt += 4
+        # ----------------------------------------------
+        # Gegebenenfalls Seitenwechsel einleiten
+        if lt > y1:
+            c.showPage()
+            seite += 1
+            c = pdf_seitenkopf_master(c, schriftart, schriftartfett, seite)
+            y1 = 26.5
+        # ----------------------------------------------
+        if alter >= 15:
+            ftext = cutrow(IAccount.get('kkdaten').title, ft)
+            btext = cutrow(IAccount.get('kkdaten').description, bt)
+        else:
+            t1 = u'Krankenkasse Ihres Kindes'
+            ftext = cutrow(t1, ft)
+            btext = cutrow(IAccount.get('kkdaten').description, bt)
+        y1 = ueberschrift(c, schriftartfett, ftext, x1, y1, 11)
+        y1 = ueberschrift(c, schriftartfett, btext, x1, y1, 9)
+        y1 -= 0.4
+        y1 = antwort(c, schriftart, text, x1, y1)
+        # ####################################################################
+        text = cutrow(data.hausarzt, 100)
+        # Platzbedarf ermitteln
+        lt = len(text) * 0.4
+        lt += 4
+        # ----------------------------------------------
+        # Gegebenenfalls Seitenwechsel einleiten
+        if lt > y1:
+            c.showPage()
+            seite += 1
+            c = pdf_seitenkopf_master(c, schriftart, schriftartfett, seite)
+            y1 = 26.5
+        # ----------------------------------------------
+        if alter >= 15:
+            ftext = cutrow(IAccount.get('hausarzt').title, ft)
+            btext = cutrow(IAccount.get('hausarzt').description, bt)
+        else:
+            t1 = u'Kinder-/Hausärztin oder Kinder-/Hausarzt'
+            t2 = u'Bitte nennen Sie uns den Namen und die Anschrift der Kinder-/Hausärztin oder des Kinder-/Hausarztes'
+            ftext = cutrow(t1, ft)
+            btext = cutrow(t2, bt)
+        y1 = ueberschrift(c, schriftartfett, ftext, x1, y1, 11)
+        y1 = ueberschrift(c, schriftartfett, btext, x1, y1, 9)
+        y1 -= 0.4
+        y1 = antwort(c, schriftart, text, x1, y1)
+        # Seitenumbruch
+        c.showPage()
+        # ENDE und Save
+        c.save()

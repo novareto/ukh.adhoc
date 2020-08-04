@@ -5,6 +5,24 @@ from hurry.workflow import workflow
 
 
 
+def titleForState(state):
+    ts = None
+    if state == 'created':
+        ts = 'erstellt'
+    elif state == 'sent':
+        ts = 'gesendet'
+    elif state == 'read':
+        ts = "gelesen"
+    elif state == 'replied':
+        ts = "beantwortet"
+    elif state == 'progress':
+        ts = "in Verarbeitung"
+    elif state == 'finish':
+        ts = "geschlossen"
+    return ts or state
+
+
+
 class MessageState(enum.Enum):
     created = 'created'
     sent = 'sent'
@@ -49,7 +67,7 @@ MessageWorkflow = workflow.Workflow([
     workflow.Transition(
         transition_id='finish',
         title='Finish',
-        source=None,
+        source=MessageState.sent,
         destination=MessageState.finish)
 
 ])

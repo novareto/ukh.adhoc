@@ -1,4 +1,4 @@
-<div>
+<div tal:define="unter15jahre view.unter15jahre">                                                                                                   
   <h1> Versichertenportal <small> der Unfallkasse Hessen </small>
   </h1>
   <div>
@@ -16,70 +16,142 @@
           Im zweiten Schritt bitten wir Sie um Ihre <strong>Einwilligung zur Datenerhebung</strong>
           <br>
           <br>
-          <strong>Einwilligung zur Datenerhebung</strong>
-          <br>
-          <br>
-          <p>
-            Ich bin damit einverstanden, dass dem Unfallversicherungsträger Unterlagen gesendet werden,
-            um meinen Versicherungsfall zu klären und Leistungen festzustellen.
-          </p>
-          <p>
-            Mir ist bewusst, dass alle mich betreffenden Daten grundsätzlich zunächst bei mir zur erheben sind.
-            Zur Beschleunigung des Verfahrens erkläre ich mich damit einverstanden, dass die benötigten Auskünfte
-            und Unterlagen über meine gesundheitlichen Verhältnisse <strong>direkt</strong> von 
-          </p>
-          <ul>
-            <li>
-              meinen behandelnden Ärzten, ggf. früheren behandelnden Ärzten,
-            </li>
-            <li>
-              meiner Krankenkasse, meinen früheren Krankenkassen,
-            </li>
-            <li>
-              dem Rentenversicherungsträger,
-            </li>
-            <li>
-              der Bundesagentur für Arbeit, 
-            </li>
-            <li>
-              dem Versorgungsamt oder anderen Behörden, denen Aufgaben nach dem Schwerbehinderten- oder sozialen Entschädigungsrecht übertragen sind,
-            </li>
-            <li>
-              dem Medizinischen Dienst der Krankenversicherung
-            </li>
-          </ul>
-          <p>
-            angefordert werden.
-          </p>
-          <p>
-            Zu den Auskünften bzw. Unterlagen können insbesondere Röntgen-, CT-Bilder,
-            medizinische Gutachten und Bescheinigungen, Unterlagen über bestehende und frühere Erkrankungen,
-            Vorsorgeuntersuchungen oder sonstige entscheidungserhebliche, ärztliche Unterlagen gehören.
-          </p>
-          <p>
-            Zur Klärung des Versicherungsfalles bzw. zur Feststellung der Leistungshöhe kann es erforderlich sein von
-          </p>
-          <ul>
-            <li>
-              meinem Arbeitgeber, ggf. früheren Arbeitgebern
-            </li>
-          </ul>
-          <p>
-            Auskünfte einzuholen.
-          </p>
-          <p>
-            Insoweit willige ich in die Erhebung meiner Daten ein bzw. entbinde die betroffenen Personen und
-            Stellen von ihrer Schweigepflicht gegenüber der Unfallkasse Hessen.
-          </p>
-          <p>
-            <small>
-            Hinweis: 
+          <div tal:condition="unter15jahre.alter >= 15">
+            <strong>Einwilligung zur Datenerhebung</strong>
             <br>
-            Ihre Einwilligung  ist  freiwillig und kann jederzeit widerrufen werden. Es genügt eine formlose Mitteilung an uns.
-            Bitte beachten Sie, dass der Widerruf Ihrer Einwilligungen nur für die Zukunft und nicht für die Vergangenheit möglich ist.
-            Die bis zu dem Zeitpunkt Ihres Widerrufs vorgenommene Datenverarbeitung bleibt damit rechtmäßig.
-            </small>
-          </p>
+            <br>
+            <p>
+              Ich bin damit einverstanden, dass dem Unfallversicherungsträger Unterlagen gesendet werden,
+              um meinen Versicherungsfall zu klären und Leistungen festzustellen.
+            </p>
+            <p>
+              Mir ist bewusst, dass alle mich betreffenden Daten grundsätzlich zunächst bei mir zur erheben sind.
+              Zur Beschleunigung des Verfahrens erkläre ich mich damit einverstanden, dass die benötigten Auskünfte
+              und Unterlagen über meine gesundheitlichen Verhältnisse <strong>direkt</strong> von 
+            </p>
+            <ul>
+              <li>
+                meinen behandelnden Ärzten, ggf. früheren behandelnden Ärzten,
+              </li>
+              <li>
+                meiner Krankenkasse, meinen früheren Krankenkassen,
+              </li>
+              <li>
+                dem Rentenversicherungsträger,
+              </li>
+              <li>
+                der Bundesagentur für Arbeit, 
+              </li>
+              <li>
+                dem Versorgungsamt oder anderen Behörden, denen Aufgaben nach dem Schwerbehinderten- oder sozialen Entschädigungsrecht übertragen sind,
+              </li>
+              <li>
+                dem Medizinischen Dienst der Krankenversicherung
+              </li>
+            </ul>
+            <p>
+              angefordert werden.
+            </p>
+            <p>
+              Zu den Auskünften bzw. Unterlagen können insbesondere Röntgen-, CT-Bilder,
+              medizinische Gutachten und Bescheinigungen, Unterlagen über bestehende und frühere Erkrankungen,
+              Vorsorgeuntersuchungen oder sonstige entscheidungserhebliche, ärztliche Unterlagen gehören.
+            </p>
+            <p>
+              Zur Klärung des Versicherungsfalles bzw. zur Feststellung der Leistungshöhe kann es erforderlich sein von
+            </p>
+            <ul>
+              <li>
+                meinem Arbeitgeber, ggf. früheren Arbeitgebern
+              </li>
+            </ul>
+            <p>
+              Auskünfte einzuholen.
+            </p>
+            <p>
+              Insoweit willige ich in die Erhebung meiner Daten ein bzw. entbinde die betroffenen Personen und
+              Stellen von ihrer Schweigepflicht gegenüber der Unfallkasse Hessen.
+            </p>
+            <p>
+              <small>
+              Hinweis: 
+              <br>
+              Ihre Einwilligung  ist  freiwillig und kann jederzeit widerrufen werden. Es genügt eine formlose Mitteilung an uns.
+              Bitte beachten Sie, dass der Widerruf Ihrer Einwilligungen nur für die Zukunft und nicht für die Vergangenheit möglich ist.
+              Die bis zu dem Zeitpunkt Ihres Widerrufs vorgenommene Datenverarbeitung bleibt damit rechtmäßig.
+              </small>
+            </p>
+          </div>    
+          <div tal:condition="unter15jahre.alter < 15">
+            <strong>Einwilligung zur Datenerhebung bei Dritten</strong>
+            <br>
+            <br>
+            <p>
+              Ich bin damit einverstanden, dass dem Unfallversicherungsträger Unterlagen gesendet werden,
+              um den Versicherungsfall meines Kindes <span tal:replace="string: ${context.ansprechpartner}"> </span>
+              zu klären und Leistungen festzustellen.
+            </p>
+            <p>
+              Mir ist bewusst, dass alle die betreffenden Daten grundsätzlich zunächst bei meinem Kind bzw. mir zur erheben sind.
+              Zur Beschleunigung des Verfahrens erkläre ich mich damit einverstanden, dass die benötigten Auskünfte
+              und Unterlagen über die gesundheitlichen Verhältnisse meines Kindes <strong>direkt</strong> von 
+            </p>
+            <ul>
+              <li>
+                den behandelnden Ärzten, ggf. früheren behandelnden Ärzten,
+              </li>
+              <li>
+                der Kranken- und Pflegekasse, den früheren Kranken- und Pflegekassen,
+              </li>
+              <li>
+                anderen Unfallversicherungsträgern,
+              </li>
+              <li>
+                dem Rentenversicherungsträger,
+              </li>
+              <li>
+                der Bundesagentur für Arbeit, 
+              </li>
+              <li>
+                dem Versorgungsamt oder anderen Behörden, denen Aufgaben nach dem Schwerbehinderten- oder sozialen Entschädigungsrecht übertragen sind,
+              </li>
+              <li>
+                dem Medizinischen Dienst der Krankenversicherung
+              </li>
+            </ul>
+            <p>
+              angefordert werden.
+            </p>
+            <p>
+              Zu den Auskünften bzw. Unterlagen können insbesondere Röntgen-, CT-Bilder,
+              medizinische Gutachten und Bescheinigungen, Unterlagen über bestehende und frühere Erkrankungen,
+              Vorsorgeuntersuchungen oder sonstige entscheidungserhebliche, ärztliche Unterlagen gehören.
+            </p>
+            <p>
+              Zur Klärung des Versicherungsfalles bzw. zur Feststellung der Leistungshöhe kann es erforderlich sein von
+            </p>
+            <ul>
+              <li>
+                dem Arbeitgeber, ggf. früheren Arbeitgebern bzw. der Schule
+              </li>
+            </ul>
+            <p>
+              Auskünfte einzuholen.
+            </p>
+            <p>
+              Insoweit willige ich in die Erhebung der Daten ein bzw. entbinde die betroffenen Personen und
+              Stellen von ihrer Schweigepflicht gegenüber der Unfallkasse Hessen.
+            </p>
+            <p>
+              <small>
+              Hinweis: 
+              <br>
+              Ihre Einwilligung  ist  freiwillig und kann jederzeit widerrufen werden. Es genügt eine formlose Mitteilung an uns.
+              Bitte beachten Sie, dass der Widerruf Ihrer Einwilligungen nur für die Zukunft und nicht für die Vergangenheit möglich ist.
+              Die bis zu dem Zeitpunkt Ihres Widerrufs vorgenommene Datenverarbeitung bleibt damit rechtmäßig.
+              </small>
+            </p>
+          </div>    
         </div>
 
         <div tal:define="widget view.fieldWidgets.get('form.field.datenerhebung')"
