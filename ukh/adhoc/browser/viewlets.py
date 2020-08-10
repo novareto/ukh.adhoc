@@ -13,7 +13,6 @@ from ukh.adhoc.interfaces import IUKHAdHocLayer
 grok.templatedir('templates')
 
 
-
 class PersonalPreferencesTemplate(PersonalPreferencesTemplate):
 #    grok.layer(IUKHAdHocLayer)
     pass
@@ -64,23 +63,7 @@ class HomeFolderMenuItem(uvcsite.MenuItem):
 
     @property
     def action(self):
-        # print "???????????????????????????????????????????????????????????????"
-        # print dir(get_account(self.request.principal.id))
-        # print "???????????????????????????????????????????????????????????????"
         return self.view.url(get_account(self.request.principal.id), "homefolder")
-
-
-# class NachrichtenMenuItem(uvcsite.MenuItem):
-#    """ Menu fuer das Logout """
-#    grok.require('zope.View')
-#    grok.order(95)
-#    grok.context(Interface)
-#    grok.title('Nachrichten')
-#    grok.viewletmanager(uvcsite.IPersonalPreferences)
-#
-#    @property
-#    def action(self):
-#        return self.view.url(get_account(self.request.principal.id), 'nachrichten')
 
 
 class DatenMenuItem(uvcsite.SubMenu):
@@ -95,13 +78,13 @@ class DatenMenuItem(uvcsite.SubMenu):
         return self.view.url(get_account(self.request.principal.id), "meinedaten")
 
 
-# class KontoMenuItem(uvcsite.SubMenu):
-#    grok.require('zope.View')
-#    grok.order(94)
-#    grok.context(Interface)
-#    grok.title('Mein Konto')
-#    grok.viewletmanager(uvcsite.IPersonalPreferences)
-#
-#    @property
-#    def action(self):
-#        return self.view.url(get_account(self.request.principal.id), 'meinkonto')
+class KontaktMenuItem(uvcsite.SubMenu):
+    grok.require('zope.View')
+    grok.order(94)
+    grok.context(Interface)
+    grok.title('Kontakt')
+    grok.viewletmanager(uvcsite.IPersonalPreferences)
+
+    @property
+    def action(self):
+        return self.view.url(get_account(self.request.principal.id), 'kontakt')

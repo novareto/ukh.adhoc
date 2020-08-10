@@ -80,7 +80,34 @@
     <div class="col-md-9">
       <p tal:content="daten.jobinfo2"> </p>
     </div>
-
+    <div tal:condition="unter15jahre.alter >= 15">
+      <div class="col-md-3">
+        <p>Krankenkasse:</p>
+      </div>
+      <div class="col-md-9">
+        <p tal:content="daten.kkdaten"> </p>
+      </div>
+      <div class="col-md-3">
+        <p>Hausarzt / Hausärztin:</p>
+      </div>
+      <div class="col-md-9">
+        <p tal:content="daten.hausarzt"> </p>
+      </div>
+    </div>
+    <div tal:condition="unter15jahre.alter < 15">
+      <div class="col-md-3">
+        <p>Krankenkasse des Kindes:</p>
+      </div>
+      <div class="col-md-9">
+        <p tal:content="daten.kkdaten"> </p>
+      </div>
+      <div class="col-md-3">
+        <p>Kinderarzt / Kinderärztin:</p>
+      </div>
+      <div class="col-md-9">
+        <p tal:content="daten.hausarzt"> </p>
+      </div>
+    </div>
     <div class="col-md-12"></div>
 
     <div class="col-md-12">
@@ -139,7 +166,12 @@
       <br>
     </div>
     <div class="col-md-12">
-      <p> Sollten die Angaben nicht stimmen oder sollten sich in Zukunft Änderungen ergeben, senden Sie uns eine Mitteilung. </p> 
+      <p> Sollten die Angaben nicht stimmen oder sollten sich in Zukunft Änderungen ergeben, senden Sie uns eine
+        <a href="" tal:attributes="href view.url(context, 'nachrichten')">
+          <b>Mitteilung</b>
+        </a>
+          .
+      </p> 
     </div>
   </div>
 </div>

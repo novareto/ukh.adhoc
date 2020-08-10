@@ -227,6 +227,14 @@ class MeineFahrtkosten(uvcsite.Form):
             self.redirect(self.url(self.context, "registerf1"))
 
 
+class Kontakt(uvcsite.Form):
+    grok.context(IAccount)
+
+    def update(self):
+        if self.context.status != "bearbeitet":
+            self.redirect(self.url(self.context, "registerf1"))
+
+
 class MeineDaten(uvcsite.Form):
     grok.context(IAccount)
 
