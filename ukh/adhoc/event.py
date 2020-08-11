@@ -16,7 +16,7 @@ Guten Tag,
 in Ihrem Versichertenportal wartet eine neue Nachricht auf Sie.
 
 Um die Nachricht zu lesen, melden Sie sich bitte in Ihrem Versichertenportal \
-der Unfallkasse Hessen auf www.ukh.de/versichertenportal an.
+der Unfallkasse Hessen auf https://versichert.ukh.de an.
 
 
 Freundliche Grüße
