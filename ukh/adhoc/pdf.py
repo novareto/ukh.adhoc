@@ -133,9 +133,9 @@ def Antwort_pdf(data, grunddaten, status):
     zeit = strftime("%H:%M:%S", localtime())
     datum = str(strftime("%d.%m.%Y", localtime()))
     uhrzeit = str(strftime("%H:%M", localtime()))
-    datum2 = str(strftime("%Y_%m_%d_%H_%M", localtime()))
+    datum2 = str(strftime("%Y_%m_%d_%H_%M_%S", localtime()))
     verzeichnis = '/ausgang/fax133a'
-    dateiname = datum2 + '_' + data.az + '.pdf'
+    dateiname = datum2 + '_' + data.az + '_Antwort_Einladung_VP.pdf'
     saveverzeichnis = verzeichnis + '/' + dateiname
     # Layout
     c = canvas.Canvas(saveverzeichnis, pagesize=A4)
@@ -165,6 +165,9 @@ def Antwort_pdf(data, grunddaten, status):
     y1 -= 0.6
     c.drawString(x1 * cm, y1 * cm, u"Formular Bezeichnung:")
     c.drawString(x2 * cm, y1 * cm, u"Erstanmeldung")
+    y1 -= 0.6
+    c.drawString(x1 * cm, y1 * cm, u"EDT DocTyp:")
+    c.drawString(x2 * cm, y1 * cm, u"004.001")
     y1 -= 0.6
     c.drawString(x1 * cm, y1 * cm, u"Eingangsdatum, Uhrzeit:")
     c.drawString(x2 * cm, y1 * cm, datum + ', ' + zeit)

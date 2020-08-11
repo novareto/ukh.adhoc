@@ -2,6 +2,7 @@
 # # Copyright (c) 2007-2013 NovaReto GmbH
 # # cklinger@novareto.de
 
+import pytz
 import grok
 import transaction
 
@@ -22,6 +23,9 @@ from uvcsite.utils.mail import send_mail
 from zope.interface import directlyProvides
 from hurry.workflow.interfaces import IWorkflowState, IWorkflowInfo
 from uvc.layout.forms.event import AfterSaveEvent
+
+
+tz = pytz.timezone("Europe/Berlin")
 
 
 BODY = u"""\
@@ -124,7 +128,7 @@ class AdHocService(grok.JSON):
             docs = []
             for name, obj in user.items():
                 if name != 'nachrichten':
-                    docs.append(dict(doc_id=name, doc_type=obj.doc_type, status=obj.state, date=obj.modtime.strftime('%d.%m.%Y')))
+                    docs.append(dict(doc_id=name, doc_type=obj.doc_type, status=obj.state, date=obj.modtime.astimezone(tz).strftime('%d.%m.%Y')))
             struct = dict(az=user.az, password=user.password, email=user.email, docs=docs,
                           active=user.active, anfragedatum=user.anfragedatum, status=user.status)
             return struct
@@ -230,7 +234,7 @@ class AdHocService(grok.JSON):
                 if len(answer) == 1:
                     answer = answer[0]
                     an = dict(
-                        date=answer.modtime.strftime('%d.%m.%Y %H:%M'),
+                        date=answer.modtime.astimezone(tz).strftime('%d.%m.%Y %H:%M'),
                         author=answer.principal.id,
                         az=answer.__name__,
                         doc_id=answer.__name__,
@@ -240,7 +244,7 @@ class AdHocService(grok.JSON):
                     )
                 docs.append(
                     dict(
-                        date=message.modtime.strftime('%d.%m.%Y %H:%M'),
+                        date=message.modtime.astimezone(tz).strftime('%d.%m.%Y %H:%M'),
                         author=message.principal.id,
                         az=user.__name__,
                         doc_id=message.__name__,

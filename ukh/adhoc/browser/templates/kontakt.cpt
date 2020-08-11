@@ -1,0 +1,25 @@
+<div>
+  <h1> Kontakt - Wir freuen uns auf Sie! </h1>
+  <br>
+  <div class="row ">
+    <div class="col-md-12">
+      <h4> Unfallkasse Hessen </h4>
+      <p>
+        Leonardo-da-Vinci-Allee 20
+        <br>
+        60486 Frankfurt am Main
+      </p>
+      <br>
+      <h4> Servicetelefon </h4>
+      <p>
+        069 29972-440,
+        <br>
+        (montags bis freitags von 7:30-18 Uhr)
+        <br>
+        Fax: 069 29972-133
+        <br>
+        <a href="mailto:ukh@ukh.de"> E-Mail: ukh(at)ukh.de </a>
+      </p>
+    </div>
+  </div>
+</div>

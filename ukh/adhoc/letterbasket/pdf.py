@@ -21,7 +21,7 @@ def Nachricht_pdf(dat, nname, vname, tmp):
     datum = str(strftime("%d.%m.%Y", localtime()))
     uhrzeit = str(strftime("%H:%M", localtime()))
     if tmp is None:
-        datum2 = str(strftime("%Y_%m_%d_%H_%M", localtime()))
+        datum2 = str(strftime("%Y_%m_%d_%H_%M_%S", localtime()))
         verzeichnis = '/ausgang/fax133a'
         dateiname = datum2 + '_' + dat.principal.id + '_Nachricht.pdf'
         saveverzeichnis = verzeichnis + '/' + dateiname
@@ -55,6 +55,9 @@ def Nachricht_pdf(dat, nname, vname, tmp):
     y1 -= 0.6
     c.drawString(x1 * cm, y1 * cm, u"Formular Bezeichnung:")
     c.drawString(x2 * cm, y1 * cm, u"Nachricht")
+    y1 -= 0.6
+    c.drawString(x1 * cm, y1 * cm, u"EDT DocTyp:")
+    c.drawString(x2 * cm, y1 * cm, u"004.001")
     y1 -= 0.6
     c.drawString(x1 * cm, y1 * cm, u"Eingangsdatum:")
     c.drawString(x2 * cm, y1 * cm, datum)
