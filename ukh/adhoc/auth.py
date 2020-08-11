@@ -129,7 +129,7 @@ class UserAuthenticatorPlugin(UsersManagement, grok.LocalUtility):
         account = self.getAccount(credentials["login"])
         if account is None:
             return None
-        if not account.checkPassword(credentials["password"], credentials["gebdate"]):
+        if not account.checkPassword(credentials["password"], credentials.get("gebdate", '99.99.9999')):
             return None
         return PrincipalInfo(id=account.az)
 
@@ -175,3 +175,20 @@ class AdHocPrincipalFactory(factories.AuthenticatedPrincipalFactory, grok.MultiA
         #)
         alsoProvides(self.request, IUKHAdHocLayer)
         return principal
+
+
+from ukh.adhoc.interfaces import IUKHAdHocApp
+from dolmen.authentication import UserLoginEvent
+class CheckRemote(grok.XMLRPC):
+    grok.context(IUKHAdHocApp)
+
+    def checkAuth(self, user, password, gebdate):
+        plugin = getUtility(IAuthenticatorPlugin, 'users')
+        principal = plugin.authenticateCredentials(dict(
+            login=user,
+            password=password,
+            gebdate=gebdate))
+        if principal:
+            grok.notify(UserLoginEvent(factories.Principal(user)))
+            return 1
+        return 0

@@ -179,11 +179,11 @@ class Account(grok.Container):
     def checkPassword(self, password, gebdate):
         if password != self.password:
             return False
-        gd = self.getGrundDaten()
-        gdatum = "%s.%s.%s" %(str(gd['prsgtt']).zfill(2), str(gd['prsgmm']).zfill(2), str(gd['prsgjj']))
-        print gdatum
-        if gebdate != gdatum:
-            return False
+        if gebdate != "99.99.9999":
+            gd = self.getGrundDaten()
+            gdatum = "%s.%s.%s" %(str(gd['prsgtt']).zfill(2), str(gd['prsgmm']).zfill(2), str(gd['prsgjj']))
+            if gebdate != gdatum:
+                return False
         return True
 
     def add(self, name, content):
