@@ -189,7 +189,7 @@ class AdHocService(grok.JSON):
                 docs.append(
                     dict(
                         date=message.modtime.astimezone(tz).strftime('%d.%m.%Y %H:%M'),
-                        author=message.principal.id,
+                        author=getattr(message, 'sachbearbeiter', message.principal.id),
                         az=user.__name__,
                         doc_id=message.__name__,
                         wf_state=IWorkflowState(message).getState().value,
