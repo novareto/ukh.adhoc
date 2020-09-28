@@ -41,7 +41,7 @@ Freundliche Grüße
 Ihre Unfallkasse Hessen
 
 
-Diese E-Mail-Nachricht wurde von einer ausschließlichen Benachrichtungsadresse versandt,\
+Diese E-Mail-Nachricht wurde von einer ausschließlichen Benachrichtungsadresse versandt,
 die keine eingehenden Nachrichten empfängt. Bitte antworten Sie nicht auf diese E-Mail-Nachricht.
 """
 
