@@ -104,29 +104,29 @@ class IAccount(interface.Interface):
     )
 
     passworda = schema.Password(
-        title=u"Bitte tragen Sie hier ihr altes Passwort ein",
+        title=u"Bitte tragen Sie hier ihr altes Passwort ein.",
         required=True
     )
 
     password = schema.Password(
-        title=u"Bitte tragen Sie hier ihr neues Passwort ein",
+        title=u"Bitte tragen Sie hier ihr neues Passwort ein.",
         required=True
     )
 
     passwordv = schema.Password(
-        title=u"Bitte bestätigen Sie das neue Passwort",
+        title=u"Bitte bestätigen Sie das neue Passwort.",
         required=True
     )
 
     email = schema.TextLine(
         title=u"E-Mail*",
-        description=u"Für die zukünftige Kommunikation benötigen wir Ihre E-Mail Adresse",
+        description=u"Für die zukünftige Kommunikation benötigen wir Ihre E-Mail Adresse:",
         required=True
     )
 
     email2 = schema.TextLine(
         title=u"E-Mail Wiederholung*",
-        description=u"Bitte bestätigen Sie Ihre E-Mail Adresse",
+        description=u"Bitte bestätigen Sie Ihre E-Mail Adresse:",
         required=True
     )
 
@@ -241,7 +241,7 @@ class IAccount(interface.Interface):
 
     jobinfo1 = schema.TextLine(
         title=u"Arbeitgeber*in oder Unfallbetrieb *",
-        description=u"Bitte genauen Namen und Anschrift",
+        description=u"Bitte genauen Namen und Anschrift.",
         required=True
     )
 
@@ -253,13 +253,13 @@ class IAccount(interface.Interface):
 
     kkdaten = schema.TextLine(
         title=u"Krankenkasse *",
-        description=u"Bitte genauen Namen, Anschrift und Versichertennummer",
+        description=u"Bitte genauen Namen, Anschrift und Versichertennummer.",
         required=True
     )
 
     hausarzt = schema.TextLine(
         title=u"Hausarzt / Hausärztin *",
-        description=u"Bitte genauen Namen und Anschrift",
+        description=u"Bitte genauen Namen und Anschrift.",
         required=True
     )
 
@@ -295,7 +295,7 @@ class IMessage(IContained, IContainer):
 
     filename = schema.TextLine(
         title=u"Dateiname",
-        description=u"Der Dateiname der Datei",
+        description=u"Der Dateiname der Datei.",
     )
 
     access_token = schema.TextLine(

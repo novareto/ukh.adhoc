@@ -168,7 +168,7 @@
     <div class="col-md-12">
       <p> Sollten die Angaben nicht stimmen oder sollten sich in Zukunft Änderungen ergeben, senden Sie uns eine
         <a href="" tal:attributes="href view.url(context, 'nachrichten')">
-          <b>Mitteilung</b>
+          <b>Nachricht</b>
         </a>
           .
       </p> 

@@ -33,8 +33,8 @@ Guten Tag,
 
 in Ihrem Versichertenportal wartet eine neue Nachricht auf Sie.
 
-Um die Nachricht zu lesen, melden Sie sich bitte in Ihrem Versichertenportal \
-der Unfallkasse Hessen auf www.ukh.de/versichertenportal an.
+Um die Nachricht zu lesen, melden Sie sich bitte in Ihrem Versichertenportal
+der Unfallkasse Hessen auf https://versichert.ukh.de an.
 
 
 Freundliche Grüße
@@ -44,45 +44,6 @@ Ihre Unfallkasse Hessen
 Diese E-Mail-Nachricht wurde von einer ausschließlichen Benachrichtungsadresse versandt,\
 die keine eingehenden Nachrichten empfängt. Bitte antworten Sie nicht auf diese E-Mail-Nachricht.
 """
-
-
-#ETEXT1 = u"""
-#Guten Tag,
-#
-#wir freuen uns, dass Sie sich für das Versichertenportal entschieden haben.
-#
-#Damit können Sie Anfragen schnell und einfach online beantworten.
-#
-#Wahrscheinlich ist unsere Anfrage vom %s im Alltag in Vergessenheit geraten, deshalb möchten wir Sie mit
-#dieser Nachricht gerne an die Erledigung erinnern.
-#
-#Die Anfrage finden Sie im Bereich Formulare. Vielen Dank für Ihre Mithilfe.
-#
-#Freundliche Grüße
-#
-#Ihre Unfallkasse Hessen
-#"""
-#
-#ETEXT2 = u"""
-#Guten Tag,
-#
-#unsere Anfrage vom %s wurde von Ihnen bisher noch nicht beantwortet.
-#
-#Wir erinnern Sie hiermit an die Erledigung. Etwaige Hinderungsgründe bitten wir uns mitzuteilen.
-#
-#Wir sind gesetzlich verpflichtet, Sie auf Ihre bestehenden Mitwirkungspflichten hinzuweisen.
-#Diese ergeben sich aus den §§ 60 ff. Sozialgesetzbuch-Allgemeiner Teil (SGB I).
-#Hiernach müssen Sie dem gesetzlichen Unfallversicherungsträger die notwendigen Angaben machen.
-#
-#Bei fehlender Mitwirkung können Leistungen (Geld-und Sachleistungen) ganz oder teilweise
-#versagt oder entzogen werden (§ 66 SGB I).
-#
-#Die Anfrage finden Sie im Bereich Formulare.
-#
-#Freundliche Grüße
-#
-#Ihre Unfallkasse Hessen
-#"""
 
 
 class AdHocService(grok.JSON):
@@ -151,23 +112,6 @@ class AdHocService(grok.JSON):
             self.request.response.setStatus(202)
             return {'id': name}
         raise KeyError('Unknown user.')
-
-    #@expected(IAccount['az'], *fields(IDocumentInfo))
-    #@error_handler
-    #def submit_notification(self, data):
-    #    user = self.manager.get(data['az'])
-    #    ETEXT = ''
-    #    if user is not None:
-    #        anfragedatum = data.get('anschreiben')[1:11]
-    #        # info = data.by_schema[IDocumentInfo]
-    #        # document = user[data.get('doc_type')]
-    #        if data.get('anschreiben')[0] == '1':
-    #            ETEXT = ETEXT1 % (anfragedatum)
-    #            BETREFF = u'Erinnerung'
-    #        if data.get('anschreiben')[0] == '2':
-    #            ETEXT = ETEXT2 % (anfragedatum)
-    #            BETREFF = u'2. Erinnerung mit Hinweis auf Mitwirkungspflicht'
-    #        send_mail('versichertenportal@ukh.de', [user.email, ], BETREFF, ETEXT)
 
     @expected(IAccount['az'], *fields(IMessage, select=('doc_id', 'message', 'title', 'attachment', 'filename', 'sachbearbeiter')), strict=('title', 'message'))
     @error_handler
@@ -254,6 +198,5 @@ class AdHocService(grok.JSON):
                         answer = an
                     )
                 )
-            print docs
             return docs
         raise KeyError('Unknown user.')

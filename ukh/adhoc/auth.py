@@ -20,6 +20,7 @@ from zope.pluggableauth.interfaces import IPrincipalInfo
 from dolmen.app.authentication.browser.login import ILoginForm, Login
 from dolmen.app.authentication.plugins.cookies import CookiesCredentials
 from zope import schema
+from zope.session.interfaces import ISession
 from zope.publisher.interfaces.http import IHTTPRequest
 
 
@@ -124,14 +125,21 @@ class UserAuthenticatorPlugin(UsersManagement, grok.LocalUtility):
     grok.name("users")
 
     def authenticateCredentials(self, credentials):
-        if not isinstance(credentials, dict):
-            return
-        account = self.getAccount(credentials["login"])
-        if account is None:
-            return None
-        if not account.checkPassword(credentials["password"], credentials.get("gebdate", '99.99.9999')):
-            return None
-        return PrincipalInfo(id=account.az)
+        USER_SESSION_KEY = "adhoc.authentication"
+        request = uvcsite.getRequest()
+        session = ISession(request)['adhoc.authentication']
+        authenticated = session.get(USER_SESSION_KEY)
+        if authenticated is None:
+            if not isinstance(credentials, dict):
+                return
+            account = self.getAccount(credentials["login"])
+            if account is None:
+                return None
+            if not account.checkPassword(credentials["password"], credentials.get("gebdate", '99.99.9999')):
+                return None
+            else:
+                authenticated = session[USER_SESSION_KEY] = dict(id=account.az)
+        return PrincipalInfo(**authenticated)
 
     def getAccount(self, login):
         return self.get(login)

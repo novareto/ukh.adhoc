@@ -10,6 +10,7 @@ from reportlab.lib.units import cm
 from reportlab.lib.colors import black, blue
 from time import localtime, strftime
 from ..pdf import cutrow, pdf_seitenkopf_master, ueberschrift, antwort
+from ..pdf import daten_deckblatt
 
 
 bcp = '/'.join(__file__.split('/')[:-2])
@@ -36,31 +37,8 @@ def Nachricht_pdf(dat, nname, vname, tmp):
     # Seite 1 - Deckblatt
     seite = 1
     c = pdf_seitenkopf_master(c, schriftart, schriftartfett, seite)
-    y1 = 25.0
-    x1 = 2.2
-    x2 = 8.2
-    c.setFillColor(black)
-    c.setFont(schriftart, 11)
-    c.drawString(x1 * cm, y1 * cm, u"Aktenzeichen:")
-    c.drawString(x2 * cm, y1 * cm, dat.principal.id)
-    y1 -= 0.6
-    c.drawString(x1 * cm, y1 * cm, u"Name:")
-    c.drawString(x2 * cm, y1 * cm, nname)
-    y1 -= 0.6
-    c.drawString(x1 * cm, y1 * cm, u"Vorname:")
-    c.drawString(x2 * cm, y1 * cm, vname)
-    y1 -= 0.6
-    c.drawString(x1 * cm, y1 * cm, u"Formular Typ:")
-    c.drawString(x2 * cm, y1 * cm, u"Nachricht")
-    y1 -= 0.6
-    c.drawString(x1 * cm, y1 * cm, u"Formular Bezeichnung:")
-    c.drawString(x2 * cm, y1 * cm, u"Nachricht")
-    y1 -= 0.6
-    c.drawString(x1 * cm, y1 * cm, u"EDT DocTyp:")
-    c.drawString(x2 * cm, y1 * cm, u"004.001")
-    y1 -= 0.6
-    c.drawString(x1 * cm, y1 * cm, u"Eingangsdatum:")
-    c.drawString(x2 * cm, y1 * cm, datum)
+    c = daten_deckblatt(c, schriftart, dat.principal.id, nname, vname,
+                        u'Nachricht', u'Nachricht', '004050', datum)
     # ----------------------------------------------
     # Seitenwechsel
     # ----------------------------------------------
@@ -68,6 +46,7 @@ def Nachricht_pdf(dat, nname, vname, tmp):
     seite += 1
     c = pdf_seitenkopf_master(c, schriftart, schriftartfett, seite)
     y1 = 26.5
+    x1 = 2.2
     # ----------------------------------------------
     # Fragen / Antworten
     # ###############################################################################

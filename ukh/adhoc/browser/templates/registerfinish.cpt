@@ -1,11 +1,6 @@
-<div tal:define="unter15jahre view.unter15jahre">
-  <h1> Versichertenportal <small> der Unfallkasse Hessen </small>
-  </h1>
+<div>
+  <h1> Versichertenportal </h1>
   <div>
-    <b tal:content="unter15jahre.kombianrede + ','"> </b>
-    <p>
-      willkommen im Versichertenportal der Unfallkasse Hessen. 
-    </p>
     <fieldset>
     <p>
       Wir bedauern, dass Sie nicht am elektronischen Verfahren teilnehmen möchten.

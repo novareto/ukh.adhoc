@@ -1,5 +1,5 @@
 <div>
-  <h1> Kontakt - Wir freuen uns auf Sie! </h1>
+  <h1> Haben Sie Fragen? Wir freuen uns über Ihren Anruf! </h1>
   <br>
   <div class="row ">
     <div class="col-md-12">
@@ -12,13 +12,27 @@
       <br>
       <h4> Servicetelefon </h4>
       <p>
-        069 29972-440,
+        069 29972-440
         <br>
         (montags bis freitags von 7:30-18 Uhr)
         <br>
         Fax: 069 29972-133
         <br>
         <a href="mailto:ukh@ukh.de"> E-Mail: ukh(at)ukh.de </a>
+      </p>
+      <br>
+      <p>
+        Haben Sie Anregungen, Wünsche, Kritik zu unserem Versichertenportal?
+        Haben Sie Probleme mit einem der angebotenen Dienste?
+        <br>
+	Bitte setzen Sie sich mit uns in <a href="mailto:ukh@ukh.de"><b>Verbindung</b></a>.
+        <br>
+        <br>
+        Wir sind auf Ihre Meldung angewiesen, um unser Versichertenportal optimal
+	auf Ihren Bedarf auszurichten und bedanken uns für Ihre Unterstützung.
+        <br>
+        <br>
+	Ihre Unfallkasse Hessen
       </p>
     </div>
   </div>

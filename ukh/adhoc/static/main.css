@@ -1,3 +1,7 @@
 div.form-actions {
   padding-top: 20px;
 }
+
+#personalmenu li#personalpanelentry {
+    background: none!important;
+}

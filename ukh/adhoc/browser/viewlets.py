@@ -20,11 +20,15 @@ class PersonalPreferencesTemplate(PersonalPreferencesTemplate):
 
 class PersonalPanelEntry(PersonalPanelEntry):
     grok.name("ppe")
+    title = u"Passwort ändern"
+    grok.order(99)
 
     @property
     def action(self):
         return self.view.url(
-            get_account(self.request.principal.id), "personalpanelview"
+            # Ausgeblendet, solange es nur Passwort ändern gibt
+            # get_account(self.request.principal.id), "personalpanelview"
+            get_account(self.request.principal.id), "changepassword"
         )
 
 
@@ -58,7 +62,7 @@ class HomeFolderMenuItem(uvcsite.MenuItem):
     grok.require("zope.View")
     grok.order(90)
     grok.context(Interface)
-    grok.title("Mein Ordner")
+    grok.title("Meine Dokumente")
     grok.viewletmanager(uvcsite.IPersonalPreferences)
 
     @property

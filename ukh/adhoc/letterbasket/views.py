@@ -56,15 +56,20 @@ class MessageTableItem(grok.Adapter):
         return self.context.modtime.astimezone(tz).strftime('%d.%m.%Y %H:%M')
 
     def author(self):
-        def p_name(context):
+        def p_name1(context):
             principal = context.principal.id
             if principal == 'zope.anybody':
                 principal = getattr(self.context, 'sachbearbeiter', 'UKH-Sachbearbeiter')
             return principal
-        principal = p_name(self.context)
+        def p_name2(context):
+            principal = context.principal.id
+            if principal == 'zope.anybody':
+                principal = getattr(context, 'sachbearbeiter', 'UKH-Sachbearbeiter')
+            return principal
+        principal = p_name1(self.context)
         if len(self.context) > 0:
             answer = [x for x in self.context.values()][0]
-            principal += " / %s" % p_name(answer)
+            principal += " / %s" % p_name2(answer)
         return principal
 
     def hasAnswer(self):

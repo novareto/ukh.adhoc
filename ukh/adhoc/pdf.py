@@ -30,6 +30,36 @@ def pdf_seitenkopf_master(c, schriftart, schriftartfett, seite):
     return c
 
 
+def daten_deckblatt(c, schriftart, az, nn, vn, tp, bz, ed ,tm):
+    y1 = 25.0
+    x1 = 2.2
+    x2 = 8.2
+    c.setFillColor(black)
+    c.setFont(schriftart, 11)
+    c.drawString(x1 * cm, y1 * cm, u"Aktenzeichen:")
+    c.drawString(x2 * cm, y1 * cm, az)
+    y1 -= 0.6
+    c.drawString(x1 * cm, y1 * cm, u"Name:")
+    c.drawString(x2 * cm, y1 * cm, nn)
+    y1 -= 0.6
+    c.drawString(x1 * cm, y1 * cm, u"Vorname:")
+    c.drawString(x2 * cm, y1 * cm, vn)
+    y1 -= 0.6
+    c.drawString(x1 * cm, y1 * cm, u"Formular Typ:")
+    c.drawString(x2 * cm, y1 * cm, tp)
+    y1 -= 0.6
+    c.drawString(x1 * cm, y1 * cm, u"Formular Bezeichnung:")
+    c.drawString(x2 * cm, y1 * cm, bz)
+    y1 -= 0.6
+    if ed is not None:
+        c.drawString(x1 * cm, y1 * cm, u"EDT DocTyp:")
+        c.drawString(x2 * cm, y1 * cm, ed)
+        y1 -= 0.6
+    c.drawString(x1 * cm, y1 * cm, u"Eingangsdatum:")
+    c.drawString(x2 * cm, y1 * cm, tm)
+    return c
+
+
 def ueberschrift(c, schriftartfett, text, x1, y1, groesse):
     c.setFont(schriftartfett, groesse)
     z1 = 0
@@ -146,38 +176,14 @@ def Antwort_pdf(data, grunddaten, status):
     # Seite 1 - Deckblatt
     seite = 1
     c = pdf_seitenkopf_master(c, schriftart, schriftartfett, seite)
-    y1 = 25.0
+    c = daten_deckblatt(c, schriftart, data.az, grunddaten['iknam1'], grunddaten['iknam2'],
+                        u'Erstanmeldung', u'Erstanmeldung', '004001', datum)
+    y1 = 19
     x1 = 2.2
     x2 = 8.2
-    c.setFillColor(black)
-    c.setFont(schriftart, 11)
-    c.drawString(x1 * cm, y1 * cm, u"Aktenzeichen:")
-    c.drawString(x2 * cm, y1 * cm, data.az)
-    y1 -= 0.6
-    c.drawString(x1 * cm, y1 * cm, u"Name:")
-    c.drawString(x2 * cm, y1 * cm, grunddaten['iknam1'])
-    y1 -= 0.6
-    c.drawString(x1 * cm, y1 * cm, u"Vorname:")
-    c.drawString(x2 * cm, y1 * cm, grunddaten['iknam2'])
-    y1 -= 0.6
-    c.drawString(x1 * cm, y1 * cm, u"Formular Typ:")
-    c.drawString(x2 * cm, y1 * cm, u"Erstanmeldung")
-    y1 -= 0.6
-    c.drawString(x1 * cm, y1 * cm, u"Formular Bezeichnung:")
-    c.drawString(x2 * cm, y1 * cm, u"Erstanmeldung")
-    y1 -= 0.6
-    c.drawString(x1 * cm, y1 * cm, u"EDT DocTyp:")
-    c.drawString(x2 * cm, y1 * cm, u"004.001")
-    y1 -= 0.6
-    c.drawString(x1 * cm, y1 * cm, u"Eingangsdatum, Uhrzeit:")
-    c.drawString(x2 * cm, y1 * cm, datum + ', ' + zeit)
-    # ----------------------------------------------
-    y1 -= 3.0
     c.setFont(schriftartfett, 10)
     if status == 'absage':
         c.drawString(x1 * cm, y1 * cm, u"Die Einladung vom " + data.anfragedatum + u" zum Versichertenportal wurde abgelehnt.")
-        y1 = y1 - 1.0
-        c.drawString(x1 * cm, y1 * cm, data.anrede + ' ' + data.ansprechpartner + u" wünscht bis auf weiteres eine Schriftliche Kommunikation.")
         # Seitenumbruch
         c.showPage()
         # ENDE und Save
@@ -268,8 +274,6 @@ def Antwort_pdf(data, grunddaten, status):
         x3 = 2.7
         c.setFillColor(black)
         c.setFont(schriftartfett, 10)
-        c.drawString(x1 * cm, y1 * cm, u'Folgende Daten von der Versicherten Person zur Verfügung gestellt:')
-        y1 -= 1.5
         # ####################################################################
         text = cutrow(data.jobinfo1, 100)
         # Platzbedarf ermitteln

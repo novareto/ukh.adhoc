@@ -1,22 +1,12 @@
 <div tal:define="unter15jahre view.unter15jahre">
-  <h1> Versichertenportal <small> der Unfallkasse Hessen </small>
-  </h1>
+  <h1> Versichertenportal </h1>
   <div>
-    <p>
-      Vielen Dank, dass Sie sich für die elektronische Kommunikation entschieden haben.
-    </p>
-    <p>
-      In diesem speziell abgesicherten Servicebereich stellen wir Ihnen besondere Anwendungen und Informationen zur Verfügung.
-    </p>
+    <p> Vielen Dank, dass Sie sich für die elektronische Kommunikation über unser speziell abgesichertes Portal entschieden haben. </p>
     <fieldset>
       <span class="badge pull-right">Schritt 3/4</span>
       <form class="form-horizontal" enctype="multipart/form-data" method="post" novalidate="novalidate" action="" tal:attributes="action request.URL">
         <div class="row">
           <div class="info">
-            <!--Schritt 1: Im ersten Schritt bitten wir Sie, die uns übermittelnden Angaben zur Ihrer Person zu überprüfen und ggf. zu ergänzen-->
-            Im dritten Schritt bitten wir Sie um Ihre <strong>Einwilligung zur Datenübermittlung</strong>
-            <br>
-            <br>
             <strong>Einwilligung zur Datenübermittlung</strong>
             <br>
             <br>
@@ -56,13 +46,10 @@
             </div>
           </div>
         </div>
-
         <div tal:define="widget view.fieldWidgets.get('form.field.datenuebermittlung')"
              metal:use-macro="path: context/@@fieldmacros/template/macros/field_inline">
         </div>
-
         <br>
-
         <div class="row">
           <div metal:use-macro="path: context/@@fieldmacros/template/macros/form-actions"></div>
         </div>
@@ -73,6 +60,3 @@
     Datenschutzrichtlinien der Unfallkasse Hessen
   </a>
 </div>
-
-
-

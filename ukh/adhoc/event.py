@@ -15,8 +15,8 @@ Guten Tag,
 
 in Ihrem Versichertenportal wartet eine neue Nachricht auf Sie.
 
-Um die Nachricht zu lesen, melden Sie sich bitte in Ihrem Versichertenportal \
-der Unfallkasse Hessen auf www.ukh.de/versichertenportal an.
+Um die Nachricht zu lesen, melden Sie sich bitte in Ihrem Versichertenportal
+der Unfallkasse Hessen auf https://versichert.ukh.de an.
 
 
 Freundliche Grüße
@@ -33,10 +33,11 @@ def notify_user(obj, event):
     if obj.doc_title != "Dateiupload":
         account = obj.__parent__
         grunddaten = IAccountData(obj.__parent__)
-        message = MES #% (datetime.datetime.now().strftime("%d.%m.%Y"), obj.doc_title)
-        send_mail(
-            "versichertenportal@ukh.de",
-            [grunddaten.email],
-            "Sie haben neue Nachrichten!",
-            message,
-        )
+        message = MES
+        if grunddaten.email.strip() != '':
+            send_mail(
+                "versichertenportal@ukh.de",
+                [grunddaten.email],
+                "Sie haben neue Nachrichten!",
+                message,
+            )

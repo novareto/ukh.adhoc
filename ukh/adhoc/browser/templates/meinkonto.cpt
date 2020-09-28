@@ -2,13 +2,10 @@
   <h1> Leistungskonto </h1>
   <br>
   <div class="row ">
-
     <div class="col-md-12">
-      <p> Folgende Hauptleistungen wurden durch die Unfallkasse Hessen erbracht: </p>
+      <p> Hier ein Auszug der Leistungen, die die UKH bisher für Sie gezahlt hat: </p>
     </div>
-
     <div class="col-md-12">
-
       <table class="ktotable table-striped table-bordered table-condensed" tal:define="results view.daten" tal:condition="results">
         <thead>
           <tr>
@@ -20,7 +17,6 @@
             </th>
           </tr>
         </thead>
-
         <tbody>
           <tr tal:repeat="result results" tal:attributes="class repeat['result'].odd() and 'odd' or 'even'">
             <td>
@@ -45,23 +41,13 @@
             </td>
           </tr>
         </tbody>
-
       </table>
-
-    </div>
-
-
-    <div class="col-md-12">
-      <p>Ambulante Heilbehandlung beinhaltet u.A. Leistungen Ihres Durchgangsarztes, Krankengymnastik/Physiotherapie, Medikamente, etc.</p>
     </div>
     <div class="col-md-12">
-      <p>Bitte beachten Sie, dass etwaige Regresszahlungen Dritter bei der Darstellung berücksichtigt und verrechnet werden.</p> 
+      <p>Ambulante Heilbehandlung beinhaltet u. a. ärztliche Leistungen, Krankengymnastik/Physiotherapie, Medikamente etc.</p>
     </div>
-
     <div class="col-md-12">
       <br>
     </div>
-
   </div>
-
 </div>

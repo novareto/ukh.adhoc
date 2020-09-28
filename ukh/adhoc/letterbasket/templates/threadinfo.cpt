@@ -4,6 +4,6 @@
     Sie antworten auf folgende Nachricht vom
     <span tal:content="str(daten.modtime)[8:10] + '.' + str(daten.modtime)[5:7] + '.' + str(daten.modtime)[0:4]"> </span>
   </p>
-  <pre tal:content="daten.message">
+  <pre tal:content="daten.message.replace('<br>', '')">
   </pre>
 </div>

@@ -13,6 +13,12 @@ from ukh.adhoc.interfaces import IAccount, IAccountData
 from dolmen.forms.base import apply_data_event
 from zeam.form.base import makeAdaptiveDataManager
 from ukh.adhoc.pdf import Antwort_pdf
+from ukh.adhoc.db_setup import z1vrs1aa
+from time import localtime, strftime
+from sqlalchemy.sql import and_
+from z3c.saconfig import Session
+from zope.sqlalchemy import mark_changed
+
 
 
 grok.templatedir("templates")
@@ -323,9 +329,9 @@ class RegisterF2(RegisterF1):
         alter = getAlter(self.context.getGrundDaten())
         a = {}
         if alter >= 15:
-            a['kombianrede'] = u'Im ersten Schritt bitten wir Sie, die uns übermittelnden Angaben zur Ihrer Person zu überprüfen und ggf. zu ergänzen.'
+            a['kombianrede'] = u'Bitte prüfen Sie zunächst die persönlichen Angaben und ergänzen Sie sie bei Bedarf.'
         else:
-            a['kombianrede'] = u'Im ersten Schritt bitten wir Sie, die uns übermittelnden Angaben zu Ihrem Kind zu überprüfen und ggf. zu ergänzen.'
+            a['kombianrede'] = u'Bitte prüfen Sie zunächst die persönlichen Angaben Ihres Kindes und ergänzen Sie sie bei Bedarf.'
         return a
 
     def update(self):
@@ -418,7 +424,7 @@ class RegisterF4(RegisterF1):
         apply_data_event(self.fields, self.context, data)
         self.redirect(self.url(self.context) + '/registerf3')
 
-    @uvcsite.action('Speichern')
+    @uvcsite.action('Speichern & Weiter')
     def handle_save(self):
         data, errors = self.extractData()
         if errors:
@@ -431,7 +437,7 @@ class RegisterF4(RegisterF1):
 class RegisterF5(RegisterF1):
     label = u"Daten"
     description = u"Bitte vervollständigen Sie folgende Angaben um den \
-        'Versicherten Service' der UKH zu nutzen"
+        'Versicherten Service' der UKH zu nutzen."
 
     @property
     def fields(self):
@@ -440,15 +446,25 @@ class RegisterF5(RegisterF1):
         if alter < 15:
             fields['jobinfo1'].title = u'Unfallbetrieb *'
             fields['jobinfo1'].description = u'Bitte nennen Sie uns den Namen und die Anschrift \
-                der Kindertagesstätte / des Kindergartens / der Schule'
+                der Kindertagesstätte / des Kindergartens / der Schule.'
             fields['jobinfo2'].title = u'Unfallbringende Tätigkeit *'
             fields['jobinfo2'].description = u'Bitte beschreiben Sie, bei welcher Tätigkeit \
-                sich der Unfall ereignete'
+                sich der Unfall ereignete.'
             fields['kkdaten'].title = u'Krankenkasse Ihres Kindes *'
             fields['hausarzt'].title = u'Kinder-/Hausärztin oder Kinder-/Hausarzt *'
             fields['hausarzt'].description = u'Bitte nennen Sie uns den Namen und die Anschrift \
-                der Kinder-/Hausärztin oder des Kinder-/Hausarztes'
+                der Kinder-/Hausärztin oder des Kinder-/Hausarztes.'
         return fields
+
+    @property
+    def unter15jahre(self):
+        alter = getAlter(self.context.getGrundDaten())
+        a = {}
+        if alter >= 15:
+            a['kombianrede'] = u'Im letzten Schritt bitten wir Sie noch um einige Informationen, die uns helfen, Ihren Fall zügig zu bearbeiten.'
+        else:
+            a['kombianrede'] = u'Im letzten Schritt bitten wir Sie noch um einige Informationen, die uns helfen, den Fall Ihres Kindes zügig zu bearbeiten.'
+        return a
 
     @uvcsite.action(u'Zurück')
     def handle_back(self):
@@ -456,7 +472,7 @@ class RegisterF5(RegisterF1):
         apply_data_event(self.fields, self.context, data)
         self.redirect(self.url(self.context) + '/registerf4')
 
-    @uvcsite.action('Speichern')
+    @uvcsite.action('Speichern & Weiter')
     def handle_save(self):
         data, errors = self.extractData()
         if errors:
@@ -467,6 +483,11 @@ class RegisterF5(RegisterF1):
         context = self.context
         grunddaten = self.context.getGrundDaten()
         Antwort_pdf(context, grunddaten, u'zusage')
+        datum = str(strftime("%d.%m.%Y", localtime()))
+        upd = z1vrs1aa.update().where(and_(z1vrs1aa.c.az == context.az)).values(bestaet='J', am=datum, unfoid=str(grunddaten['unfoid']))
+        session = Session()
+        session.execute(upd)
+        mark_changed(session)
         self.redirect(self.application_url())
 
 
@@ -478,24 +499,13 @@ class RegisterFinish(uvcsite.Form):
     ignoreContent = False
     dataManager = makeAdaptiveDataManager(IAccountData)
 
-    @property
-    def unter15jahre(self):
-        data = self.context.getGrundDaten()
-        alter = getAlter(data)
-        a = {}
-        if alter >= 15:
-            if self.context.anrede == 'Herr':
-                a['kombianrede'] = u'Sehr geehrter Herr ' + self.context.ansprechpartner
-            elif self.context.anrede == 'Frau':
-                a['kombianrede'] = u'Sehr geehrte Frau ' + self.context.ansprechpartner
-            else:
-                a['kombianrede'] = self.context.anrede + ' ' + self.context.ansprechpartner
-        else:
-            a['kombianrede'] = u'Sehr geehrte Familie ' + data['iknam1']
-        return a
-
     def update(self):
         context = self.context
         grunddaten = self.context.getGrundDaten()
         Antwort_pdf(context, grunddaten, u'absage')
+        datum = str(strftime("%d.%m.%Y", localtime()))
+        upd = z1vrs1aa.update().where(and_(z1vrs1aa.c.az == context.az)).values(bestaet='N', am=datum, unfoid=str(grunddaten['unfoid']))
+        session = Session()
+        session.execute(upd)
+        mark_changed(session)
         css.need()

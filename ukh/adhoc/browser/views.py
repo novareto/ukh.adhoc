@@ -44,6 +44,7 @@ class FieldMacros(FieldMacros):
     template = ChameleonPageTemplateFile('templates/fieldtemplates.cpt')
 
 
+
 class Index(uvcsite.Page):
     grok.context(IUKHAdHocApp)
 
@@ -327,10 +328,10 @@ class Form(uvcsite.Form):
         self.flash(u"Speichern erfolgreich.")
         return self.redirect(self.url(self.context))
 
-    @uvcsite.action(u"Abbrechen")
-    def handle_cancel(self):
-        self.flash(u"Der Vorgang wurde abgebrochen.")
-        return self.redirect(self.application_url())
+    #@uvcsite.action(u"Abbrechen")
+    #def handle_cancel(self):
+    #    self.flash(u"Der Vorgang wurde abgebrochen.")
+    #    return self.redirect(self.application_url())
 
 
 class Logout(grok.View):

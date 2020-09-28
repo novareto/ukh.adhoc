@@ -1,13 +1,7 @@
 <div tal:define="unter15jahre view.unter15jahre">
-  <h1> Versichertenportal <small> der Unfallkasse Hessen </small>
-  </h1>
+  <h1> Versichertenportal </h1>
   <div>
-    <p>
-      Vielen Dank, dass Sie sich für die elektronische Kommunikation entschieden haben.
-    </p>
-    <p>
-      In diesem speziell abgesicherten Servicebereich stellen wir Ihnen besondere Anwendungen und Informationen zur Verfügung.
-    </p>
+    <p> Vielen Dank, dass Sie sich für die elektronische Kommunikation über unser speziell abgesichertes Portal entschieden haben. </p>
     <fieldset>
       <span class="badge pull-right">Schritt 1/4</span>
       <form class="form-horizontal" enctype="multipart/form-data" method="post" novalidate="novalidate" action="" tal:attributes="action request.URL">

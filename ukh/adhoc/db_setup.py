@@ -27,6 +27,7 @@ if os.environ.get('ADHOC_TEST') == "True":
     avika1aa = None
     zczve1aa = None
     zckto1aa = None
+    z1vrs1aa = None
 
 else:
     c1unf1aa = Table(config['c1unf1aa'], metadata, schema=SCHEMA, autoload=True, autoload_with=engine)
@@ -34,4 +35,5 @@ else:
     avika1aa = Table(config['avika1aa'], metadata, schema=SCHEMA, autoload=True, autoload_with=engine)
     zczve1aa = Table(config['zczve1aa'], metadata, schema=SCHEMA, autoload=True, autoload_with=engine)
     zckto1aa = Table(config['zckto1aa'], metadata, schema=SCHEMA, autoload=True, autoload_with=engine)
+    z1vrs1aa = Table(config['z1vrs1aa'], metadata, schema='UKHINTERN', autoload=True, autoload_with=engine)
 
