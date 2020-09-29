@@ -22,12 +22,13 @@ grok.global_utility(scoped_session, direct=True)
 engine = engine_factory()
 metadata = MetaData(bind=engine)
 if os.environ.get('ADHOC_TEST') == "True":
-    c1unf1aa = None 
+    c1unf1aa = None
     c1prs1aa = None
     avika1aa = None
     zczve1aa = None
     zckto1aa = None
     z1vrs1aa = None
+    z1vrs2aa = None
 
 else:
     c1unf1aa = Table(config['c1unf1aa'], metadata, schema=SCHEMA, autoload=True, autoload_with=engine)
@@ -36,4 +37,4 @@ else:
     zczve1aa = Table(config['zczve1aa'], metadata, schema=SCHEMA, autoload=True, autoload_with=engine)
     zckto1aa = Table(config['zckto1aa'], metadata, schema=SCHEMA, autoload=True, autoload_with=engine)
     z1vrs1aa = Table(config['z1vrs1aa'], metadata, schema='UKHINTERN', autoload=True, autoload_with=engine)
-
+    z1vrs2aa = Table(config['z1vrs2aa'], metadata, schema='UKHINTERN', autoload=True, autoload_with=engine)

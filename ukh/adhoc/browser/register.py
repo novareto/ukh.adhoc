@@ -13,11 +13,8 @@ from ukh.adhoc.interfaces import IAccount, IAccountData
 from dolmen.forms.base import apply_data_event
 from zeam.form.base import makeAdaptiveDataManager
 from ukh.adhoc.pdf import Antwort_pdf
-from ukh.adhoc.db_setup import z1vrs1aa
+from ukh.adhoc.stammdaten import PRStatistik, RGStatistik
 from time import localtime, strftime
-from sqlalchemy.sql import and_
-from z3c.saconfig import Session
-from zope.sqlalchemy import mark_changed
 
 
 
@@ -484,10 +481,8 @@ class RegisterF5(RegisterF1):
         grunddaten = self.context.getGrundDaten()
         Antwort_pdf(context, grunddaten, u'zusage')
         datum = str(strftime("%d.%m.%Y", localtime()))
-        upd = z1vrs1aa.update().where(and_(z1vrs1aa.c.az == context.az)).values(bestaet='J', am=datum, unfoid=str(grunddaten['unfoid']))
-        session = Session()
-        session.execute(upd)
-        mark_changed(session)
+        PRStatistik(context.az, 'Einl_VP', '004051')
+        RGStatistik(context.az, 'J', str(grunddaten['unfoid']))
         self.redirect(self.application_url())
 
 
@@ -504,8 +499,6 @@ class RegisterFinish(uvcsite.Form):
         grunddaten = self.context.getGrundDaten()
         Antwort_pdf(context, grunddaten, u'absage')
         datum = str(strftime("%d.%m.%Y", localtime()))
-        upd = z1vrs1aa.update().where(and_(z1vrs1aa.c.az == context.az)).values(bestaet='N', am=datum, unfoid=str(grunddaten['unfoid']))
-        session = Session()
-        session.execute(upd)
-        mark_changed(session)
+        PRStatistik(context.az, 'Einl_VP', '004051')
+        RGStatistik(context.az, 'N', str(grunddaten['unfoid']))
         css.need()

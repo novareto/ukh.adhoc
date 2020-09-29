@@ -1,0 +1,15 @@
+<div>
+  <h1>Akteneinsicht... ???</h1>
+  <div>
+    <p>
+      Hier können Sie Ihre Akte auf elektronischem Weg beantragen... bla bla bla....
+      <br>
+      Die Akte wird Ihnen dann über die Nachrichtenfunktion angeboten... bla bla bla....
+    </p>
+    <form class="form-horizontal" enctype="multipart/form-data" method="post" novalidate="novalidate" action="" tal:attributes="action request.URL">
+      <div class="row">
+        <div metal:use-macro="path: context/@@fieldmacros/template/macros/form-actions"></div>
+      </div>
+    </form>
+  </div>
+</div>
